@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniCalc - Giả lập & Tính điểm GPA NEU</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dark-theme {
+            --bg-app: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+        }
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    </style>
+</head>
+<body class="dark-theme bg-[#0f172a] text-[#f8fafc] font-sans min-h-screen flex flex-col justify-between">
+
+    <div>
+        <!-- HEADER -->
+        <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🎓</span>
+                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">UniCalc</h1>
+                    <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-bold">NEU Edition</span>
+                </div>
+                <div class="text-sm text-slate-400 font-medium hidden sm:block">⚡ Hệ thống tính điểm & giả lập chuẩn Đại học Kinh tế Quốc dân</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            
+            <!-- CỘT TRÁI + GIỮA: NHẬP LIỆU -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400">📝 Danh Sách Môn Học</h2>
+                            <p class="text-xs text-slate-400 mt-1">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
+                        </div>
+                        <button onclick="addSubjectRow()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-2 text-sm cursor-pointer shadow-lg shadow-cyan-500/20">
+                            ➕ Thêm Môn
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-xs text-slate-400 uppercase tracking-wider">
+                                    <th class="pb-3 w-1/3">Tên Môn Học</th>
+                                    <th class="pb-3 w-16 text-center">Tín Chỉ</th>
+                                    <th class="pb-3 text-center">Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span></th>
+                                    <th class="pb-3 text-center">Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span></th>
+                                    <th class="pb-3 text-center">Thi CK</th>
+                                    <th class="pb-3 text-center">Tổng Kết</th>
+                                    <th class="pb-3 w-10 text-center">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjectTableBody" class="divide-y divide-slate-800">
+                                <!-- JS auto-render -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- KHU VỰC GÁNH ĐIỂM -->
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2 mb-2">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
+                    <p class="text-xs text-slate-400 mb-4">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm mới.</p>
+                    <div id="ganhDiemContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="text-sm text-slate-500 italic col-span-2">Hãy nhập đầy đủ điểm Chuyên cần và Giữa kỳ để rada bắt đầu quét...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ -->
+            <div class="space-y-6">
+                <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
+                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (NEU)</h2>
+                    <div class="grid grid-cols-2 gap-4 my-4 border-b border-slate-700/50 pb-4">
+                        <div>
+                            <div class="text-xs text-slate-400 mb-1">Thang 10 trung bình</div>
+                            <div id="gpa10" class="text-3xl font-black text-white">0.00</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 mb-1">GPA Tích Lũy Thang 4</div>
+                            <div id="gpa4" class="text-4xl font-black text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">0.00</div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-xs text-slate-400 uppercase mb-1">Xếp Loại Học Lực Học Kỳ</div>
+                        <div id="xepLoai" class="text-xl font-bold text-slate-400">Chưa có dữ liệu</div>
+                    </div>
+                </div>
+
+                <div id="caKhiaBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center text-sm font-medium italic text-slate-400">
+                    🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
+                </div>
+
+                <!-- CHART -->
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">📊 Tỷ Lệ Điểm Chữ (Có A+)</h3>
+                    <div class="w-full flex justify-center">
+                        <div class="w-[200px] h-[200px] relative">
+                            <canvas id="gradeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GIẢ LẬP -->
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-4">
+                    <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🚀 Giả Lập Tốt Nghiệp Tương Lai</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">GPA tích lũy cũ</label>
+                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.1" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">Số tín chỉ tích lũy cũ</label>
+                            <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div class="space-y-1 pt-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-400">GPA dự kiến các kỳ tới:</span>
+                            <span id="sliderValue" class="text-emerald-400 font-bold">2.50</span>
+                        </div>
+                        <input type="range" id="futureSlider" min="0" max="4" step="0.05" value="2.50" oninput="calculateFuture()" class="w-full accent-emerald-500 cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] text-slate-400 block">Số tín chỉ các kỳ tới</label>
+                        <input type="number" id="futureCredits" value="60" min="0" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="bg-emerald-950/40 border border-emerald-500/20 rounded-xl p-3 text-center">
+                        <div class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">GPA Ra Trường Dự Kiến</div>
+                        <div id="futureResultGpa" class="text-2xl font-black text-white my-0.5">0.00</div>
+                        <div id="futureResultRank" class="text-xs text-slate-300 font-semibold">Xếp loại bằng: -</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODERN FOOTER -->
+    <footer class="border-t border-slate-800 bg-slate-900/80 py-6 mt-12 text-center text-sm text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="font-semibold tracking-wide text-slate-300">
+                Developed by <span class="text-cyan-400 font-bold">Duc Viet</span>
+            </div>
+            <div class="flex items-center gap-6 text-xs font-medium">
+                <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 hover:text-cyan-400 transition-colors bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                    ✉️ <span class="underline decoration-slate-600 hover:decoration-cyan-400">vietdang293.vn@gmail.com</span>
+                </a>
+                <a href="tel:0965193026" class="flex items-center gap-1.5 hover:text-cyan-400 transition-colors bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                    📞 <span class="font-mono">0965193026</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT DETAILED LOGIC -->
+    <script>
+        let subjects = [];
+        let myChart = null;
+
+        const gradeMapping = {
+            'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const stored = localStorage.getItem('unicalc_subjects_neu');
+            if (stored) {
+                subjects = JSON.parse(stored);
+            } else {
+                subjects = [
+                    { id: 1, name: 'Kinh tế vĩ mô', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9, pGk: 8.5, pCk: 9.2 },
+                    { id: 2, name: 'Xác suất thống kê', credits: 3, wCc: 10, wGk: 20, wCk: 70, pCc: 10, pGk: 7.5, pCk: 8.2 }
+                ];
+            }
+            renderTable();
+            initChart();
+            updateDashboard();
+        });
+
+        function saveData() {
+            localStorage.setItem('unicalc_subjects_neu', JSON.stringify(subjects));
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('subjectTableBody');
+            tbody.innerHTML = '';
+
+            subjects.forEach((sub) => {
+                const total10 = calculateTotal10(sub);
+                const gradeLetter = convertToLetterNEU(total10);
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/30 transition-all text-sm";
+                tr.innerHTML = `
+                    <td class="py-4 pr-2">
+                        <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-600 focus:border-cyan-500 focus:outline-none text-white font-medium py-1">
+                    </td>
+                    <td class="py-4 text-center">
+                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="bg-slate-900 border border-slate-700 rounded p-1 text-center text-white focus:outline-none">
+                            ${[1,2,3,4,5].map(c => `<option value="${c}" ${sub.credits === c ? 'selected' : ''}>${c}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td class="py-4 text-center">
+                        <div class="flex items-center justify-center gap-1 text-xs">
+                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                        </div>
+                    </td>
+                    <td class="py-4 text-center">
+                        <div class="flex items-center justify-center gap-1 text-xs">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                        </div>
+                    </td>
+                    <td class="py-4 text-center">
+                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-12 bg-slate-900 text-center rounded border border-cyan-600/50 p-1 font-bold text-white focus:outline-none focus:border-cyan-400">
+                    </td>
+                    <td class="py-4 text-center font-bold">
+                        <div class="text-white">${total10.toFixed(2)}</div>
+                        <div class="text-xs text-cyan-400">${gradeLetter}</div>
+                    </td>
+                    <td class="py-4 text-center">
+                        <button onclick="deleteSubject(${sub.id})" class="text-rose-400 hover:text-rose-600 font-bold transition-all p-1 cursor-pointer">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addSubjectRow() {
+            const newId = subjects.length > 0 ? Math.max(...subjects.map(s => s.id)) + 1 : 1;
+            subjects.push({
+                id: newId, name: 'Môn học mới ' + newId, credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 10, pGk: 0, pCk: 0
+            });
+            saveData();
+            renderTable();
+            updateDashboard();
+        }
+
+        function deleteSubject(id) {
+            subjects = subjects.filter(s => s.id !== id);
+            saveData();
+            renderTable();
+            updateDashboard();
+        }
+
+        // ĐÃ SỬA LỖI: Tách biệt logic cập nhật tên môn dạng chữ và điểm số dạng số
+        function updateSubField(id, field, value) {
+            const sub = subjects.find(s => s.id === id);
+            if (sub) {
+                if (field === 'name') {
+                    sub[field] = value ? value.trim() : 'Môn học không tên';
+                } else {
+                    sub[field] = isNaN(parseFloat(value)) ? null : parseFloat(value);
+                }
+                saveData();
+                updateDashboard();
+            }
+        }
+
+        function updateWeights(id, field, value) {
+            const sub = subjects.find(s => s.id === id);
+            if (sub) {
+                sub[field] = parseInt(value) || 0;
+                saveData();
+                updateDashboard();
+                renderTable();
+            }
+        }
+
+        function calculateTotal10(sub) {
+            const cc = sub.pCc || 0;
+            const gk = sub.pGk || 0;
+            const ck = sub.pCk || 0;
+            const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
+            if(sumWeight === 0) return 0;
+            return ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
+        }
+
+        function convertToLetterNEU(score) {
+            if (score >= 9.0) return 'A+';
+            if (score >= 8.5) return 'A';
+            if (score >= 8.0) return 'B+';
+            if (score >= 7.0) return 'B';
+            if (score >= 6.5) return 'C+';
+            if (score >= 5.5) return 'C';
+            if (score >= 5.0) return 'D+';
+            if (score >= 4.5) return 'D';
+            return 'F';
+        }
+
+        function updateDashboard() {
+            let totalCredits = 0;
+            let sumScore10 = 0;
+            let sumScore4 = 0;
+            let gradeCounts = { 'A+': 0, 'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'D+': 0, 'D': 0, 'F': 0 };
+
+            subjects.forEach(sub => {
+                const score10 = calculateTotal10(sub);
+                const letter = convertToLetterNEU(score10);
+                const score4 = gradeMapping[letter];
+
+                totalCredits += sub.credits;
+                sumScore10 += score10 * sub.credits;
+                sumScore4 += score4 * sub.credits;
+
+                gradeCounts[letter]++;
+            });
+
+            const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
+            const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
+
+            document.getElementById('gpa10').innerText = finalGpa10.toFixed(2);
+            document.getElementById('gpa4').innerText = finalGpa4.toFixed(2);
+
+            const xepLoaiDiv = document.getElementById('xepLoai');
+            const caKhiaBox = document.getElementById('caKhiaBox');
+            document.body.style.backgroundColor = "#0f172a";
+
+            if (totalCredits === 0) {
+                xepLoaiDiv.innerText = "Chưa có dữ liệu";
+                xepLoaiDiv.className = "text-xl font-bold text-slate-400";
+                caKhiaBox.innerText = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
+            } else if (finalGpa4 >= 3.6) {
+                xepLoaiDiv.innerText = "Xuất Sắc 🏆";
+                xepLoaiDiv.className = "text-xl font-bold text-emerald-400";
+                caKhiaBox.innerText = "🔥 Đỉnh cao NEU! Học bổng Xuất sắc nắm chắc trong tay, chuẩn bị tinh thần đi khao cả hội bạn thân thôi!";
+            } else if (finalGpa4 >= 3.2) {
+                xepLoaiDiv.innerText = "Giỏi 🌟";
+                xepLoaiDiv.className = "text-xl font-bold text-cyan-400";
+                caKhiaBox.innerText = "😎 Học lực siêu chiến, bằng Giỏi NEU vẫy gọi. Giữ vững phong độ này ra trường làm BA xịn xò nhé!";
+            } else if (finalGpa4 >= 2.5) {
+                xepLoaiDiv.innerText = "Khá 👍";
+                xepLoaiDiv.className = "text-xl font-bold text-indigo-400";
+                caKhiaBox.innerText = "☕ Phong độ rất an toàn và ổn định. Cố gắng cày cuốc đẩy nhẹ vài môn lên A/A+ để bứt phá lên bằng Giỏi nào.";
+            } else if (finalGpa4 >= 2.0) {
+                xepLoaiDiv.innerText = "Trung Bình 😐";
+                xepLoaiDiv.className = "text-xl font-bold text-amber-400";
+                caKhiaBox.innerText = "⚠️ Tín hiệu vũ trụ nhắc nhở: Tập trung gánh điểm thi cuối kỳ ngay lập tức kẻo tụt xuống vùng nguy hiểm.";
+            } else {
+                xepLoaiDiv.innerText = "Yếu / Kém 🚨";
+                xepLoaiDiv.className = "text-xl font-bold text-rose-500 animate-pulse";
+                caKhiaBox.innerText = "💀 Tối sầm màn hình! Nguy cơ học lại, nộp tiền cải thiện đang hiển thị rõ mồn một. Gác lại mọi cuộc chơi để cứu lấy học bạ ngay!";
+                document.body.style.backgroundColor = "#020617";
+            }
+
+            updateChartData(gradeCounts);
+            calculateGanhDiem();
+            calculateFuture();
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('gradeChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function updateChartData(counts) {
+            if (!myChart) return;
+            myChart.data.datasets[0].data = [
+                counts['A+'], counts['A'], counts['B+'], counts['B'], counts['C+'], counts['C'], counts['D+'], counts['D'], counts['F']
+            ];
+            myChart.update();
+        }
+
+        function calculateGanhDiem() {
+            const container = document.getElementById('ganhDiemContainer');
+            container.innerHTML = '';
+            let hasData = false;
+
+            subjects.forEach(sub => {
+                const cc = sub.pCc || 0;
+                const gk = sub.pGk || 0;
+                const currentAccumulated = ((cc * sub.wCc) + (gk * sub.wGk)) / 100;
+                const ckWeightRatio = sub.wCk / 100;
+
+                if (ckWeightRatio > 0) {
+                    hasData = true;
+
+                    let scoreForAPlus = (9.0 - currentAccumulated) / ckWeightRatio;
+                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
+                    let scoreForPass = (4.5 - currentAccumulated) / ckWeightRatio;
+
+                    scoreForAPlus = scoreForAPlus < 0 ? 0 : (scoreForAPlus > 10 ? "Bất khả thi" : scoreForAPlus.toFixed(1));
+                    scoreForA = scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1));
+                    scoreForPass = scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1));
+
+                    const div = document.createElement('div');
+                    div.className = "bg-slate-900/60 border border-slate-700 p-3 rounded-xl text-xs space-y-1.5";
+                    div.innerHTML = `
+                        <div class="font-bold text-slate-200 text-sm truncate">${sub.name}</div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Thi để đạt <span class="text-emerald-400 font-bold">A+</span>:</span>
+                            <span class="font-black text-white">${scoreForAPlus} ${typeof scoreForAPlus === 'string' ? '' : 'điểm'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Thi để đạt <span class="text-teal-400 font-bold">A</span>:</span>
+                            <span class="font-black text-white">${scoreForA} ${typeof scoreForA === 'string' ? '' : 'điểm'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-rose-400 font-bold">Qua môn (D) cần:</span>
+                            <span class="font-black text-amber-400">${scoreForPass} ${typeof scoreForPass === 'string' ? '' : 'điểm'}</span>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                }
+            });
+            if (!hasData) {
+                container.innerHTML = `<div class="text-sm text-slate-500 italic col-span-2">Hãy thêm môn học để kích hoạt radar tính toán lực gánh điểm thi!</div>`;
+            }
+        }
+
+        function calculateFuture() {
+            const oldGpa = parseFloat(document.getElementById('oldGpa').value) || 0;
+            const oldCredits = parseInt(document.getElementById('oldCredits').value) || 0;
+            const futureGpa = parseFloat(document.getElementById('futureSlider').value);
+            const futureCredits = parseInt(document.getElementById('futureCredits').value) || 0;
+
+            document.getElementById('sliderValue').innerText = futureGpa.toFixed(2);
+
+            let currentCredits = 0;
+            let currentSumScore4 = 0;
+            subjects.forEach(sub => {
+                const score10 = calculateTotal10(sub);
+                const letter = convertToLetterNEU(score10);
+                currentCredits += sub.credits;
+                currentSumScore4 += gradeMapping[letter] * sub.credits;
+            });
+
+            const totalAllCredits = oldCredits + currentCredits + futureCredits;
+            const totalAllPoints = (oldGpa * oldCredits) + currentSumScore4 + (futureGpa * futureCredits);
+            const finalFutureGpa = totalAllCredits > 0 ? (totalAllPoints / totalAllCredits) : 0;
+
+            let rank = "Chưa xếp loại";
+            if (finalFutureGpa >= 3.6) rank = "BẰNG XUẤT SẮC 🏅";
+            else if (finalFutureGpa >= 3.2) rank = "BẰNG GIỎI 📜";
+            else if (finalFutureGpa >= 2.5) rank = "BẰNG KHÁ 🎓";
+            else if (finalFutureGpa >= 2.0) rank = "BẰNG TRUNG BÌNH 📝";
+            else rank = "Chưa đủ điều kiện tốt nghiệp ❌";
+
+            document.getElementById('futureResultGpa').innerText = finalFutureGpa.toFixed(2);
+            document.getElementById('futureResultRank').innerText = `Xếp loại bằng: ${rank}`;
+        }
+    </script>
+</body>
+</html>
