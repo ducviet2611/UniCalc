@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniCalc - Giả lập & Tính điểm GPA NEU</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .dark-theme {
@@ -25,7 +23,6 @@
 <body class="dark-theme bg-[#0f172a] text-[#f8fafc] font-sans min-h-screen flex flex-col justify-between">
 
     <div>
-        <!-- HEADER -->
         <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-2">
@@ -37,10 +34,8 @@
             </div>
         </header>
 
-        <!-- MAIN CONTENT -->
         <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             
-            <!-- CỘT TRÁI + GIỮA: NHẬP LIỆU -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
                     <div class="flex justify-between items-center mb-6">
@@ -67,13 +62,11 @@
                                 </tr>
                             </thead>
                             <tbody id="subjectTableBody" class="divide-y divide-slate-800">
-                                <!-- JS auto-render -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- KHU VỰC GÁNH ĐIỂM -->
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
                     <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2 mb-2">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
                     <p class="text-xs text-slate-400 mb-4">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm mới.</p>
@@ -83,7 +76,6 @@
                 </div>
             </div>
 
-            <!-- CỘT PHẢI: KẾT QUẢ -->
             <div class="space-y-6">
                 <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
                     <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (NEU)</h2>
@@ -107,7 +99,6 @@
                     🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
                 </div>
 
-                <!-- CHART -->
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">📊 Tỷ Lệ Điểm Chữ (Có A+)</h3>
                     <div class="w-full flex justify-center">
@@ -117,7 +108,6 @@
                     </div>
                 </div>
 
-                <!-- GIẢ LẬP -->
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-4">
                     <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🚀 Giả Lập Tốt Nghiệp Tương Lai</h2>
                     <div class="grid grid-cols-2 gap-3">
@@ -151,7 +141,6 @@
         </main>
     </div>
 
-    <!-- MODERN FOOTER -->
     <footer class="border-t border-slate-800 bg-slate-900/80 py-6 mt-12 text-center text-sm text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="font-semibold tracking-wide text-slate-300">
@@ -168,7 +157,6 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT DETAILED LOGIC -->
     <script>
         let subjects = [];
         let myChart = null;
@@ -183,8 +171,8 @@
                 subjects = JSON.parse(stored);
             } else {
                 subjects = [
-                    { id: 1, name: 'Kinh tế vĩ mô', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9, pGk: 8.5, pCk: 9.2 },
-                    { id: 2, name: 'Xác suất thống kê', credits: 3, wCc: 10, wGk: 20, wCk: 70, pCc: 10, pGk: 7.5, pCk: 8.2 }
+                    { id: 1, name: 'Kinh tế vĩ mô', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 9, pGk: 8.5, pCk: 9.2 },
+                    { id: 2, name: 'Xác suất thống kê', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 10, pGk: 7.5, pCk: 8.2 }
                 ];
             }
             renderTable();
@@ -194,6 +182,29 @@
 
         function saveData() {
             localStorage.setItem('unicalc_subjects_neu', JSON.stringify(subjects));
+        }
+
+        // Thay đổi quan trọng: Hàm tính điểm tổng kết môn học giờ đây sẽ làm tròn đến 1 chữ số thập phân (phần mười) theo chuẩn NEU
+        function calculateTotal10(sub) {
+            const cc = sub.pCc || 0;
+            const gk = sub.pGk || 0;
+            const ck = sub.pCk || 0;
+            const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
+            if(sumWeight === 0) return 0;
+            const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
+            return Math.round(rawScore * 10) / 10; 
+        }
+
+        function convertToLetterNEU(score) {
+            if (score >= 9.0) return 'A+';
+            if (score >= 8.5) return 'A';
+            if (score >= 8.0) return 'B+';
+            if (score >= 7.0) return 'B';
+            if (score >= 6.5) return 'C+';
+            if (score >= 5.5) return 'C';
+            if (score >= 5.0) return 'D+';
+            if (score >= 4.5) return 'D';
+            return 'F';
         }
 
         function renderTable() {
@@ -224,15 +235,15 @@
                     </td>
                     <td class="py-4 text-center">
                         <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
-                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
                         </div>
                     </td>
                     <td class="py-4 text-center">
-                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', parseFloat(this.value))" min="0" max="10" step="0.1" class="w-12 bg-slate-900 text-center rounded border border-cyan-600/50 p-1 font-bold text-white focus:outline-none focus:border-cyan-400">
+                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 bg-slate-900 text-center rounded border border-cyan-600/50 p-1 font-bold text-white focus:outline-none focus:border-cyan-400">
                     </td>
                     <td class="py-4 text-center font-bold">
-                        <div class="text-white">${total10.toFixed(2)}</div>
+                        <div class="text-white">${total10.toFixed(1)}</div>
                         <div class="text-xs text-cyan-400">${gradeLetter}</div>
                     </td>
                     <td class="py-4 text-center">
@@ -246,7 +257,7 @@
         function addSubjectRow() {
             const newId = subjects.length > 0 ? Math.max(...subjects.map(s => s.id)) + 1 : 1;
             subjects.push({
-                id: newId, name: 'Môn học mới ' + newId, credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 10, pGk: 0, pCk: 0
+                id: newId, name: 'Môn học mới ' + newId, credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 10, pGk: 0, pCk: 0
             });
             saveData();
             renderTable();
@@ -260,7 +271,6 @@
             updateDashboard();
         }
 
-        // ĐÃ SỬA LỖI: Tách biệt logic cập nhật tên môn dạng chữ và điểm số dạng số
         function updateSubField(id, field, value) {
             const sub = subjects.find(s => s.id === id);
             if (sub) {
@@ -271,6 +281,7 @@
                 }
                 saveData();
                 updateDashboard();
+                renderTable();
             }
         }
 
@@ -282,27 +293,6 @@
                 updateDashboard();
                 renderTable();
             }
-        }
-
-        function calculateTotal10(sub) {
-            const cc = sub.pCc || 0;
-            const gk = sub.pGk || 0;
-            const ck = sub.pCk || 0;
-            const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
-            if(sumWeight === 0) return 0;
-            return ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
-        }
-
-        function convertToLetterNEU(score) {
-            if (score >= 9.0) return 'A+';
-            if (score >= 8.5) return 'A';
-            if (score >= 8.0) return 'B+';
-            if (score >= 7.0) return 'B';
-            if (score >= 6.5) return 'C+';
-            if (score >= 5.5) return 'C';
-            if (score >= 5.0) return 'D+';
-            if (score >= 4.5) return 'D';
-            return 'F';
         }
 
         function updateDashboard() {
@@ -323,6 +313,7 @@
                 gradeCounts[letter]++;
             });
 
+            // Thay đổi quan trọng: Điểm trung bình học kỳ hệ 10 làm tròn đến hàng phần trăm (.toFixed(2))
             const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
             const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
 
@@ -425,7 +416,7 @@
                             <span class="font-black text-white">${scoreForAPlus} ${typeof scoreForAPlus === 'string' ? '' : 'điểm'}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400">Thi để đạt <span class="text-teal-400 font-bold">A</span>:</span>
+                            <span class="text-teal-400 font-bold">Thi để đạt <span class="text-teal-400 font-bold">A</span>:</span>
                             <span class="font-black text-white">${scoreForA} ${typeof scoreForA === 'string' ? '' : 'điểm'}</span>
                         </div>
                         <div class="flex justify-between">
@@ -441,6 +432,7 @@
             }
         }
 
+        // Đồng bộ hóa với việc tích lũy cũ / tương lai
         function calculateFuture() {
             const oldGpa = parseFloat(document.getElementById('oldGpa').value) || 0;
             const oldCredits = parseInt(document.getElementById('oldCredits').value) || 0;
