@@ -6,6 +6,7 @@
     <title>UniCalc - Nền tảng Giả lập & Tính điểm GPA Đa Trường</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         .dark-theme {
             --bg-app: #0f172a;
@@ -86,26 +87,60 @@
             </div>
 
             <div class="space-y-6">
-                <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
-                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (<span id="cardUniBadge">NEU</span>)</h2>
-                    <div class="grid grid-cols-2 gap-4 my-4 border-b border-slate-700/50 pb-4">
+                
+                <div id="shareCard" class="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-2 border-indigo-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[340px]">
+                    <div class="absolute -right-12 -top-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="flex justify-between items-start border-b border-slate-800/60 pb-3 z-10">
                         <div>
-                            <div class="text-xs text-slate-400 mb-1">Thang 10 trung bình</div>
-                            <div id="gpa10" class="text-3xl font-black text-white">0.00</div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-lg">🔮</span>
+                                <h3 class="font-black text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">UniCalc Horoscope</h3>
+                            </div>
+                            <p id="cardUniName" class="text-[11px] text-slate-400 font-medium mt-0.5">Đại học Kinh tế Quốc dân (NEU)</p>
                         </div>
-                        <div>
-                            <div class="text-xs text-slate-400 mb-1">GPA Tích Lũy Thang 4</div>
-                            <div id="gpa4" class="text-4xl font-black text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">0.00</div>
+                        <span id="cardEditionBadge" class="text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">NEU Edition</span>
+                    </div>
+
+                    <div class="my-6 grid grid-cols-2 gap-4 text-center z-10">
+                        <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-3 backdrop-blur-sm">
+                            <div class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Trung bình Hệ 10</div>
+                            <div id="cardGpa10" class="text-3xl font-black text-white font-mono">0.00</div>
+                        </div>
+                        <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-3 backdrop-blur-sm">
+                            <div class="text-[10px] text-indigo-300 uppercase tracking-widest font-semibold mb-1">Tích lũy Hệ 4</div>
+                            <div id="cardGpa4" class="text-3xl font-black text-cyan-400 font-mono drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">0.00</div>
+                        </div>
+                        <div class="col-span-2 mt-1">
+                            <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Quẻ Học Lực Học Kỳ</div>
+                            <div id="cardXepLoai" class="text-xl font-extrabold tracking-wide text-slate-400">Chưa có dữ liệu</div>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <div class="text-xs text-slate-400 uppercase mb-1">Xếp Loại Học Lực Học Kỳ</div>
-                        <div id="xepLoai" class="text-xl font-bold text-slate-400">Chưa có dữ liệu</div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-center text-xs font-medium italic text-slate-300 line-clamp-3 min-h-[56px] flex items-center justify-center z-10">
+                        <span id="cardCaKhiaText">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</span>
+                    </div>
+
+                    <div class="text-center text-[10px] text-slate-500/80 font-mono mt-4 pt-2 border-t border-slate-800/40 tracking-wider">
+                        Chụp tại: <span class="text-indigo-400/60 font-semibold">ducviet211.github.io/UniCalc/</span>
                     </div>
                 </div>
 
-                <div id="caKhiaBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center text-sm font-medium italic text-slate-400">
-                    🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
+                <button onclick="shareDashboardImage()" class="w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-slate-950 font-black py-3.5 px-4 rounded-xl transition-all cursor-pointer shadow-xl shadow-indigo-500/10 flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                    📸 KHOE TỬ VI HỌC TẬP CỦA BẠN
+                </button>
+
+                <div id="toastNotification" class="hidden bg-emerald-950/80 border border-emerald-500/30 rounded-xl p-3 text-center text-xs text-emerald-400 font-medium animate-bounce">
+                    ✨ Đã tải ảnh thẻ Tử vi về máy của bạn! Hãy mang đi gieo quẻ trên Facebook/Threads nào!
+                </div>
+
+                <div id="cardGpa" class="hidden" aria-hidden="true">
+                    <span id="gpa10">0.00</span>
+                    <span id="gpa4">0.00</span>
+                    <span id="xepLoai">Chưa có dữ liệu</span>
+                    <div id="caKhiaBox">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</div>
+                    <span id="cardUniBadge">NEU</span>
                 </div>
 
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
@@ -118,32 +153,34 @@
                 </div>
 
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-4">
-                    <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🚀 Giả Lập Tốt Nghiệp Tương Lai</h2>
+                    <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🔄 Lộ Trình Gánh Điểm Ngược</h2>
+                    <p class="text-xs text-slate-400">Hệ thống phân tích thuật toán ngược để đưa ra điểm số mục tiêu tối thiểu cho các kỳ học còn lại.</p>
+                    
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] text-slate-400 block mb-1">GPA tích lũy cũ</label>
-                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.1" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                            <label class="text-[11px] text-slate-400 block mb-1">GPA tích lũy cũ (Hệ 4)</label>
+                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
                             <label class="text-[11px] text-slate-400 block mb-1">Số tín chỉ tích lũy cũ</label>
                             <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
-                    <div class="space-y-1 pt-2">
-                        <div class="flex justify-between text-xs font-semibold">
-                            <span class="text-slate-400">GPA dự kiến các kỳ tới:</span>
-                            <span id="sliderValue" class="text-emerald-400 font-bold">2.50</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">Số tín chỉ còn lại</label>
+                            <input type="number" id="futureCredits" value="60" min="1" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
                         </div>
-                        <input type="range" id="futureSlider" min="0" max="4" step="0.05" value="2.50" oninput="calculateFuture()" class="w-full accent-emerald-500 cursor-pointer">
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">GPA mục tiêu ra trường</label>
+                            <input type="number" id="targetGpa" value="3.20" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                        </div>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400 block">Số tín chỉ các kỳ tới</label>
-                        <input type="number" id="futureCredits" value="60" min="0" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-                    <div class="bg-emerald-950/40 border border-emerald-500/20 rounded-xl p-3 text-center">
-                        <div class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">GPA Ra Trường Dự Kiến</div>
-                        <div id="futureResultGpa" class="text-2xl font-black text-white my-0.5">0.00</div>
-                        <div id="futureResultRank" class="text-xs text-slate-300 font-semibold">Xếp loại bằng: -</div>
+
+                    <div id="futureResultContainer" class="bg-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center transition-all duration-300">
+                        <div class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider mb-1">GPA Trung Bình Cần Đạt Trong Các Kỳ Tới</div>
+                        <div id="futureResultGpa" class="text-3xl font-black text-white my-1">0.00</div>
+                        <div id="futureResultRank" class="text-xs text-slate-300 font-medium mt-2 leading-relaxed">Đang tính toán lộ trình khả thi...</div>
                     </div>
                 </div>
             </div>
@@ -167,7 +204,6 @@
     </footer>
 
     <script>
-        // YÊU CẦU 2: Bổ sung thuộc tính `name` chứa chính xác chữ hiển thị phiên bản cho từng trường học
         const uniConfigs = {
             NEU: {
                 name: "NEU Edition",
@@ -179,6 +215,9 @@
                 grades: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
                 colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
                 mapping: { 'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
+                roundSubjectScore: function(rawScore) {
+                    return Math.round(rawScore * 10) / 10;
+                },
                 convert: function(score) {
                     if (score >= 9.0) return 'A+';
                     if (score >= 8.5) return 'A';
@@ -218,6 +257,9 @@
                 grades: ['A', 'B', 'C', 'D', 'F'],
                 colors: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'],
                 mapping: { 'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0 },
+                roundSubjectScore: function(rawScore) {
+                    return Math.round(rawScore * 10) / 10;
+                },
                 convert: function(score) {
                     if (score >= 8.5) return 'A';
                     if (score >= 7.0) return 'B';
@@ -295,28 +337,30 @@
             applyUniversityConfig();
         }
 
-        // YÊU CẦU 3: Hàm cập nhật giao diện động - Thay đổi Badge và tĩnh học phần theo Realtime
         function applyUniversityConfig() {
             const config = uniConfigs[currentUni];
             
-            // Cập nhật nhãn động ở Header bằng thời gian thực không cần reload (F5)
+            // Đồng bộ an toàn và bảo mật dữ liệu, tránh crash DOM
             document.getElementById('editionBadge').innerText = config.name;
+            document.getElementById('cardUniName').innerText = config.title;
+            document.getElementById('cardEditionBadge').innerText = config.name;
+            document.getElementById('cardUniBadge').innerText = currentUni;
 
-            // Thay đổi màu sắc Badge cho đẹp mắt theo từng phiên bản trường học
             if (currentUni === 'AOF') {
+                const borderClass = "text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
                 document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
+                document.getElementById('cardEditionBadge').className = borderClass;
             } else {
+                const borderClass = "text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
                 document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
+                document.getElementById('cardEditionBadge').className = borderClass;
             }
             
-            // Cập nhật văn bản giao diện hiển thị theo thiết lập cấu hình trường
             document.getElementById('tableUniTitle').innerText = currentUni;
             document.getElementById('tableUniDesc').innerText = config.desc;
-            document.getElementById('cardUniBadge').innerText = currentUni;
             document.getElementById('thRatio').innerHTML = config.ratioHeader;
             document.getElementById('thComponent').innerHTML = config.componentHeader;
 
-            // Xây dựng cấu trúc lại biểu đồ thích ứng với số lượng đầu điểm chữ của trường
             if (myChart) {
                 myChart.data.labels = config.grades;
                 myChart.data.datasets[0].backgroundColor = config.colors;
@@ -336,17 +380,18 @@
             const cc = sub.pCc || 0;
             const gk = sub.pGk || 0;
             const ck = sub.pCk || 0;
+            const config = uniConfigs[currentUni];
             
             if (currentUni === 'NEU') {
                 const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
                 if (sumWeight === 0) return 0;
                 const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
-                return Math.round(rawScore * 10) / 10;
+                return config.roundSubjectScore(rawScore);
             } else {
                 const weightCc = sub.wCc !== undefined ? sub.wCc : 30; 
                 const weightCk = sub.wCk !== undefined ? sub.wCk : 70;
                 const rawScore = ((cc * weightCc) + (ck * weightCk)) / 100;
-                return Math.round(rawScore * 10) / 10;
+                return config.roundSubjectScore(rawScore);
             }
         }
 
@@ -495,22 +540,37 @@
             const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
             const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
 
+            // Cập nhật mượt mà cho cả ID gốc lẫn ID Card Ảnh thẻ
             document.getElementById('gpa10').innerText = finalGpa10.toFixed(2);
             document.getElementById('gpa4').innerText = finalGpa4.toFixed(2);
+            document.getElementById('cardGpa10').innerText = finalGpa10.toFixed(2);
+            document.getElementById('cardGpa4').innerText = finalGpa4.toFixed(2);
 
             const xepLoaiDiv = document.getElementById('xepLoai');
+            const cardXepLoaiDiv = document.getElementById('cardXepLoai');
             const caKhiaBox = document.getElementById('caKhiaBox');
+            const cardCaKhiaText = document.getElementById('cardCaKhiaText');
+            
             document.body.style.backgroundColor = "#0f172a";
 
             if (totalCredits === 0) {
-                xepLoaiDiv.innerText = "Chưa có dữ liệu";
+                const emptyText = "Chưa có dữ liệu";
+                const emptyMsg = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
+                xepLoaiDiv.innerText = emptyText;
+                cardXepLoaiDiv.innerText = emptyText.toUpperCase();
                 xepLoaiDiv.className = "text-xl font-bold text-slate-400";
-                caKhiaBox.innerText = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
+                cardXepLoaiDiv.className = "text-xl font-extrabold tracking-wide text-slate-500";
+                caKhiaBox.innerText = emptyMsg;
+                cardCaKhiaText.innerText = emptyMsg;
             } else {
                 const rankInfo = config.rank(finalGpa4);
                 xepLoaiDiv.innerText = rankInfo.label;
+                cardXepLoaiDiv.innerText = rankInfo.label.toUpperCase();
                 xepLoaiDiv.className = `text-xl font-bold ${rankInfo.class}`;
+                cardXepLoaiDiv.className = `text-xl font-extrabold tracking-wide ${rankInfo.class} drop-shadow-md`;
+                
                 caKhiaBox.innerText = rankInfo.msg;
+                cardCaKhiaText.innerText = rankInfo.msg;
 
                 if (finalGpa4 < 2.0 && currentUni === 'NEU') {
                     document.body.style.backgroundColor = "#020617";
@@ -604,34 +664,74 @@
         function calculateFuture() {
             const oldGpa = parseFloat(document.getElementById('oldGpa').value) || 0;
             const oldCredits = parseInt(document.getElementById('oldCredits').value) || 0;
-            const futureGpa = parseFloat(document.getElementById('futureSlider').value);
             const futureCredits = parseInt(document.getElementById('futureCredits').value) || 0;
-            const config = uniConfigs[currentUni];
+            const targetGpa = parseFloat(document.getElementById('targetGpa').value) || 0;
 
-            document.getElementById('sliderValue').innerText = futureGpa.toFixed(2);
+            const resContainer = document.getElementById('futureResultContainer');
+            const resGpaDiv = document.getElementById('futureResultGpa');
+            const resRankDiv = document.getElementById('futureResultRank');
 
-            let currentCredits = 0;
-            let currentSumScore4 = 0;
-            subjects.forEach(sub => {
-                const score10 = calculateTotal10(sub);
-                const letter = config.convert(score10);
-                currentCredits += sub.credits;
-                currentSumScore4 += config.mapping[letter] * sub.credits;
+            if (futureCredits <= 0) {
+                resGpaDiv.innerText = "N/A";
+                resRankDiv.innerText = "⚠️ Số tín chỉ còn lại bắt buộc phải lớn hơn 0 để đo lường lộ trình.";
+                resContainer.className = "bg-slate-900 border border-slate-700 rounded-xl p-4 text-center";
+                return;
+            }
+
+            const totalCredits = oldCredits + futureCredits;
+            const targetPoints = targetGpa * totalCredits;
+            const currentPoints = oldGpa * oldCredits;
+            const requiredPoints = targetPoints - currentPoints;
+            const requiredGpa = requiredPoints / futureCredits;
+
+            const isAbsoluteMatch = (oldGpa === 4.0 && targetGpa === 4.0 && oldGpa === targetGpa);
+
+            if (requiredGpa <= 0 || isAbsoluteMatch) {
+                resGpaDiv.innerText = "ĐÃ AN TOÀN ✅";
+                resGpaDiv.className = "text-2xl font-black text-emerald-400 my-1";
+                resRankDiv.innerText = "Hiện tại điểm tích lũy của bạn đã thừa sức đạt mục tiêu ra trường rồi!";
+                resContainer.className = "bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-center";
+            } else if (requiredGpa > 4.0) {
+                resGpaDiv.innerText = "BẤT KHẢ THI 🚨";
+                resGpaDiv.className = "text-2xl font-black text-rose-500 animate-pulse my-1";
+                resRankDiv.innerText = "⚠️ Cảnh báo: Kể cả bạn có đạt điểm tuyệt đối 4.0/4.0 cho tất cả các môn còn lại cũng không gánh nổi mục tiêu này! Hãy hạ bớt kỳ vọng hoặc đăng ký học cải thiện/học bù thêm tín chỉ ngay lập tức!";
+                resContainer.className = "bg-rose-950/40 border border-rose-500/30 rounded-xl p-4 text-center";
+            } else {
+                resGpaDiv.innerText = requiredGpa.toFixed(2);
+                resGpaDiv.className = "text-3xl font-black text-cyan-400 my-1 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]";
+                resRankDiv.innerText = `Để ra trường đạt mục tiêu, trung bình mỗi kỳ tới bạn cần đạt ${requiredGpa.toFixed(2)} / 4.0. Kế hoạch khả thi, chiến thôi!`;
+                resContainer.className = "bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4 text-center";
+            }
+        }
+
+        function shareDashboardImage() {
+            const targetCard = document.getElementById('shareCard');
+            const toast = document.getElementById('toastNotification');
+
+            html2canvas(targetCard, {
+                backgroundColor: '#0f172a',
+                scale: 2, 
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const base64Image = canvas.toDataURL('image/png');
+
+                const downloadLink = document.createElement('a');
+                downloadLink.href = base64Image;
+                downloadLink.download = 'UniCalc_TuViHocTap.png';
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 4500);
+            }).catch(err => {
+                console.error("Lỗi trích xuất ảnh thẻ Tử vi:", err);
+                alert("Rất tiếc, trình duyệt chưa hỗ trợ xuất ảnh nhanh. Hãy chụp ảnh màn hình thủ công nhé!");
             });
-
-            const totalAllCredits = oldCredits + currentCredits + futureCredits;
-            const totalAllPoints = (oldGpa * oldCredits) + currentSumScore4 + (futureGpa * futureCredits);
-            const finalFutureGpa = totalAllCredits > 0 ? (totalAllPoints / totalAllCredits) : 0;
-
-            let rank = "Chưa xếp loại";
-            if (finalFutureGpa >= 3.6) rank = "BẰNG XUẤT SẮC 🏅";
-            else if (finalFutureGpa >= 3.2) rank = "BẰNG GIỎI 📜";
-            else if (finalFutureGpa >= 2.5) rank = "BẰNG KHÁ 🎓";
-            else if (finalFutureGpa >= 2.0) rank = "BẰNG TRUNG BÌNH 📝";
-            else rank = "Chưa đủ điều kiện tốt nghiệp ❌";
-
-            document.getElementById('futureResultGpa').innerText = finalFutureGpa.toFixed(2);
-            document.getElementById('futureResultRank').innerText = `Xếp loại bằng: ${rank}`;
         }
     </script>
 </body>
