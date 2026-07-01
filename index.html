@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,190 +8,327 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        .dark-theme {
+        /* Kiến trúc CSS Variables quản lý Theme */
+        [data-theme="dark"] {
             --bg-app: #0f172a;
-            --bg-card: #1e293b;
+            --bg-pattern: none;
+            --bg-card: rgba(30, 41, 59, 0.5);
+            --bg-card-solid: #1e293b;
+            --bg-input: #0f172a;
+            --border-color: rgba(51, 65, 85, 0.5);
             --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-accent: #22d3ee;
+            --btn-primary-bg: #06b6d4;
+            --btn-primary-text: #020617;
+            --btn-primary-hover: #0891b2;
+            --header-bg: rgba(15, 23, 42, 0.5);
+            --header-border: #1e293b;
+            --progress-bar-bg: linear-gradient(to right, #22d3ee, #6366f1, #a855f7);
+            --shadow-style: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --focus-glow: 0 0 0 3px rgba(34, 211, 238, 0.3);
         }
+
+        [data-theme="pink"] {
+            --bg-app: #fff2f5; 
+            /* Background Pattern: Mũ cử nhân chibi, Nơ và Ngôi sao */
+            --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M10 15 L20 10 L30 15 L20 20 Z M20 18 L20 25 M28 16 L28 22' stroke='%23ffdae3' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='45' cy='45' r='3' fill='%23ffdae3'/%3E%3Cpath d='M42 45 Q45 40 48 45 Q45 50 42 45 Z' fill='%23ffdae3'/%3E%3Cpath d='M15 45 Q12 42 15 39 Q18 42 15 45 Z' fill='%23ffdae3'/%3E%3Cpath d='M48 15 L52 15 M50 13 L50 17' stroke='%23ffdae3' stroke-width='1.5'/%3E%3C/svg%3E");
+            --bg-card: #fffbfb; /* Màu kem sữa siêu mịn */
+            --bg-card-solid: #fff9fa;
+            --bg-input: #fff6f7;
+            --border-color: #f5d4da; /* Màu hồng đất nhạt */
+            --text-main: #5c4338; /* Warm Brown cổ điển */
+            --text-muted: #917568;
+            --text-accent: #ff6584; /* Đóa hồng ngọt ngào */
+            --btn-primary-bg: linear-gradient(135deg, #ff758f, #ffaaab); /* Rose Gold Gradient */
+            --btn-primary-text: #ffffff;
+            --btn-primary-hover: linear-gradient(135deg, #e65c78, #ff8fa3);
+            --header-bg: rgba(255, 242, 245, 0.85);
+            --header-border: #fbcad4;
+            --progress-bar-bg: linear-gradient(to right, #ff8fa3, #e5989b); 
+            --shadow-style: 0 20px 40px -15px rgba(163, 102, 113, 0.25); /* Đổ bóng 3D tone hồng đất */
+            --focus-glow: 0 0 10px rgba(255, 101, 132, 0.25);
+        }
+
         body {
-            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-app);
+            background-image: var(--bg-pattern);
+            color: var(--text-main);
+            transition: all 0.3s ease;
         }
+        
+        .theme-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-style);
+        }
+        
+        .theme-input {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+        .theme-input:focus {
+            outline: none;
+            border-color: var(--text-accent);
+            box-shadow: var(--focus-glow);
+        }
+
+        .theme-btn {
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+        }
+
+        /* Họa tiết Sticker Chibi bay bổng */
+        .cute-sticker {
+            display: none;
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            z-index: 20;
+        }
+        [data-theme="pink"] .cute-sticker {
+            display: block;
+        }
+        [data-theme="pink"] .kitty-only {
+            display: inline-block !important;
+        }
+        [data-theme="pink"] .angel-wings {
+            display: flex !important;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
     </style>
 </head>
-<body class="dark-theme bg-[#0f172a] text-[#f8fafc] font-sans min-h-screen flex flex-col justify-between">
+<body class="font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
     <div>
-        <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🎓</span>
-                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">UniCalc</h1>
-                    <span id="editionBadge" class="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300">NEU Edition</span>
+        <header class="border-b backdrop-blur sticky top-0 z-50 transition-all" style="background-color: var(--header-bg); border-color: var(--header-border);">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2 relative">
+                    <div class="kitty-only hidden w-10 h-10 mr-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <ellipse cx="50" cy="55" rx="40" ry="32" fill="#fff" stroke="#5c4338" stroke-width="4"/>
+                            <ellipse cx="32" cy="52" rx="4" ry="6" fill="#5c4338"/>
+                            <ellipse cx="68" cy="52" rx="4" ry="6" fill="#5c4338"/>
+                            <polygon points="50,58 46,63 54,63" fill="#ffb3c1" stroke="#5c4338" stroke-width="2"/>
+                            <path d="M14,35 Q10,15 30,26" fill="#fff" stroke="#5c4338" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M86,35 Q90,15 70,26" fill="#fff" stroke="#5c4338" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M22,24 Q28,12 40,20 Q32,32 22,24" fill="#ff6584" stroke="#5c4338" stroke-width="3" fill-rule="evenodd"/>
+                            <path d="M5,52 L20,54 M3,60 L18,59 M6,68 L20,64 M95,52 L80,54 M97,60 L82,59 M94,68 L80,64" stroke="#5c4338" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="text-2xl [data-theme='pink']:hidden">🎓</span>
+                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-500 [data-theme='pink']:from-[#ff6584] [data-theme='pink']:to-[#ff8fa3] bg-clip-text text-transparent">UniCalc</h1>
+                    <span id="editionBadge" class="text-xs px-2 py-0.5 rounded-full font-bold transition-all duration-300 bg-cyan-500/20 text-cyan-400 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]">NEU Edition</span>
                 </div>
                 
-                <div class="flex items-center gap-3 w-full sm:w-auto">
-                    <label for="universitySelector" class="text-xs text-slate-400 uppercase font-bold tracking-wider whitespace-nowrap">Chọn Trường:</label>
-                    <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full sm:w-64 bg-slate-800 border-2 border-indigo-500/50 text-white font-bold py-2 px-3 rounded-xl focus:outline-none focus:border-indigo-400 cursor-pointer shadow-lg transition-all">
-                        <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
-                        <option value="TMU">Đại học Thương mại (TMU)</option>
-                        <option value="AOF">Học viện Tài chính (AOF)</option>
-                    </select>
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <label for="select-theme" class="text-xs uppercase font-bold tracking-wider whitespace-nowrap" style="color: var(--text-muted)">Giao diện:</label>
+                        <select id="select-theme" onchange="switchTheme(this.value)" class="w-full sm:w-40 theme-input font-bold py-2 px-3 rounded-2xl focus:outline-none cursor-pointer shadow-md text-sm">
+                            <option value="dark">Dark Pallete 🌌</option>
+                            <option value="pink">Pink Palette 💖</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <label for="universitySelector" class="text-xs uppercase font-bold tracking-wider whitespace-nowrap" style="color: var(--text-muted)">Chọn Trường:</label>
+                        <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full sm:w-64 theme-input font-bold py-2 px-3 rounded-2xl focus:outline-none cursor-pointer shadow-md text-sm" style="border-width: 2px; border-color: var(--text-accent);">
+                            <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
+                            <option value="TMU">Đại học Thương mại (TMU)</option>
+                            <option value="AOF">Học viện Tài chính (AOF)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12 relative z-10">
             
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                <div class="theme-card rounded-3xl p-6 transition-all relative">
+                    <div class="cute-sticker -left-3 top-10 w-8 h-8">
+                        <svg viewBox="0 0 24 24" fill="#ff6584" stroke="#5c4338" stroke-width="2"><path d="M12 5c3 0 5 2 5 5 0 5-4 9-5 9s-5-4-5-9c0-3 2-5 5-5z"/><path d="M12 5Q11 2 14 2" fill="none" stroke-width="2"/></svg>
+                    </div>
+
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
-                            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400">
-                                📝 Danh Sách Môn Học - <span id="tableUniTitle">NEU</span>
+                            <h2 class="text-xl font-bold flex items-center gap-2" style="color: var(--text-main)">
+                                <span class="hidden [data-theme='pink']:inline">📚</span><span class="[data-theme='pink']:hidden">📝</span> Danh Sách Môn Học - <span id="tableUniTitle">NEU</span>
                             </h2>
-                            <p class="text-xs text-slate-400 mt-1" id="tableUniDesc">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
+                            <p class="text-xs mt-1" id="tableUniDesc" style="color: var(--text-muted)">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
                         </div>
-                        <button onclick="addSubjectRow()" class="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-lg shadow-cyan-500/20">
-                            ➕ Thêm Môn
-                        </button>
+                        
+                        <div class="relative w-full sm:w-auto">
+                            <div class="angel-wings hidden absolute -inset-x-6 top-1.5 justify-between pointer-events-none">
+                                <svg class="w-5 h-5 text-[#ffbaa8]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6 2 2 6 2 12c0 3 3 7 7 8l-1-3c-2-1-3-3-3-5 0-4 3-7 7-7s7 3 7 7c0 2-1 4-3 5l-1 3c4-1 7-5 7-8 0-6-4-10-10-10z"/></svg>
+                                <svg class="w-5 h-5 text-[#ffbaa8] scale-x-100" style="transform: scaleX(-1)" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6 2 2 6 2 12c0 3 3 7 7 8l-1-3c-2-1-3-3-3-5 0-4 3-7 7-7s7 3 7 7c0 2-1 4-3 5l-1 3c4-1 7-5 7-8 0-6-4-10-10-10z"/></svg>
+                            </div>
+                            <button onclick="addSubjectRow()" class="w-full sm:w-auto theme-btn font-black px-6 py-2.5 rounded-full transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-md active:scale-95">
+                                ➕ Thêm Môn
+                            </button>
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[620px]">
                             <thead>
-                                <tr class="border-b border-slate-700 text-xs text-slate-400 uppercase tracking-wider">
+                                <tr class="border-b text-xs uppercase tracking-wider" style="border-color: var(--border-color); color: var(--text-muted)">
                                     <th class="pb-3 w-5/12">Tên Môn Học</th>
                                     <th class="pb-3 w-16 text-center">Tín Chỉ</th>
-                                    <th class="pb-3 text-center w-28" id="thRatio">Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span></th>
-                                    <th class="pb-3 text-center w-36" id="thComponent">Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span></th>
+                                    <th class="pb-3 text-center w-28" id="thRatio">Tỷ Lệ (%)</th>
+                                    <th class="pb-3 text-center w-36" id="thComponent">Điểm TP</th>
                                     <th class="pb-3 text-center w-16">Thi CK</th>
                                     <th class="pb-3 text-center w-20">Tổng Kết</th>
                                     <th class="pb-3 w-10 text-center">Xóa</th>
                                 </tr>
                             </thead>
-                            <tbody id="subjectTableBody" class="divide-y divide-slate-800">
+                            <tbody id="subjectTableBody" class="divide-y" style="divide-color: var(--border-color)">
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                    <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2 mb-2">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
-                    <p class="text-xs text-slate-400 mb-4">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm của trường.</p>
+                <div class="relative h-4 w-full">
+                    <div class="cute-sticker left-1/2 -translate-x-1/2 -top-4 flex items-center gap-1 opacity-90">
+                        <svg class="w-7 h-7 text-[#ff8fa3]" viewBox="0 0 24 24" fill="currentColor" stroke="#5c4338" stroke-width="1.5"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="#fff" stroke-width="2"/><path d="M12 12s-1-2-3-2 0 3 3 4c3-1 4-4 3-4s-2 2-3 2z" fill="#ff6584"/></svg>
+                        <svg class="w-5 h-5 text-[#fbcad4] rotate-45" viewBox="0 0 24 24" fill="currentColor" stroke="#5c4338"><path d="M3 21l3-1 14-14-2-2-14 14-1 3z"/></svg>
+                    </div>
+                </div>
+
+                <div class="theme-card rounded-3xl p-6 transition-all">
+                    <h2 class="text-xl font-bold flex items-center gap-2 mb-2" style="color: var(--text-main)">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
+                    <p class="text-xs mb-4" style="color: var(--text-muted)">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm của trường.</p>
                     <div id="ganhDiemContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="text-sm text-slate-500 italic col-span-2">Hãy nhập đầy đủ điểm thành phần để rada bắt đầu quét...</div>
+                        <div class="text-sm italic" style="color: var(--text-muted)">Hãy nhập đầy đủ điểm thành phần để rada bắt đầu quét...</div>
                     </div>
                 </div>
             </div>
 
             <div class="space-y-6">
-                
-                <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
-                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (<span id="cardUniBadge">NEU</span>)</h2>
-                    <div class="grid grid-cols-2 gap-4 my-4 border-b border-slate-700/50 pb-4">
+                <div id="cardGpa" class="theme-card rounded-3xl p-6 text-center relative overflow-hidden transition-all">
+                    <div class="cute-sticker -right-2 -top-1 w-12 h-12 rotate-12">
+                        <svg viewBox="0 0 100 100" class="w-full h-full" fill="#ff6584" stroke="#5c4338" stroke-width="5">
+                            <circle cx="50" cy="50" r="15" fill="#fff9fa"/>
+                            <path d="M50,50 C20,30 10,70 50,50 Z M50,50 C80,30 90,70 50,50 Z"/>
+                        </svg>
+                    </div>
+
+                    <h2 class="text-sm font-bold uppercase tracking-widest mb-4" style="color: var(--text-accent)">GPA Học Kỳ Hiện Tại (<span id="cardUniBadge">NEU</span>)</h2>
+                    <div class="grid grid-cols-2 gap-4 my-4 border-b pb-4" style="border-color: var(--border-color)">
                         <div>
-                            <div class="text-xs text-slate-400 mb-1">Thang 10 trung bình</div>
-                            <div id="gpa10" class="text-3xl font-black text-white">0.00</div>
+                            <div class="text-xs mb-1" style="color: var(--text-muted)">Thang 10 trung bình</div>
+                            <div id="gpa10" class="text-3xl font-black">0.00</div>
                         </div>
                         <div>
-                            <div class="text-xs text-slate-400 mb-1">GPA Tích Lũy Thang 4</div>
-                            <div id="gpa4" class="text-4xl font-black text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">0.00</div>
+                            <div class="text-xs mb-1" style="color: var(--text-muted)">GPA Tích Lũy Thang 4</div>
+                            <div id="gpa4" class="text-4xl font-black" style="color: var(--text-accent)">0.00</div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <div class="text-xs text-slate-400 uppercase mb-1">Xếp Loại Học Lực Học Kỳ</div>
-                        <div id="xepLoai" class="text-xl font-bold text-slate-400">Chưa có dữ liệu</div>
+                        <div class="text-xs uppercase mb-1" style="color: var(--text-muted)">Xếp Loại Học Lực Học Kỳ</div>
+                        <div id="xepLoai" class="text-xl font-bold" style="color: var(--text-muted)">Chưa có dữ liệu</div>
                     </div>
                 </div>
 
-                <div id="caKhiaBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center text-sm font-medium italic text-slate-400 hidden">
+                <div id="caKhiaBox" class="theme-card rounded-2xl p-4 text-center text-sm font-medium italic hidden" style="color: var(--text-muted)">
                     🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
                 </div>
 
-                <button onclick="openShareModal()" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-slate-950 font-black py-4 px-4 rounded-xl transition-all cursor-pointer shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-2 transform active:scale-[0.99] text-base tracking-wide">
-                    🔮 KHOE TỬ VI HỌC TẬP CỦA BẠN
+                <button onclick="openShareModal()" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 [data-theme='pink']:from-[#917568] [data-theme='pink']:via-[#ff8fa3] [data-theme='pink']:to-[#ffe3a8] font-black py-4 px-4 rounded-2xl transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2 transform active:scale-[0.99] text-base tracking-wide relative overflow-hidden" style="color: #fff">
+                    <span>✨ KHOE TỬ VI HỌC TẬP CỦA BẠN ✨</span>
                 </button>
 
-                <div id="toastNotification" class="hidden bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 rounded-xl p-3 text-center text-xs font-semibold shadow-lg shadow-emerald-500/10 transition-all">
+                <div id="toastNotification" class="hidden bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 rounded-xl p-3 text-center text-xs font-semibold shadow-lg transition-all">
                     ✨ Bản sao ảnh đã nằm trong bộ nhớ tạm! Hãy Ctrl+V gieo quẻ trên mạng xã hội nào!
                 </div>
 
-                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-5">
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">📊 Tiến Trình GPA & Tối Ưu Điểm</h3>
+                <div class="theme-card rounded-3xl p-6 transition-all space-y-5 relative">
+                    <div class="cute-sticker -right-1 -top-8 w-14 h-14">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <path d="M20,60 Q10,30 35,42 Q50,40 65,42 Q90,30 80,60" fill="#fff" stroke="#5c4338" stroke-width="4"/>
+                            <ellipse cx="40" cy="54" rx="3" ry="5" fill="#5c4338"/>
+                            <ellipse cx="60" cy="54" rx="3" ry="5" fill="#5c4338"/>
+                            <path d="M22,40 Q28,25 40,35" fill="#ff6584" stroke="#5c4338" stroke-width="2"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-sm font-bold uppercase tracking-wider" style="color: var(--text-muted)">📊 Tiến Trình GPA & Tối Ưu Điểm</h3>
                     
                     <div class="space-y-2">
-                        <div class="flex justify-between items-center text-xs text-slate-400">
+                        <div class="flex justify-between items-center text-xs" style="color: var(--text-muted)">
                             <span>Mức GPA Hiện Tại:</span>
-                            <span id="progressBarValue" class="font-bold text-cyan-400 font-mono">0.00 / 4.00</span>
+                            <span id="progressBarValue" class="font-bold font-mono" style="color: var(--text-accent)">0.00 / 4.00</span>
                         </div>
-                        <div class="w-full bg-slate-900 rounded-full h-3.5 border border-slate-700/60 overflow-hidden p-[2px]">
-                            <div id="progressBarFill" class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-500" style="width: 0%"></div>
+                        <div class="w-full rounded-full h-4 border overflow-hidden p-[2px] shadow-inner" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                            <div id="progressBarFill" class="h-full rounded-full transition-all duration-500 shadow-md" style="width: 0%; background: var(--progress-bar-bg);"></div>
                         </div>
                         
-                        <div class="relative w-full h-6 mt-1 text-xs text-slate-400 select-none">
+                        <div class="relative w-full h-6 mt-1 text-xs select-none" style="color: var(--text-muted)">
                             <div class="absolute flex flex-col items-center" style="left: 50%; transform: translateX(-50%);">
-                                <span class="font-semibold text-[10px]">2.50</span><span class="text-[9px] text-slate-500">Khá</span>
+                                <span class="font-semibold text-[10px]">2.50</span><span class="text-[9px]">Khá</span>
                             </div>
                             <div class="absolute flex flex-col items-center" style="left: 62.5%; transform: translateX(-50%);">
-                                <span class="font-semibold text-[10px]">3.20</span><span class="text-[9px] text-slate-500">Giỏi</span>
+                                <span class="font-semibold text-[10px]">3.20</span><span class="text-[9px]">Giỏi</span>
                             </div>
                             <div class="absolute flex flex-col items-center" style="left: 80%; transform: translateX(-50%);">
-                                <span class="font-semibold text-[10px]">3.60</span><span class="text-[9px] text-slate-500">X.Sắc</span>
+                                <span class="font-semibold text-[10px]">3.60</span><span class="text-[9px]">X.Sắc</span>
                             </div>
                             <div class="absolute flex flex-col items-end" style="left: 100%; transform: translateX(-100%);">
-                                <span class="font-semibold text-[10px]">4.00</span><span class="text-[9px] text-slate-500">Tuyệt đối</span>
+                                <span class="font-semibold text-[10px]">4.00</span><span class="text-[9px]">Tuyệt đối</span>
                             </div>
                         </div>
                         
-                        <div id="godRemainingMsg" class="text-xs text-slate-300 font-medium text-center pt-2 border-t border-slate-800/50 mt-1">
+                        <div id="godRemainingMsg" class="text-xs font-medium text-center pt-2 border-t mt-1" style="border-color: var(--border-color);">
                             Vui lòng nhập điểm để thiết lập tiến trình mục tiêu học lực.
                         </div>
                     </div>
 
-                    <hr class="border-slate-800">
+                    <hr style="border-color: var(--border-color)">
 
                     <div class="space-y-2">
-                        <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                        <div class="text-xs font-bold flex items-center gap-1.5" style="color: var(--text-main)">
                             <span>🧠 RADA PHÂN TÍCH ĐIỂM</span>
                         </div>
-                        <div id="smartTipsBox" class="bg-slate-900/40 backdrop-blur-md border border-slate-700/40 rounded-xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2">
-                            <div class="text-slate-500 italic text-center">Vũ trụ đang quét dữ liệu môn học...</div>
+                        <div id="smartTipsBox" class="backdrop-blur-md border rounded-2xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2" style="background-color: rgba(0,0,0,0.03); border-color: var(--border-color)">
+                            <div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang quét dữ liệu môn học...</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-4">
-                    <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🔄 Lộ Trình Gánh Điểm Ngược</h2>
-                    <p class="text-xs text-slate-400">Hệ thống phân tích thuật toán ngược để đưa ra điểm số mục tiêu tối thiểu cho các kỳ học còn lại.</p>
+                <div class="theme-card rounded-3xl p-6 transition-all space-y-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2" style="color: var(--text-main)">🔄 Lộ Trình Gánh Điểm Ngược</h2>
+                    <p class="text-xs" style="color: var(--text-muted)">Hệ thống phân tích thuật toán ngược để đưa ra điểm số mục tiêu tối thiểu cho các kỳ học còn lại.</p>
                     
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] text-slate-400 block mb-1">GPA tích lũy cũ (Hệ 4)</label>
-                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">GPA tích lũy cũ (Hệ 4)</label>
+                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
                         </div>
                         <div>
-                            <label class="text-[11px] text-slate-400 block mb-1">Số tín chỉ tích lũy cũ</label>
-                            <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">Số tín chỉ tích lũy cũ</label>
+                            <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] text-slate-400 block mb-1">Số tín chỉ còn lại</label>
-                            <input type="number" id="futureCredits" value="60" min="1" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">Số tín chỉ còn lại</label>
+                            <input type="number" id="futureCredits" value="60" min="1" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
                         </div>
                         <div>
-                            <label class="text-[11px] text-slate-400 block mb-1">GPA mục tiêu ra trường</label>
-                            <input type="number" id="targetGpa" value="3.20" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-center text-white focus:outline-none focus:border-emerald-500">
+                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">GPA mục tiêu ra trường</label>
+                            <input type="number" id="targetGpa" value="3.20" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
                         </div>
                     </div>
 
-                    <div id="futureResultContainer" class="bg-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center transition-all duration-300">
-                        <div class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider mb-1">GPA Trung Bình Cần Đạt Trong Các Kỳ Tới</div>
-                        <div id="futureResultGpa" class="text-3xl font-black text-white my-1">0.00</div>
-                        <div id="futureResultRank" class="text-xs text-slate-300 font-medium mt-2 leading-relaxed">Đang tính toán lộ trình khả thi...</div>
+                    <div id="futureResultContainer" class="border rounded-2xl p-4 text-center transition-all duration-300" style="background-color: rgba(255, 101, 132, 0.05); border-color: var(--border-color)">
+                        <div class="text-[10px] uppercase font-bold tracking-wider mb-1" style="color: var(--text-accent)">GPA Trung Bình Cần Đạt Trong Các Kỳ Tới</div>
+                        <div id="futureResultGpa" class="text-3xl font-black my-1">0.00</div>
+                        <div id="futureResultRank" class="text-xs font-medium mt-2 leading-relaxed">Đang tính toán lộ trình khả thi...</div>
                     </div>
                 </div>
             </div>
@@ -199,70 +336,70 @@
     </div>
 
     <div id="shareModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-all duration-300">
-        <div class="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-6 transform scale-95 transition-transform duration-300">
+        <div class="w-full max-w-md theme-card rounded-3xl p-6 shadow-2xl flex flex-col gap-6 transform scale-95 transition-transform duration-300" style="background-color: var(--bg-card-solid)">
             
-            <div id="shareCard" class="border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500">
+            <div id="shareCard" class="border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500" style="border-color: var(--border-color)">
                 <div class="absolute -right-12 -top-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
                 
-                <div class="flex justify-between items-start border-b border-slate-800/60 pb-3 z-10">
+                <div class="flex justify-between items-start border-b pb-3 z-10" style="border-color: var(--border-color)">
                     <div>
                         <div class="flex items-center gap-1.5">
                             <span id="shareCardIcon" class="text-xl">🔮</span>
-                            <h3 class="font-black text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">UniCalc Horoscope</h3>
+                            <h3 class="font-black text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 [data-theme='pink']:from-[#ff6584] [data-theme='pink']:to-[#ff8fa3] bg-clip-text text-transparent">UniCalc Horoscope</h3>
                         </div>
-                        <p id="cardUniName" class="text-[11px] text-slate-400 font-medium mt-0.5">Đại học Kinh tế Quốc dân (NEU)</p>
+                        <p id="cardUniName" class="text-[11px] font-medium mt-0.5" style="color: var(--text-muted)">Đại học Kinh tế Quốc dân (NEU)</p>
                     </div>
-                    <span id="cardEditionBadge" class="text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">NEU Edition</span>
+                    <span id="cardEditionBadge" class="text-[10px] border px-2 py-0.5 rounded-md font-bold uppercase tracking-wider bg-cyan-500/15 text-cyan-400 border-cyan-500/30">NEU Edition</span>
                 </div>
 
                 <div class="my-5 grid grid-cols-2 gap-4 text-center z-10">
-                    <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
-                        <div class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Hệ 10 Trung Bình</div>
-                        <div id="cardGpa10" class="text-3xl font-black text-white font-mono">0.00</div>
+                    <div class="border rounded-xl p-3" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                        <div class="text-[10px] uppercase tracking-widest font-semibold mb-1" style="color: var(--text-muted)">Hệ 10 Trung Bình</div>
+                        <div id="cardGpa10" class="text-3xl font-black font-mono">0.00</div>
                     </div>
-                    <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
-                        <div class="text-[10px] text-indigo-300 uppercase tracking-widest font-semibold mb-1">Hệ 4 Tích Lũy</div>
-                        <div id="cardGpa4" class="text-3xl font-black text-cyan-400 font-mono drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">0.00</div>
+                    <div class="border rounded-xl p-3" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                        <div class="text-[10px] uppercase tracking-widest font-semibold mb-1" style="color: var(--text-muted)">Hệ 4 Tích Lũy</div>
+                        <div id="cardGpa4" class="text-3xl font-black font-mono" style="color: var(--text-accent);">0.00</div>
                     </div>
                     <div class="col-span-2 mt-1">
                         <div id="cardXepLoai" class="text-base font-extrabold tracking-wide uppercase">CHƯA CÓ DỮ LIỆU</div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-center text-xs font-medium italic text-slate-200 min-h-[72px] flex items-center justify-center z-10 leading-relaxed">
+                <div class="border rounded-xl p-3 text-center text-xs font-medium italic min-h-[72px] flex items-center justify-center z-10 leading-relaxed" style="background-color: var(--bg-input); border-color: var(--border-color)">
                     <span id="cardCaKhiaText">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</span>
                 </div>
 
-                <div class="text-center text-[10px] text-slate-500/80 font-mono mt-4 pt-2 border-t border-slate-800/40 tracking-wider">
-                    Chụp tại: <span class="text-indigo-400/60 font-semibold">ducviet2611.github.io/UniCalc/</span>
+                <div class="text-center text-[10px] font-mono mt-4 pt-2 border-t tracking-wider" style="border-color: var(--border-color); color: var(--text-muted)">
+                    Chụp tại: <span class="font-semibold" style="color: var(--text-accent)">ducviet2611.github.io/UniCalc/</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="downloadShareCard()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-cyan-500/10">
+                <button onclick="downloadShareCard()" class="w-full theme-btn font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg">
                     📥 Tải Ảnh Về Máy
                 </button>
-                <button onclick="copyShareCardToClipboard()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-indigo-500/10">
+                <button onclick="copyShareCardToClipboard()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg">
                     📋 Sao Chép Ảnh
                 </button>
-                <button onclick="closeShareModal()" class="col-span-2 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center transition-all cursor-pointer">
+                <button onclick="closeShareModal()" class="col-span-2 w-full theme-input hover:opacity-80 text-center font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center transition-all cursor-pointer">
                     ❌ Đóng Cửa Sổ
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="border-t border-slate-800 bg-slate-900/80 py-6 mt-12 text-center text-sm text-slate-400">
+    <footer class="border-t py-6 mt-12 text-center text-sm transition-all" style="background-color: var(--header-bg); border-color: var(--header-border);">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="font-semibold tracking-wide text-slate-300">
-                Developed by <span class="text-cyan-400 font-bold">Duc Viet</span>
+            <div class="font-semibold tracking-wide" style="color: var(--text-main)">
+                Developed by <span style="color: var(--text-accent)">Duc Viet</span>
             </div>
             <div class="flex items-center gap-6 text-xs font-medium">
-                <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 hover:text-cyan-400 transition-colors bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                    ✉️ <span class="underline decoration-slate-600 hover:decoration-cyan-400">vietdang293.vn@gmail.com</span>
+                <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border theme-input">
+                    ✉️ <span class="underline">vietdang293.vn@gmail.com</span>
                 </a>
-                <a href="tel:0965193026" class="flex items-center gap-1.5 hover:text-cyan-400 transition-colors bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                <a href="tel:0965193026" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border theme-input">
                     📞 <span class="font-mono">0965193026</span>
                 </a>
             </div>
@@ -276,8 +413,8 @@
                 title: "Đại học Kinh tế Quốc dân (NEU)",
                 desc: "Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU",
                 defaultWeights: { wCc: 10, wGk: 40, wCk: 50 },
-                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span>',
-                componentHeader: 'Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span>',
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(CC - GK - CK)</span>',
+                componentHeader: 'Điểm TP<br><span class="text-[10px]">(CC - GK)</span>',
                 grades: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
                 colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
                 mapping: { 'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
@@ -306,11 +443,11 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
-                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
-                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
-                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
-                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold [data-theme='pink']:text-[#ff6584]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold [data-theme='pink']:text-[#ff8fa3]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", msg: "Vũ trụ cho thấy chủ nhân chiếc bảng điểm này chọn lối sống bình yên, vừa vặn, an toàn tuyệt đối." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", msg: "Trải qua bao kiếp nạn thi cử khó nhằn bạn vẫn hiên ngang bước qua môn xuất sắc." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Điểm số đang rơi vào vùng không gian báo động. Gác lại mọi cuộc vui và cứu viện học bạ ngay!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
                     let scoreForTop = (9.0 - currentAccumulated) / ckWeightRatio;
@@ -328,8 +465,8 @@
                 title: "Đại học Thương mại (TMU)",
                 desc: "Áp dụng hệ số 10 - 30 - 60 và dải quy đổi điểm 10 - Chữ - 4 chuẩn TMU",
                 defaultWeights: { wCc: 10, wGk: 30, wCk: 60 },
-                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span>',
-                componentHeader: 'Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span>',
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(CC - GK - CK)</span>',
+                componentHeader: 'Điểm TP<br><span class="text-[10px]">(CC - GK)</span>',
                 grades: ['A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
                 colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#ef4444'],
                 mapping: { 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
@@ -356,11 +493,11 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
-                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
-                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
-                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
-                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold [data-theme='pink']:text-[#ff6584]", msg: "Hào quang sáng rực, học bổng danh giá đang chờ đón!" };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", msg: "Đường học hanh thông, tấm bằng Giỏi nằm chắc trong tay." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", msg: "An toàn, bình yên không vướng bận tranh đua." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", msg: "Lực gánh qua môn sát nút vô cùng ngoạn mục." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Báo động học tập! Tập trung toàn lực ngay lập tức!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
@@ -378,8 +515,8 @@
                 title: "Học viện Tài chính (AOF)",
                 desc: "Áp dụng công thức và dải quy đổi điểm 10 - Chữ - 4 chuẩn Học viện Tài chính",
                 defaultWeights: { wCc: 30, wGk: 0, wCk: 70 },
-                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(KT - CK)</span>',
-                componentHeader: 'Điểm Kiểm Tra<br><span class="text-[10px] text-slate-500">(Hệ số 30%)</span>',
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(KT - CK)</span>',
+                componentHeader: 'Điểm Kiểm Tra<br><span class="text-[10px]">(Hệ số 30%)</span>',
                 grades: ['A', 'B', 'C', 'D', 'F'],
                 colors: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'],
                 mapping: { 'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0 },
@@ -400,11 +537,11 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
-                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
-                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
-                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên quang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
-                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", msg: "Chiêm tinh hiển thị bạn là thủ khoa của tương lai!" };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", msg: "Học lực giỏi giang vững bước con đường sự nghiệp." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", msg: "Điểm số ổn định, tâm thế thong dong tự tại." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", msg: "Vượt qua phong ba bão táp kế toán tài chính an toàn." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Học tập báo động đỏ, gác lại mọi cuộc vui ngay!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
@@ -420,9 +557,17 @@
         };
 
         let currentUni = 'NEU';
+        let currentTheme = 'dark';
         let subjects = [];
 
         window.addEventListener('DOMContentLoaded', () => {
+            const storedTheme = localStorage.getItem('unicalc_theme');
+            if (storedTheme) {
+                currentTheme = storedTheme;
+            }
+            document.getElementById('select-theme').value = currentTheme;
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
             const storedUni = localStorage.getItem('unicalc_current_uni');
             if (storedUni && uniConfigs[storedUni]) {
                 currentUni = storedUni;
@@ -438,6 +583,13 @@
 
             applyUniversityConfig();
         });
+
+        function switchTheme(themeName) {
+            currentTheme = themeName;
+            localStorage.setItem('unicalc_theme', themeName);
+            document.documentElement.setAttribute('data-theme', themeName);
+            updateDashboard();
+        }
 
         function initDefaultSubjects() {
             if (currentUni === 'NEU') {
@@ -488,17 +640,11 @@
             document.getElementById('cardEditionBadge').innerText = config.name;
 
             if (currentUni === 'AOF') {
-                const borderClass = "text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
-                document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
-                document.getElementById('cardEditionBadge').className = borderClass;
+                document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             } else if (currentUni === 'TMU') {
-                const borderClass = "text-[10px] bg-purple-500/15 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
-                document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
-                document.getElementById('cardEditionBadge').className = borderClass;
+                document.getElementById('editionBadge').className = "text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             } else {
-                const borderClass = "text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
-                document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
-                document.getElementById('cardEditionBadge').className = borderClass;
+                document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             }
             
             document.getElementById('tableUniTitle').innerText = currentUni;
@@ -543,7 +689,7 @@
                 const gradeLetter = config.convert(total10);
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/30 transition-all text-sm";
+                tr.className = "hover:bg-slate-500/5 transition-all text-sm";
                 
                 let dynamicComponentTd = '';
                 let dynamicRatioTd = '';
@@ -551,33 +697,33 @@
                 if (currentUni === 'NEU' || currentUni === 'TMU') {
                     dynamicRatioTd = `
                         <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
+                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
+                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
                         </div>`;
                     dynamicComponentTd = `
                         <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
-                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 theme-input text-center rounded-lg p-1 font-semibold">
+                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 theme-input text-center rounded-lg p-1 font-semibold">
                         </div>`;
                 } else {
                     dynamicRatioTd = `
                         <div class="flex items-center justify-center gap-2 text-xs">
-                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-10 theme-input text-center rounded-lg p-0.5">
+                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-10 theme-input text-center rounded-lg p-0.5">
                         </div>`;
                     dynamicComponentTd = `
                         <div class="flex items-center justify-center text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 theme-input text-center rounded-lg p-1 font-semibold">
                         </div>`;
                 }
 
                 tr.innerHTML = `
                     <td class="py-4 pr-2">
-                        <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-600 focus:border-cyan-500 focus:outline-none text-white font-medium py-1">
+                        <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent focus:border-cyan-500 [data-theme='pink']:focus:border-[#ff6584] focus:outline-none font-bold py-1" style="color: var(--text-main)">
                     </td>
                     <td class="py-4 text-center">
-                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="bg-slate-900 border border-slate-700 rounded p-1 text-center text-white focus:outline-none">
+                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="theme-input border rounded-xl p-1 text-center focus:outline-none font-semibold cursor-pointer">
                             ${[1,2,3,4,5].map(c => `<option value="${c}" ${sub.credits === c ? 'selected' : ''}>${c}</option>`).join('')}
                         </select>
                     </td>
@@ -588,11 +734,11 @@
                         ${dynamicComponentTd}
                     </td>
                     <td class="py-4 text-center">
-                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 bg-slate-900 text-center rounded border border-cyan-600/50 p-1 font-bold text-white focus:outline-none focus:border-cyan-400">
+                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 theme-input text-center rounded-xl p-1 font-black focus:outline-none" style="border-width: 2px; border-color: var(--text-accent);">
                     </td>
                     <td class="py-4 text-center font-bold">
-                        <div class="text-white">${total10.toFixed(1)}</div>
-                        <div class="text-xs text-cyan-400">${gradeLetter}</div>
+                        <div style="color: var(--text-main)">${total10.toFixed(1)}</div>
+                        <div class="text-xs" style="color: var(--text-accent)">${gradeLetter}</div>
                     </td>
                     <td class="py-4 text-center">
                         <button onclick="deleteSubject(${sub.id})" class="text-rose-400 hover:text-rose-600 font-bold transition-all p-1 cursor-pointer">🗑️</button>
@@ -680,11 +826,7 @@
             const cardXepLoaiDiv = document.getElementById('cardXepLoai');
             const caKhiaBox = document.getElementById('caKhiaBox');
             const cardCaKhiaText = document.getElementById('cardCaKhiaText');
-            const mainResultCard = document.getElementById('cardGpa');
-            
-            document.body.style.backgroundColor = "#0f172a";
 
-            // THUẬT TOÁN ĐỘ RỘNG (WIDTH) PHI TUYẾN TÍNH MỚI CHO PROGRESS BAR
             const progressBarFill = document.getElementById('progressBarFill');
             const progressBarValue = document.getElementById('progressBarValue');
             const godRemainingMsg = document.getElementById('godRemainingMsg');
@@ -712,22 +854,17 @@
                 const emptyMsg = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
                 xepLoaiDiv.innerText = emptyText;
                 cardXepLoaiDiv.innerText = emptyText.toUpperCase();
-                xepLoaiDiv.className = "text-xl font-bold text-slate-400";
-                cardXepLoaiDiv.className = "text-xl font-extrabold tracking-wide text-slate-500";
+                xepLoaiDiv.className = "text-xl font-bold";
+                cardXepLoaiDiv.className = "text-xl font-extrabold tracking-wide text-center w-full";
                 caKhiaBox.innerText = emptyMsg;
                 cardCaKhiaText.innerText = emptyMsg;
-                mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
-                
                 godRemainingMsg.innerText = "Vui lòng nhập điểm để thiết lập tiến trình mục tiêu học lực.";
             } else {
                 if (finalGpa4 === 4.00) {
                     xepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
-                    xepLoaiDiv.className = "text-sm font-black tracking-wide text-purple-400 drop-shadow-md";
-                    mainResultCard.className = "rounded-2xl p-6 text-center relative overflow-hidden bg-gradient-to-br from-black via-slate-900 to-purple-950 border-2 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse shadow-xl";
-                    
-                    caKhiaBox.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
-                    
-                    godRemainingMsg.innerHTML = `<span class="text-purple-400 font-bold">👑 Hoàn hảo:</span> Bạn đã đạt mức điểm tối đa của giảng đường (4.00)!`;
+                    xepLoaiDiv.className = "text-sm font-black tracking-wide text-purple-400 drop-shadow-md [data-theme='pink']:text-[#ff6584]";
+                    caKhiaBox.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo!";
+                    godRemainingMsg.innerHTML = `👑 Bạn đã đạt mức điểm tối đa của giảng đường (4.00)!`;
                 } else {
                     const rankInfo = config.rank(finalGpa4);
                     xepLoaiDiv.innerText = rankInfo.label;
@@ -737,41 +874,36 @@
                     
                     caKhiaBox.innerText = rankInfo.msg;
                     cardCaKhiaText.innerText = rankInfo.msg;
-                    mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
 
-                    if (finalGpa4 < 2.0 && currentUni === 'NEU') {
+                    if (finalGpa4 < 2.0 && currentUni === 'NEU' && currentTheme === 'dark') {
                         document.body.style.backgroundColor = "#020617";
                     }
 
-                    // Tính khoảng cách mục tiêu UX chuẩn
                     if (finalGpa4 < 2.50) {
                         const gap = (2.50 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `<span class="text-cyan-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để đạt học lực Khá (2.50).`;
+                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt học lực Khá (2.50).`;
                     } else if (finalGpa4 >= 2.50 && finalGpa4 < 3.20) {
                         const gap = (3.20 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `<span class="text-indigo-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để chạm mốc học lực Giỏi (3.20).`;
+                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Giỏi (3.20).`;
                     } else if (finalGpa4 >= 3.20 && finalGpa4 < 3.60) {
                         const gap = (3.60 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `<span class="text-amber-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để chạm mốc học lực Xuất sắc (3.60).`;
+                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Xuất sắc (3.60).`;
                     } else if (finalGpa4 >= 3.60 && finalGpa4 < 4.00) {
                         const gap = (4.00 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `<span class="text-emerald-400 font-bold">✨ Đỉnh cao:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để đạt mốc GPA tuyệt đối (4.00).`;
+                        godRemainingMsg.innerHTML = `✨ Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt mốc GPA tuyệt đối (4.00).`;
                     }
                 }
             }
 
-            // Gọi quét thuật toán phân tích điểm chặn Smart Tips
             runSmartTipsScan(totalCredits);
-            calculateGiemDiem();
             calculateGanhDiem();
             calculateFuture();
         }
 
-        // THUẬT TOÁN QUÉT ĐIỂM CHẶN THÔNG MINH (SMART TIPS)
         function runSmartTipsScan(totalCredits) {
             const tipsBox = document.getElementById('smartTipsBox');
             if (totalCredits === 0 || subjects.length === 0) {
-                tipsBox.innerHTML = `<div class="text-slate-500 italic text-center">Vũ trụ đang đợi bảng điểm của bạn để thiết lập rada quét...</div>`;
+                tipsBox.innerHTML = `<div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang đợi bảng điểm của bạn để thiết lập rada quét...</div>`;
                 return;
             }
 
@@ -795,8 +927,8 @@
                     const distance = (targetThreshold.min - total10);
                     if (distance >= 0.05 && distance <= 0.35) {
                         tipsHtml += `
-                            <div class="bg-indigo-950/40 border-l-2 border-cyan-400 p-2 rounded-r-lg">
-                                💡 <span class="font-bold text-slate-200">Mẹo bứt phá:</span> Môn <span class="text-cyan-400 font-semibold">${sub.name}</span> hiện có tổng kết là <span class="text-white font-bold font-mono">${total10.toFixed(1)}</span> (${currentLetter}). Bạn chỉ thiếu đúng <span class="text-amber-400 font-bold font-mono">${distance.toFixed(1)}</span> điểm nữa là lên được điểm <span class="text-emerald-400 font-bold">${targetThreshold.grade}</span>! Hãy cố gắng kéo thêm một chút điểm thành phần nhé!
+                            <div class="border-l-4 p-2 rounded-r-xl" style="background-color: rgba(0,0,0,0.04); border-color: var(--text-accent)">
+                                💡 <span class="font-bold">Mẹo bứt phá:</span> Môn <span class="font-semibold" style="color: var(--text-accent)">${sub.name}</span> tổng kết là <span class="font-bold font-mono">${total10.toFixed(1)}</span> (${currentLetter}). Thiếu đúng <span class="font-bold font-mono" style="color: var(--text-accent)">${distance.toFixed(1)}</span> điểm nữa để lên mức <span class="font-bold">${targetThreshold.grade}</span>!
                             </div>
                         `;
                     }
@@ -805,16 +937,14 @@
 
             if (tipsHtml === '') {
                 tipsBox.innerHTML = `
-                    <div class="text-slate-300 italic text-center py-2 flex flex-col items-center gap-1">
-                        <span>Vũ trụ nhận thấy điểm số của bạn đang ở trạng thái rất tối ưu, hãy tiếp tục duy trì phong độ này nhé! ✨</span>
+                    <div class="italic text-center py-2 flex flex-col items-center gap-1" style="color: var(--text-main)">
+                        <span>Vũ trụ nhận thấy điểm số rất tối ưu, hãy giữ vững phong độ! ✨</span>
                     </div>
                 `;
             } else {
                 tipsBox.innerHTML = tipsHtml;
             }
         }
-
-        function calculateGiemDiem() {} // Placeholder maintainer
 
         function calculateGanhDiem() {
             const container = document.getElementById('ganhDiemContainer');
@@ -844,15 +974,15 @@
                     const targetScores = config.ganhDiem(currentAccumulated, ckWeightRatio);
 
                     const div = document.createElement('div');
-                    div.className = "bg-slate-900/60 border border-slate-700 p-3 rounded-xl text-xs space-y-1.5";
+                    div.className = "theme-input border p-3 rounded-2xl text-xs space-y-1.5 shadow-sm";
                     
-                    let innerHtml = `<div class="font-bold text-slate-200 text-sm truncate">${sub.name}</div>`;
+                    let innerHtml = `<div class="font-bold text-sm truncate" style="color: var(--text-main)">📖 ${sub.name}</div>`;
                     targetScores.forEach(target => {
-                        const colorClass = target.isPass ? "text-rose-400" : "text-emerald-400";
+                        const colorClass = target.isPass ? "text-rose-400" : "font-bold text-emerald-500 [data-theme='pink']:text-[#ff6584]";
                         innerHtml += `
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Thi để đạt điểm chữ <span class="${colorClass} font-bold">${target.label}</span>:</span>
-                                <span class="font-black text-white">${target.val} ${typeof target.val === 'string' ? '' : 'điểm'}</span>
+                                <span style="color: var(--text-muted)">Thi đạt điểm chữ <span class="${colorClass}">${target.label}</span>:</span>
+                                <span class="font-black" style="color: var(--text-main)">${target.val} ${typeof target.val === 'string' ? '' : 'điểm'}</span>
                             </div>`;
                     });
 
@@ -861,7 +991,7 @@
                 }
             });
             if (!hasData) {
-                container.innerHTML = `<div class="text-sm text-slate-500 italic col-span-2">Hãy thêm môn học để kích hoạt radar tính toán lực gánh điểm thi!</div>`;
+                container.innerHTML = `<div class="text-sm italic col-span-2" style="color: var(--text-muted)">Hãy thêm môn học để kích hoạt radar tính toán lực gánh điểm thi!</div>`;
             }
         }
 
@@ -878,7 +1008,6 @@
             if (futureCredits <= 0) {
                 resGpaDiv.innerText = "N/A";
                 resRankDiv.innerText = "⚠️ Số tín chỉ còn lại bắt buộc phải lớn hơn 0 để đo lường lộ trình.";
-                resContainer.className = "bg-slate-900 border border-slate-700 rounded-xl p-4 text-center";
                 return;
             }
 
@@ -892,19 +1021,17 @@
 
             if (requiredGpa <= 0 || isAbsoluteMatch) {
                 resGpaDiv.innerText = "ĐÃ AN TOÀN ✅";
-                resGpaDiv.className = "text-2xl font-black text-emerald-400 my-1";
+                resGpaDiv.className = "text-2xl font-black text-emerald-500 my-1";
                 resRankDiv.innerText = "Hiện tại điểm tích lũy của bạn đã thừa sức đạt mục tiêu ra trường rồi!";
-                resContainer.className = "bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-center";
             } else if (requiredGpa > 4.0) {
                 resGpaDiv.innerText = "BẤT KHẢ THI 🚨";
                 resGpaDiv.className = "text-2xl font-black text-rose-500 animate-pulse my-1";
-                resRankDiv.innerText = "⚠️ Cảnh báo: Kể cả bạn có đạt điểm tuyệt đối 4.0/4.0 cho tất cả các môn còn lại cũng không gánh nổi mục tiêu này! Hãy hạ bớt kỳ vọng hoặc đăng ký học cải thiện/học bù thêm tín chỉ ngay lập tức!";
-                resContainer.className = "bg-rose-950/40 border border-rose-500/30 rounded-xl p-4 text-center";
+                resRankDiv.innerText = "⚠️ Cảnh báo: Kể cả đạt điểm tuyệt đối 4.0 cũng không gánh nổi mục tiêu này!";
             } else {
                 resGpaDiv.innerText = requiredGpa.toFixed(2);
-                resGpaDiv.className = "text-3xl font-black text-cyan-400 my-1 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]";
-                resRankDiv.innerText = `Để ra trường đạt mục tiêu, trung bình mỗi kỳ tới bạn cần đạt ${requiredGpa.toFixed(2)} / 4.0. Kế hoạch khả thi, chiến thôi!`;
-                resContainer.className = "bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4 text-center";
+                resGpaDiv.className = "text-3xl font-black my-1";
+                resGpaDiv.style.color = "var(--text-accent)";
+                resRankDiv.innerText = `Để ra trường đạt mục tiêu, trung bình mỗi kỳ tới bạn cần đạt ${requiredGpa.toFixed(2)} / 4.0.`;
             }
         }
 
@@ -930,28 +1057,20 @@
             const cardCaKhiaText = document.getElementById('cardCaKhiaText');
 
             if (totalCredits === 0) {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-indigo-950 via-slate-950 to-purple-950 border-slate-800";
                 shareCardIcon.innerText = "🔮";
             } else if (finalGpa4 === 4.0) {
-                shareCard.className = "border-2 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-black via-slate-900 to-purple-950 border-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.6)] animate-pulse";
                 shareCardIcon.innerText = "👑✨";
                 cardXepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
-                cardXepLoaiDiv.className = "text-xs font-extrabold tracking-wide text-center w-full text-purple-400 drop-shadow-md";
-                cardCaKhiaText.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
+                cardCaKhiaText.innerText = "Bạn không còn bị ràng buộc bởi các quy luật học đường nữa! Điểm tuyệt đối tối cao!";
             } else if (finalGpa4 >= 3.6) {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-purple-950 to-amber-950/40 border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.35)]";
                 shareCardIcon.innerText = "✨";
             } else if (finalGpa4 >= 3.2) {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.35)]";
                 shareCardIcon.innerText = "🌌";
             } else if (finalGpa4 >= 2.5) {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/30 border-emerald-500/40 shadow-[0_0_25px_rgba(16,185,129,0.25)]";
                 shareCardIcon.innerText = "🪐";
             } else if (finalGpa4 >= 2.0) {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-slate-900 to-orange-950/40 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.25)]";
                 shareCardIcon.innerText = "☄️";
             } else {
-                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-black via-zinc-950 to-red-950/50 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse";
                 shareCardIcon.innerText = "🕳️";
             }
 
@@ -976,8 +1095,9 @@
 
         function downloadShareCard() {
             const targetCard = document.getElementById('shareCard');
+            const bgConvertColor = currentTheme === 'dark' ? '#0f172a' : '#fff2f5';
             html2canvas(targetCard, {
-                backgroundColor: '#0f172a',
+                backgroundColor: bgConvertColor,
                 scale: 2, 
                 logging: false,
                 useCORS: true
@@ -997,9 +1117,10 @@
         function copyShareCardToClipboard() {
             const targetCard = document.getElementById('shareCard');
             const toast = document.getElementById('toastNotification');
+            const bgConvertColor = currentTheme === 'dark' ? '#0f172a' : '#fff2f5';
 
             html2canvas(targetCard, {
-                backgroundColor: '#0f172a',
+                backgroundColor: bgConvertColor,
                 scale: 2,
                 logging: false,
                 useCORS: true
@@ -1011,7 +1132,7 @@
                         toast.classList.remove('hidden');
                         setTimeout(() => toast.classList.add('hidden'), 4000);
                     }).catch(err => {
-                        console.error("Clipboard API bị chặn chặn hoặc lỗi sao chép blob:", err);
+                        console.error("Lỗi sao chép ảnh:", err);
                     });
                 }, "image/png");
             });
