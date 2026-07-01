@@ -580,6 +580,7 @@
             const cardXepLoaiDiv = document.getElementById('cardXepLoai');
             const caKhiaBox = document.getElementById('caKhiaBox');
             const cardCaKhiaText = document.getElementById('cardCaKhiaText');
+            const mainResultCard = document.getElementById('cardGpa');
             
             document.body.style.backgroundColor = "#0f172a";
 
@@ -592,6 +593,13 @@
                 cardXepLoaiDiv.className = "text-xl font-extrabold tracking-wide text-slate-500";
                 caKhiaBox.innerText = emptyMsg;
                 cardCaKhiaText.innerText = emptyMsg;
+                mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
+            } else if (finalGpa4 === 4.0) {
+                xepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
+                xepLoaiDiv.className = "text-sm font-black tracking-wide text-purple-400 drop-shadow-md";
+                mainResultCard.className = "rounded-2xl p-6 text-center relative overflow-hidden bg-gradient-to-br from-black via-slate-900 to-purple-950 border-2 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse shadow-xl";
+                
+                caKhiaBox.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
             } else {
                 const rankInfo = config.rank(finalGpa4);
                 
@@ -602,6 +610,7 @@
                 
                 caKhiaBox.innerText = rankInfo.msg;
                 cardCaKhiaText.innerText = rankInfo.msg;
+                mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
 
                 if (finalGpa4 < 2.0 && currentUni === 'NEU') {
                     document.body.style.backgroundColor = "#020617";
@@ -754,11 +763,19 @@
             const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
             const shareCard = document.getElementById('shareCard');
             const shareCardIcon = document.getElementById('shareCardIcon');
+            const cardXepLoaiDiv = document.getElementById('cardXepLoai');
+            const cardCaKhiaText = document.getElementById('cardCaKhiaText');
 
             // Reset và Apply class CSS động chuẩn vibe vũ trụ
             if (totalCredits === 0) {
                 shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-indigo-950 via-slate-950 to-purple-950 border-slate-800";
                 shareCardIcon.innerText = "🔮";
+            } else if (finalGpa4 === 4.0) {
+                shareCard.className = "border-2 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-black via-slate-900 to-purple-950 border-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.6)] animate-pulse";
+                shareCardIcon.innerText = "👑✨";
+                cardXepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
+                cardXepLoaiDiv.className = "text-xs font-extrabold tracking-wide text-center w-full text-purple-400 drop-shadow-md";
+                cardCaKhiaText.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
             } else if (finalGpa4 >= 3.6) {
                 shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-purple-950 to-amber-950/40 border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.35)]";
                 shareCardIcon.innerText = "✨";
