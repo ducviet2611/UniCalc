@@ -27,7 +27,6 @@
             --progress-bar-bg: linear-gradient(to right, #7b2cbf, #e0aaff, #00f5ff); 
             --shadow-style: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 245, 255, 0.05); 
             --focus-glow: 0 0 15px rgba(0, 245, 255, 0.4);
-            /* Nút khoe tử vi dải màu Vũ trụ Ngân hà sâu thẳm phát sáng */
             --tuvi-btn-bg: linear-gradient(135deg, #4d1375, #2c1654, #00f5ff);
             --tuvi-btn-text: #ffffff;
             --tuvi-btn-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
@@ -56,7 +55,6 @@
             --tuvi-btn-shadow: 0 8px 25px rgba(255, 181, 167, 0.4);
         }
 
-        /* ĐOẠN CSS ĐẶC TRỊ SỬA DỨT ĐIỂM LỖI DÍNH MÀU NỀN TRẮNG THEO YÊU CẦU */
         input, select, option, .form-control, .form-select {
             background-color: var(--bg-input) !important;
             color: var(--text-main) !important;
@@ -95,7 +93,6 @@
             min-height: 100vh !important; 
         }
 
-        /* VIẾT ĐÈ ĐẶC TRỊ NÚT THÊM MÔN DÀNH RIÊNG CHO THEME PINK CHIBI KẸO NGỌT */
         [data-theme="pink"] .rocket-btn {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%) !important;
             color: #5c4338 !important;
@@ -113,6 +110,16 @@
             font-size: 14px;
             margin-right: 4px;
             display: inline-block;
+        }
+
+        /* Đồng bộ CSS cho nút nhỏ Đồng bộ Hệ số kiểu kẹo ngọt (Pink Theme) */
+        [data-theme="pink"] .sync-btn-custom {
+            background: linear-gradient(135deg, #ffb5a7, #fcd5ce) !important;
+            color: #5c4338 !important;
+            border: 1px solid #fcd5ce !important;
+        }
+        [data-theme="pink"] .sync-btn-custom:hover {
+            background: linear-gradient(135deg, #fcd5ce, #ffbaa8) !important;
         }
 
         body {
@@ -249,7 +256,7 @@
                         <label for="select-theme" class="text-xs uppercase font-bold tracking-wider whitespace-nowrap" style="color: var(--text-muted)">Giao diện:</label>
                         <div class="relative w-full sm:w-auto flex items-center">
                             <select id="select-theme" onchange="switchTheme(this.value)" class="w-full sm:w-44 font-bold py-2 px-3 focus:outline-none cursor-pointer shadow-md text-sm [data-theme='pink']:pink-custom-select rounded-xl">
-                                <option value="dark">🌌 Giao diện Vũ trụ</option>
+                                <option value="dark">🌌 Dark Palette</option>
                                 <option value="pink">💖 Pink Palette</option>
                             </select>
                             <div class="pink-only hidden absolute right-3 pointer-events-none w-5 h-5">
@@ -265,6 +272,7 @@
                                 <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
                                 <option value="TMU">Đại học Thương mại (TMU)</option>
                                 <option value="AOF">Học viện Tài chính (AOF)</option>
+                                <option value="custom"> Trường khác (Tự cấu hình)</option>
                             </select>
                             <div class="pink-only hidden absolute right-3 pointer-events-none w-5 h-5">
                                 <svg viewBox="0 0 100 100" class="w-full h-full"><ellipse cx="50" cy="55" rx="35" ry="27" fill="#fff" stroke="#5c4338" stroke-width="6"/><ellipse cx="35" cy="52" rx="4" ry="5" fill="#5c4338"/><ellipse cx="65" cy="52" rx="4" ry="5" fill="#5c4338"/><polygon points="50,57 47,61 53,61" fill="#ffbaa8" stroke="#5c4338" stroke-width="2"/><path d="M18,37 Q14,18 32,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M82,37 Q86,18 68,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M24,26 Q28,15 38,22 Q32,32 24,26" fill="#ff6584" stroke="#5c4338" stroke-width="3"/></svg>
@@ -294,8 +302,12 @@
                             <p class="text-xs mt-1" id="tableUniDesc" style="color: var(--text-muted)">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
                         </div>
                         
-                        <div class="relative w-full sm:w-auto">
-                            <button onclick="addSubjectRow()" class="rocket-btn w-full sm:w-auto theme-btn font-black px-7 py-3 rounded-full transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-md active:scale-95" style="background: linear-gradient(135deg, #00f5ff, #00b4d8); color: #020617; box-shadow: 0 0 12px rgba(0, 245, 255, 0.35);">
+                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto relative">
+                            <button id="btnSyncAll" onclick="syncAllFromFirstRow()" class="sync-btn-custom text-xs font-bold px-3.5 py-3 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md bg-slate-800 border border-cyan-500/30 text-cyan-400 active:scale-95" title="Sao chép số tín chỉ và tỷ lệ (%) của môn học đầu tiên cho tất cả dòng">
+                                🔄 Đồng bộ hệ số tỷ lệ
+                            </button>
+
+                            <button onclick="addSubjectRow()" class="rocket-btn theme-btn font-black px-7 py-3 rounded-full transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-md active:scale-95" style="background: linear-gradient(135deg, #00f5ff, #00b4d8); color: #020617; box-shadow: 0 0 12px rgba(0, 245, 255, 0.35);">
                                 <span class="dark-only hidden rocket-svg w-4 h-4">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 2C6 2 2 6 2 12c0 1.5.5 3 1.5 4.5L8 11l5 5-5.5 4.5c1.5 1 3 1.5 4.5 1.5 6 0 10-4 10-10S18 2 12 2z"/></svg>
                                 </span>
@@ -308,9 +320,9 @@
                         <table class="w-full text-left border-collapse min-w-[620px]">
                             <thead>
                                 <tr class="border-b text-xs uppercase tracking-wider" style="border-color: var(--border-color); color: var(--text-muted)">
-                                    <th class="pb-3 w-5/12">Tên Môn Học</th>
+                                    <th class="pb-3 w-4/12">Tên Môn Học</th>
                                     <th class="pb-3 w-16 text-center">Tín Chỉ</th>
-                                    <th class="pb-3 text-center w-28" id="thRatio">Tỷ Lệ (%)</th>
+                                    <th class="pb-3 text-center w-36" id="thRatio">Tỷ Lệ (%)</th>
                                     <th class="pb-3 text-center w-36" id="thComponent">Điểm TP</th>
                                     <th class="pb-3 text-center w-16">Thi CK</th>
                                     <th class="pb-3 text-center w-20">Tổng Kết</th>
@@ -340,7 +352,7 @@
                     <h2 class="text-xl font-bold flex items-center gap-2 mb-2" style="color: var(--text-main)">🎯 Target Gánh Điểm Cuối Kỳ</h2>
                     <p class="text-xs mb-4" style="color: var(--text-muted)">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm của trường.</p>
                     <div id="ganhDiemContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="text-sm italic" style="color: var(--text-muted)">Hãy nhập đầy đủ điểm thành phần để rada bắt đầu quét...</div>
+                        <div class="text-sm italic" style="color: var(--text-muted)">Hãy nhập đầy đủ điểm thành phần để radar bắt đầu quét...</div>
                     </div>
                 </div>
             </div>
@@ -440,7 +452,7 @@
 
                     <div class="space-y-2">
                         <div class="text-xs font-bold flex items-center gap-1.5" style="color: var(--text-main)">
-                            <span>🧠 RADA PHÂN TÍCH ĐIỂM</span>
+                            <span>🧠 RADAR PHÂN TÍCH ĐIỂM</span>
                         </div>
                         <div id="smartTipsBox" class="backdrop-blur-md border rounded-2xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2" style="background-color: rgba(0,0,0,0.02); border-color: var(--border-color)">
                             <div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang quét dữ liệu môn học...</div>
@@ -541,7 +553,7 @@
     <footer class="border-t py-6 mt-12 text-center text-sm transition-all" style="background-color: var(--header-bg); border-color: var(--header-border);">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="font-semibold tracking-wide" style="color: var(--text-main)">
-                Developed by <span style="color: var(--text-accent)">Duc Viet</span>
+                Developed by <span style="color: var(--text-accent)">Dang Duc Viet - NEU K67</span>
             </div>
             <div class="flex items-center gap-6 text-xs font-medium">
                 <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border">
@@ -559,7 +571,7 @@
             NEU: {
                 name: "NEU Edition",
                 title: "Đại học Kinh tế Quốc dân (NEU)",
-                desc: "Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU",
+                desc: "Áp dụng thang điểm quy đổi  chuẩn NEU",
                 defaultWeights: { wCc: 10, wGk: 40, wCk: 50 },
                 ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(CC - GK - CK)</span>',
                 componentHeader: 'Điểm TP<br><span class="text-[10px]">(CC - GK)</span>',
@@ -598,6 +610,7 @@
                     return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Điểm số đang rơi vào vùng không gian báo động. Gác lại mọi cuộc vui và cứu viện học bạ ngay!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    if (ckWeightRatio <= 0) return [{ label: 'Qua môn', val: 'N/A' }];
                     let scoreForTop = (9.0 - currentAccumulated) / ckWeightRatio;
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
                     let scoreForPass = (4.5 - currentAccumulated) / ckWeightRatio;
@@ -611,7 +624,7 @@
             TMU: {
                 name: "TMU Edition",
                 title: "Đại học Thương mại (TMU)",
-                desc: "Áp dụng hệ số 10 - 30 - 60 và dải quy đổi điểm 10 - Chữ - 4 chuẩn TMU",
+                desc: "Áp dụng thang điểm quy đổi chuẩn TMU",
                 defaultWeights: { wCc: 10, wGk: 30, wCk: 60 },
                 ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(CC - GK - CK)</span>',
                 componentHeader: 'Điểm TP<br><span class="text-[10px]">(CC - GK)</span>',
@@ -641,13 +654,14 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold [data-theme='pink']:text-[#ff6584]", msg: "Hào quang sáng rực, học bổng danh giá đang chờ đón!" };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈSON TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold [data-theme='pink']:text-[#ff6584]", msg: "Hào quang sáng rực, học bổng danh giá đang chờ đón!" };
                     if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", msg: "Đường học hanh thông, tấm bằng Giỏi nằm chắc trong tay." };
                     if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", msg: "An toàn, bình yên không vướng bận tranh đua." };
                     if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", msg: "Lực gánh qua môn sát nút vô cùng ngoạn mục." };
                     return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Báo động học tập! Tập trung toàn lực ngay lập tức!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    if (ckWeightRatio <= 0) return [{ label: 'Qua môn', val: 'N/A' }];
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
                     let scoreForBPlus = (8.0 - currentAccumulated) / ckWeightRatio;
                     let scoreForPass = (4.0 - currentAccumulated) / ckWeightRatio;
@@ -661,7 +675,7 @@
             AOF: {
                 name: "AOF Edition",
                 title: "Học viện Tài chính (AOF)",
-                desc: "Áp dụng công thức và dải quy đổi điểm 10 - Chữ - 4 chuẩn Học viện Tài chính",
+                desc: "Áp dụng thang điểm quy đổi chuẩn AOF",
                 defaultWeights: { wCc: 30, wGk: 0, wCk: 70 },
                 ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(KT - CK)</span>',
                 componentHeader: 'Điểm Kiểm Tra<br><span class="text-[10px]">(Hệ số 30%)</span>',
@@ -692,6 +706,58 @@
                     return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Học tập báo động đỏ, gác lại mọi cuộc vui ngay!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    if (ckWeightRatio <= 0) return [{ label: 'Qua môn', val: 'N/A' }];
+                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
+                    let scoreForB = (7.0 - currentAccumulated) / ckWeightRatio;
+                    let scoreForPass = (4.0 - currentAccumulated) / ckWeightRatio;
+                    return [
+                        { label: 'A', val: scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1)) },
+                        { label: 'B', val: scoreForB < 0 ? 0 : (scoreForB > 10 ? "Bất khả thi" : scoreForB.toFixed(1)) },
+                        { label: 'Qua môn (D)', val: scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1)), isPass: true }
+                    ];
+                }
+            },
+            custom: {
+                name: "Custom Edition",
+                title: "Trường khác (Tự cấu hình)",
+                desc: "Tự do chỉnh sửa Tín chỉ và cấu trúc Tỷ lệ (%) của từng môn. Để 0% nếu không dùng điểm đó.",
+                defaultWeights: { wCc: 10, wGk: 30, wCk: 60 },
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px]">(CC - GK - CK)</span>',
+                componentHeader: 'Điểm TP<br><span class="text-[10px]">(CC - GK)</span>',
+                grades: ['A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
+                colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#ef4444'],
+                mapping: { 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
+                thresholds: [
+                    { grade: 'A', min: 8.5 },
+                    { grade: 'B+', min: 8.0 },
+                    { grade: 'B', min: 7.0 },
+                    { grade: 'C+', min: 6.5 },
+                    { grade: 'C', min: 5.5 },
+                    { grade: 'D+', min: 5.0 },
+                    { grade: 'D', min: 4.0 }
+                ],
+                roundSubjectScore: function(rawScore) {
+                    return Math.round(rawScore * 10) / 10;
+                },
+                convert: function(score) {
+                    if (score >= 8.5) return 'A';
+                    if (score >= 8.0) return 'B+';
+                    if (score >= 7.0) return 'B';
+                    if (score >= 6.5) return 'C+';
+                    if (score >= 5.5) return 'C';
+                    if (score >= 5.0) return 'D+';
+                    if (score >= 4.0) return 'D';
+                    return 'F';
+                },
+                rank: function(gpa4) {
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG 🌟", class: "text-amber-400 font-bold", msg: "Điểm số cấu hình riêng tối cao, mở ra cánh cổng thành công rộng mở!" };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO 🚀", class: "text-cyan-400 font-bold", msg: "Lộ trình học tập do bạn làm chủ đang vận hành cực kỳ trơn tru." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH ☕", class: "text-emerald-400 font-bold", msg: "An toàn, tự do thiết lập kế hoạch học tập theo ý muốn." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN ⚔️", class: "text-orange-400 font-bold", msg: "Bám sát mục tiêu cấu hình để vượt qua kỳ thi an toàn." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG 🚨", class: "text-rose-500 font-bold animate-pulse", msg: "Hãy rà soát lại trọng số các môn học để cải thiện điểm số ngay!" };
+                },
+                ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    if (ckWeightRatio <= 0) return [{ label: 'Qua môn', val: 'N/A' }];
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
                     let scoreForB = (7.0 - currentAccumulated) / ckWeightRatio;
                     let scoreForPass = (4.0 - currentAccumulated) / ckWeightRatio;
@@ -750,10 +816,15 @@
                     { id: 1, name: 'Quản trị học', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9.0, pGk: 8.0, pCk: 8.8 },
                     { id: 2, name: 'Kinh tế vi mô', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9.5, pGk: 8.5, pCk: 7.8 }
                 ];
-            } else {
+            } else if (currentUni === 'AOF') {
                 subjects = [
                     { id: 1, name: 'Tài chính quốc tế', credits: 3, wCc: 30, wGk: 0, wCk: 70, pCc: 8.0, pGk: 0, pCk: 8.5 },
                     { id: 2, name: 'Kế toán quản trị', credits: 3, wCc: 30, wGk: 0, wCk: 70, pCc: 7.5, pGk: 0, pCk: 6.8 }
+                ];
+            } else {
+                subjects = [
+                    { id: 1, name: 'Môn tự chọn 1', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 8.5, pGk: 8.0, pCk: 7.5 },
+                    { id: 2, name: 'Môn tự chọn 2', credits: 2, wCc: 0, wGk: 40, wCk: 60, pCc: 0, pGk: 7.0, pCk: 8.0 }
                 ];
             }
         }
@@ -765,12 +836,15 @@
             const storedSubjects = localStorage.getItem(`unicalc_subjects_${currentUni}`);
             if (storedSubjects) {
                 subjects = JSON.parse(storedSubjects);
-                const config = uniConfigs[currentUni];
-                subjects.forEach(sub => {
-                    sub.wCc = config.defaultWeights.wCc;
-                    sub.wGk = config.defaultWeights.wGk;
-                    sub.wCk = config.defaultWeights.wCk;
-                });
+                // Nếu không phải custom, ép lại hệ số chuẩn của trường
+                if (currentUni !== 'custom') {
+                    const config = uniConfigs[currentUni];
+                    subjects.forEach(sub => {
+                        sub.wCc = config.defaultWeights.wCc;
+                        sub.wGk = config.defaultWeights.wGk;
+                        sub.wCk = config.defaultWeights.wCk;
+                    });
+                }
             } else {
                 initDefaultSubjects();
                 localStorage.setItem(`unicalc_subjects_${currentUni}`, JSON.stringify(subjects));
@@ -783,7 +857,7 @@
             const config = uniConfigs[currentUni];
             
             document.getElementById('editionBadge').innerText = config.name;
-            document.getElementById('cardUniBadge').innerText = currentUni;
+            document.getElementById('cardUniBadge').innerText = currentUni === 'custom' ? 'CUSTOM' : currentUni;
             document.getElementById('cardUniName').innerText = config.title;
             document.getElementById('cardEditionBadge').innerText = config.name;
 
@@ -791,11 +865,13 @@
                 document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             } else if (currentUni === 'TMU') {
                 document.getElementById('editionBadge').className = "text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
+            } else if (currentUni === 'custom') {
+                document.getElementById('editionBadge').className = "text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             } else {
                 document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]";
             }
             
-            document.getElementById('tableUniTitle').innerText = currentUni;
+            document.getElementById('tableUniTitle').innerText = currentUni === 'custom' ? 'Tự Cấu Hình' : currentUni;
             document.getElementById('tableUniDesc').innerText = config.desc;
             document.getElementById('thRatio').innerHTML = config.ratioHeader;
             document.getElementById('thComponent').innerHTML = config.componentHeader;
@@ -808,81 +884,71 @@
             localStorage.setItem(`unicalc_subjects_${currentUni}`, JSON.stringify(subjects));
         }
 
+        // Động hóa công thức tính tổng kết dựa hoàn toàn vào hệ số gõ trong ô
         function calculateTotal10(sub) {
             const cc = sub.pCc || 0;
             const gk = sub.pGk || 0;
             const ck = sub.pCk || 0;
             const config = uniConfigs[currentUni];
             
-            if (currentUni === 'NEU' || currentUni === 'TMU') {
-                const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
-                if (sumWeight === 0) return 0;
-                const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
-                return config.roundSubjectScore(rawScore);
-            } else {
-                const weightCc = sub.wCc !== undefined ? sub.wCc : 30; 
-                const weightCk = sub.wCk !== undefined ? sub.wCk : 70;
-                const rawScore = ((cc * weightCc) + (ck * weightCk)) / 100;
-                return config.roundSubjectScore(rawScore);
-            }
+            const wCc = sub.wCc !== undefined ? sub.wCc : 0;
+            const wGk = sub.wGk !== undefined ? sub.wGk : 0;
+            const wCk = sub.wCk !== undefined ? sub.wCk : 0;
+
+            const totalWeight = wCc + wGk + wCk;
+            if (totalWeight === 0) return 0;
+
+            const rawScore = ((cc * wCc) + (gk * wGk) + (ck * wCk)) / totalWeight;
+            return config.roundSubjectScore(rawScore);
         }
 
         function renderTable() {
             const tbody = document.getElementById('subjectTableBody');
             tbody.innerHTML = '';
-            const config = uniConfigs[currentUni];
+            const isEditable = (currentUni === 'custom');
 
-            subjects.forEach((sub) => {
+            subjects.forEach((sub, index) => {
                 const total10 = calculateTotal10(sub);
+                const config = uniConfigs[currentUni];
                 const gradeLetter = config.convert(total10);
+
+                // Kiểm tra điều kiện tổng tỷ lệ có bằng 100% không để báo lỗi viền đỏ
+                const weightSum = (sub.wCc || 0) + (sub.wGk || 0) + (sub.wCk || 0);
+                const isWeightError = (weightSum !== 100);
+                const borderClass = isWeightError ? 'border-rose-500 !border-2' : 'border-transparent';
+
+                // Trạng thái vô hiệu hóa (disabled) hoặc làm mờ dựa vào tỷ lệ bằng 0
+                const ccDisabled = (sub.wCc === 0);
+                const gkDisabled = (sub.wGk === 0);
+                const ckDisabled = (sub.wCk === 0);
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-500/5 transition-all text-sm";
                 
-                let dynamicComponentTd = '';
-                let dynamicRatioTd = '';
-
-                if (currentUni === 'NEU' || currentUni === 'TMU') {
-                    dynamicRatioTd = `
-                        <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
-                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
-                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
-                        </div>`;
-                    dynamicComponentTd = `
-                        <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner">
-                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner">
-                        </div>`;
-                } else {
-                    dynamicRatioTd = `
-                        <div class="flex items-center justify-center gap-2 text-xs">
-                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
-                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
-                        </div>`;
-                    dynamicComponentTd = `
-                        <div class="flex items-center justify-center text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 text-center rounded-lg p-1 font-semibold border shadow-inner">
-                        </div>`;
-                }
-
                 tr.innerHTML = `
                     <td class="py-4 pr-2">
                         <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent focus:border-cyan-500 [data-theme='pink']:focus:border-[#ff6584] focus:outline-none font-bold py-1" style="color: var(--text-main)">
                     </td>
                     <td class="py-4 text-center">
-                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="border rounded-xl p-1 text-center focus:outline-none font-semibold cursor-pointer shadow-inner">
-                            ${[1,2,3,4,5].map(c => `<option value="${c}" ${sub.credits === c ? 'selected' : ''}>${c}</option>`).join('')}
+                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" ${!isEditable ? 'disabled' : ''} class="border rounded-xl p-1 text-center focus:outline-none font-semibold cursor-pointer shadow-inner disabled:opacity-90 disabled:cursor-not-allowed">
+                            ${[1,2,3,4,5,6].map(c => `<option value="${c}" ${sub.credits === c ? 'selected' : ''}>${c}</option>`).join('')}
                         </select>
                     </td>
                     <td class="py-4 text-center">
-                        ${dynamicRatioTd}
+                        <div class="flex items-center justify-center gap-1 text-xs p-1 rounded-lg ${borderClass}">
+                            <input type="number" value="${sub.wCc}" ${!isEditable ? 'disabled' : ''} oninput="updateWeights(${sub.id}, 'wCc', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner disabled:opacity-90 disabled:cursor-not-allowed" title="Tỷ lệ chuyên cần">
+                            <input type="number" value="${sub.wGk}" ${!isEditable ? 'disabled' : ''} oninput="updateWeights(${sub.id}, 'wGk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner disabled:opacity-90 disabled:cursor-not-allowed" title="Tỷ lệ giữa kỳ">
+                            <input type="number" value="${sub.wCk}" ${!isEditable ? 'disabled' : ''} oninput="updateWeights(${sub.id}, 'wCk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner disabled:opacity-90 disabled:cursor-not-allowed" title="Tỷ lệ cuối kỳ">
+                        </div>
                     </td>
                     <td class="py-4 text-center">
-                        ${dynamicComponentTd}
+                        <div class="flex items-center justify-center gap-1 text-xs">
+                            <input type="number" value="${sub.pCc !== null && !ccDisabled ? sub.pCc : ''}" ${ccDisabled ? 'disabled' : ''} placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner disabled:opacity-40 disabled:pointer-events-none" style="${ccDisabled ? 'background-color: rgba(0,0,0,0.1) !important;' : ''}">
+                            <input type="number" value="${sub.pGk !== null && !gkDisabled ? sub.pGk : ''}" ${gkDisabled ? 'disabled' : ''} placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner disabled:opacity-40 disabled:pointer-events-none" style="${gkDisabled ? 'background-color: rgba(0,0,0,0.1) !important;' : ''}">
+                        </div>
                     </td>
                     <td class="py-4 text-center">
-                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 text-center rounded-xl p-1 font-black focus:outline-none shadow-inner" style="border-width: 2px; border-color: var(--text-accent);">
+                        <input type="number" value="${sub.pCk !== null && !ckDisabled ? sub.pCk : ''}" ${ckDisabled ? 'disabled' : ''} placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 text-center rounded-xl p-1 font-black focus:outline-none shadow-inner disabled:opacity-40 disabled:pointer-events-none" style="border-width: 2px; border-color: var(--text-accent); ${ckDisabled ? 'background-color: rgba(0,0,0,0.1) !important;' : ''}">
                     </td>
                     <td class="py-4 text-center font-bold">
                         <div style="color: var(--text-main)">${total10.toFixed(1)}</div>
@@ -896,20 +962,62 @@
             });
         }
 
+        // Tự động sao chép (auto-fill) thuộc tính dòng liền trước khi nhấn Thêm Môn
         function addSubjectRow() {
             const newId = subjects.length > 0 ? Math.max(...subjects.map(s => s.id)) + 1 : 1;
             const config = uniConfigs[currentUni];
+            
+            let targetCredits = 3;
+            let targetWcc = config.defaultWeights.wCc;
+            let targetWgk = config.defaultWeights.wGk;
+            let targetWck = config.defaultWeights.wCk;
+
+            if (subjects.length > 0) {
+                const lastRow = subjects[subjects.length - 1];
+                targetCredits = lastRow.credits;
+                targetWcc = lastRow.wCc;
+                targetWgk = lastRow.wGk;
+                targetWck = lastRow.wCk;
+            }
+
             subjects.push({
                 id: newId, 
                 name: 'Môn học mới ' + newId, 
-                credits: 3, 
-                wCc: config.defaultWeights.wCc, 
-                wGk: config.defaultWeights.wGk, 
-                wCk: config.defaultWeights.wCk, 
-                pCc: 10, 
-                pGk: (currentUni === 'NEU' || currentUni === 'TMU') ? 0 : null, 
-                pCk: 0
+                credits: targetCredits, 
+                wCc: targetWcc, 
+                wGk: targetWgk, 
+                wCk: targetWck, 
+                pCc: targetWcc > 0 ? 10 : 0, 
+                pGk: targetWgk > 0 ? 0 : 0, 
+                pCk: targetWck > 0 ? 0 : 0
             });
+            saveData();
+            renderTable();
+            updateDashboard();
+        }
+
+        // Logic đồng bộ hóa hệ số hàng loạt từ dòng số 1 xuống các dòng dưới (Chỉ sync Tín chỉ & Tỷ lệ)
+        function syncAllFromFirstRow() {
+            if (subjects.length <= 1) return;
+            
+            const firstRow = subjects[0];
+            const syncCredits = firstRow.credits;
+            const syncWcc = firstRow.wCc;
+            const syncWgk = firstRow.wGk;
+            const syncWck = firstRow.wCk;
+
+            for (let i = 1; i < subjects.length; i++) {
+                subjects[i].credits = syncCredits;
+                subjects[i].wCc = syncWcc;
+                subjects[i].wGk = syncWgk;
+                subjects[i].wCk = syncWck;
+
+                // Đồng bộ hóa việc đặt lại điểm về 0 nếu tỷ lệ vừa cập nhật bằng 0
+                if (syncWcc === 0) subjects[i].pCc = 0;
+                if (syncWgk === 0) subjects[i].pGk = 0;
+                if (syncWck === 0) subjects[i].pCk = 0;
+            }
+
             saveData();
             renderTable();
             updateDashboard();
@@ -939,7 +1047,14 @@
         function updateWeights(id, field, value) {
             const sub = subjects.find(s => s.id === id);
             if (sub) {
-                sub[field] = parseInt(value) || 0;
+                const parsedVal = parseInt(value) || 0;
+                sub[field] = parsedVal;
+
+                // Xử lý tự động đặt điểm thành phần về 0 hoặc trống khi tỉ lệ bị điều chỉnh bằng 0
+                if (field === 'wCc' && parsedVal === 0) sub.pCc = 0;
+                if (field === 'wGk' && parsedVal === 0) sub.pGk = 0;
+                if (field === 'wCk' && parsedVal === 0) sub.pCk = 0;
+
                 saveData();
                 updateDashboard();
                 renderTable();
@@ -1047,7 +1162,7 @@
         function runSmartTipsScan(totalCredits) {
             const tipsBox = document.getElementById('smartTipsBox');
             if (totalCredits === 0 || subjects.length === 0) {
-                tipsBox.innerHTML = `<div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang đợi bảng điểm của bạn để thiết lập rada quét...</div>`;
+                tipsBox.innerHTML = `<div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang đợi bảng điểm của bạn để thiết lập radar quét...</div>`;
                 return;
             }
 
@@ -1100,22 +1215,17 @@
                 const cc = sub.pCc || 0;
                 const gk = sub.pGk || 0;
                 
-                let currentAccumulated = 0;
-                let ckWeightRatio = 0;
+                const wCc = sub.wCc !== undefined ? sub.wCc : 0;
+                const wGk = sub.wGk !== undefined ? sub.wGk : 0;
+                const wCk = sub.wCk !== undefined ? sub.wCk : 0;
+                const totalWeight = wCc + wGk + wCk;
 
-                if (currentUni === 'NEU' || currentUni === 'TMU') {
-                    currentAccumulated = ((cc * sub.wCc) + (gk * sub.wGk)) / 100;
-                    ckWeightRatio = sub.wCk / 100;
-                } else {
-                    const wCc = sub.wCc !== undefined ? sub.wCc : 30;
-                    const wCk = sub.wCk !== undefined ? sub.wCk : 70;
-                    currentAccumulated = (cc * wCc) / 100;
-                    ckWeightRatio = wCk / 100;
-                }
-
-                if (ckWeightRatio > 0) {
+                if (totalWeight > 0 && wCk > 0) {
                     hasData = true;
-                    const targetScores = config.ganhDiem(currentAccumulated, ckWeightRatio);
+                    const currentAccumulated = ((cc * wCc) + (gk * wGk)) / totalWeight;
+                    const ckWeightRatio = wCk / totalWeight;
+
+                    const targetScores = config.ganhDiem(currentAccumulated * (totalWeight / 100), ckWeightRatio);
 
                     const div = document.createElement('div');
                     div.className = "theme-input border p-3 rounded-2xl text-xs space-y-1.5 shadow-sm";
