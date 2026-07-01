@@ -88,59 +88,34 @@
 
             <div class="space-y-6">
                 
-                <div id="shareCard" class="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-2 border-indigo-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[340px]">
-                    <div class="absolute -right-12 -top-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    
-                    <div class="flex justify-between items-start border-b border-slate-800/60 pb-3 z-10">
+                <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
+                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (<span id="cardUniBadge">NEU</span>)</h2>
+                    <div class="grid grid-cols-2 gap-4 my-4 border-b border-slate-700/50 pb-4">
                         <div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-lg">🔮</span>
-                                <h3 class="font-black text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">UniCalc Horoscope</h3>
-                            </div>
-                            <p id="cardUniName" class="text-[11px] text-slate-400 font-medium mt-0.5">Đại học Kinh tế Quốc dân (NEU)</p>
+                            <div class="text-xs text-slate-400 mb-1">Thang 10 trung bình</div>
+                            <div id="gpa10" class="text-3xl font-black text-white">0.00</div>
                         </div>
-                        <span id="cardEditionBadge" class="text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">NEU Edition</span>
-                    </div>
-
-                    <div class="my-6 grid grid-cols-2 gap-4 text-center z-10">
-                        <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-3 backdrop-blur-sm">
-                            <div class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Trung bình Hệ 10</div>
-                            <div id="cardGpa10" class="text-3xl font-black text-white font-mono">0.00</div>
-                        </div>
-                        <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-3 backdrop-blur-sm">
-                            <div class="text-[10px] text-indigo-300 uppercase tracking-widest font-semibold mb-1">Tích lũy Hệ 4</div>
-                            <div id="cardGpa4" class="text-3xl font-black text-cyan-400 font-mono drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">0.00</div>
-                        </div>
-                        <div class="col-span-2 mt-1">
-                            <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Quẻ Học Lực Học Kỳ</div>
-                            <div id="cardXepLoai" class="text-xl font-extrabold tracking-wide text-slate-400">Chưa có dữ liệu</div>
+                        <div>
+                            <div class="text-xs text-slate-400 mb-1">GPA Tích Lũy Thang 4</div>
+                            <div id="gpa4" class="text-4xl font-black text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">0.00</div>
                         </div>
                     </div>
-
-                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-center text-xs font-medium italic text-slate-300 line-clamp-3 min-h-[56px] flex items-center justify-center z-10">
-                        <span id="cardCaKhiaText">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</span>
-                    </div>
-
-                    <div class="text-center text-[10px] text-slate-500/80 font-mono mt-4 pt-2 border-t border-slate-800/40 tracking-wider">
-                        Chụp tại: <span class="text-indigo-400/60 font-semibold">ducviet211.github.io/UniCalc/</span>
+                    <div class="mt-4">
+                        <div class="text-xs text-slate-400 uppercase mb-1">Xếp Loại Học Lực Học Kỳ</div>
+                        <div id="xepLoai" class="text-xl font-bold text-slate-400">Chưa có dữ liệu</div>
                     </div>
                 </div>
 
-                <button onclick="shareDashboardImage()" class="w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-slate-950 font-black py-3.5 px-4 rounded-xl transition-all cursor-pointer shadow-xl shadow-indigo-500/10 flex items-center justify-center gap-2 transform active:scale-[0.99]">
-                    📸 KHOE TỬ VI HỌC TẬP CỦA BẠN
+                <div id="caKhiaBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center text-sm font-medium italic text-slate-400 hidden">
+                    🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
+                </div>
+
+                <button onclick="openShareModal()" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-slate-950 font-black py-4 px-4 rounded-xl transition-all cursor-pointer shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-2 transform active:scale-[0.99] text-base tracking-wide">
+                    🔮 KHOE TỬ VI HỌC TẬP CỦA BẠN
                 </button>
 
-                <div id="toastNotification" class="hidden bg-emerald-950/80 border border-emerald-500/30 rounded-xl p-3 text-center text-xs text-emerald-400 font-medium animate-bounce">
-                    ✨ Đã tải ảnh thẻ Tử vi về máy của bạn! Hãy mang đi gieo quẻ trên Facebook/Threads nào!
-                </div>
-
-                <div id="cardGpa" class="hidden" aria-hidden="true">
-                    <span id="gpa10">0.00</span>
-                    <span id="gpa4">0.00</span>
-                    <span id="xepLoai">Chưa có dữ liệu</span>
-                    <div id="caKhiaBox">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</div>
-                    <span id="cardUniBadge">NEU</span>
+                <div id="toastNotification" class="hidden bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 rounded-xl p-3 text-center text-xs font-semibold shadow-lg shadow-emerald-500/10 transition-all">
+                    ✨ Bản sao ảnh đã nằm trong bộ nhớ tạm! Hãy Ctrl+V gieo quẻ trên mạng xã hội nào!
                 </div>
 
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
@@ -187,6 +162,61 @@
         </main>
     </div>
 
+    <div id="shareModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-all duration-300">
+        <div class="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-6 transform scale-95 transition-transform duration-300">
+            
+            <div id="shareCard" class="border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500">
+                <div class="absolute -right-12 -top-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="flex justify-between items-start border-b border-slate-800/60 pb-3 z-10">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span id="shareCardIcon" class="text-xl">🔮</span>
+                            <h3 class="font-black text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">UniCalc Horoscope</h3>
+                        </div>
+                        <p id="cardUniName" class="text-[11px] text-slate-400 font-medium mt-0.5">Đại học Kinh tế Quốc dân (NEU)</p>
+                    </div>
+                    <span id="cardEditionBadge" class="text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">NEU Edition</span>
+                </div>
+
+                <div class="my-5 grid grid-cols-2 gap-4 text-center z-10">
+                    <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
+                        <div class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Hệ 10 Trung Bình</div>
+                        <div id="cardGpa10" class="text-3xl font-black text-white font-mono">0.00</div>
+                    </div>
+                    <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
+                        <div class="text-[10px] text-indigo-300 uppercase tracking-widest font-semibold mb-1">Hệ 4 Tích Lũy</div>
+                        <div id="cardGpa4" class="text-3xl font-black text-cyan-400 font-mono drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">0.00</div>
+                    </div>
+                    <div class="col-span-2 mt-1">
+                        <div id="cardXepLoai" class="text-base font-extrabold tracking-wide uppercase">CHƯA CÓ DỮ LIỆU</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-center text-xs font-medium italic text-slate-200 min-h-[72px] flex items-center justify-center z-10 leading-relaxed">
+                    <span id="cardCaKhiaText">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</span>
+                </div>
+
+                <div class="text-center text-[10px] text-slate-500/80 font-mono mt-4 pt-2 border-t border-slate-800/40 tracking-wider">
+                    Chụp tại: <span class="text-indigo-400/60 font-semibold">ducviet2611.github.io/UniCalc/</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="downloadShareCard()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-cyan-500/10">
+                    📥 Tải Ảnh Về Máy
+                </button>
+                <button onclick="copyShareCardToClipboard()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-indigo-500/10">
+                    📋 Sao Chép Ảnh
+                </button>
+                <button onclick="closeShareModal()" class="col-span-2 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center transition-all cursor-pointer">
+                    ❌ Đóng Cửa Sổ
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="border-t border-slate-800 bg-slate-900/80 py-6 mt-12 text-center text-sm text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="font-semibold tracking-wide text-slate-300">
@@ -230,11 +260,11 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "Xuất Sắc 🏆", class: "text-emerald-400", msg: "🔥 Đỉnh cao NEU! Học bổng Xuất sắc nắm chắc trong tay, chuẩn bị tinh thần đi khao cả hội bạn thân thôi!" };
-                    if (gpa4 >= 3.2) return { label: "Giỏi 🌟", class: "text-cyan-400", msg: "😎 Học lực siêu chiến, bằng Giỏi NEU vẫy gọi. Giữ vững phong độ này ra trường làm BA xịn xò nhé!" };
-                    if (gpa4 >= 2.5) return { label: "Khá 👍", class: "text-indigo-400", msg: "☕ Phong độ rất an toàn và ổn định. Cố gắng cày cuốc đẩy nhẹ vài môn lên A/A+ để bứt phá lên bằng Giỏi nào." };
-                    if (gpa4 >= 2.0) return { label: "Trung Bình 😐", class: "text-amber-400", msg: "⚠️ Tín hiệu vũ trụ nhắc nhở: Tập trung gánh điểm thi cuối kỳ ngay lập tức kẻo tụt xuống vùng nguy hiểm." };
-                    return { label: "Yếu / Kém 🚨", class: "text-rose-500 animate-pulse", msg: "💀 Tối sầm màn hình! Nguy cơ học lại, nộp tiền cải thiện đang hiển thị rõ mồn một. Gác lại mọi cuộc chơi để cứu lấy học bạ ngay!" };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘPOCC (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
                     let scoreForTop = (9.0 - currentAccumulated) / ckWeightRatio;
@@ -268,10 +298,11 @@
                     return 'F';
                 },
                 rank: function(gpa4) {
-                    if (gpa4 >= 3.6) return { label: "Xuất Sắc 🏆", class: "text-emerald-400", msg: "🎉 Đỉnh cao học thuật tại AOF! Tương lai rạng ngời ngành Tài chính - Kế toán đang đón chờ bạn!" };
-                    if (gpa4 >= 3.2) return { label: "Giỏi 🌟", class: "text-cyan-400", msg: "👏 Học lực xuất sắc, chuẩn đầu ra bằng Giỏi AOF cực kỳ uy tín và danh giá!" };
-                    if (gpa4 >= 2.5) return { label: "Khá 👍", class: "text-indigo-400", msg: "📈 Phong độ khá tốt. Hãy tối ưu điểm thi cuối kỳ các môn tiếp theo để bứt phá." };
-                    return { label: "Trung Bình 😐", class: "text-amber-400", msg: "⚠️ Cảnh báo an toàn! Cần tập trung cải thiện điểm số để bảo vệ tấm bằng ra trường." };
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
                     let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
@@ -340,11 +371,10 @@
         function applyUniversityConfig() {
             const config = uniConfigs[currentUni];
             
-            // Đồng bộ an toàn và bảo mật dữ liệu, tránh crash DOM
             document.getElementById('editionBadge').innerText = config.name;
+            document.getElementById('cardUniBadge').innerText = currentUni;
             document.getElementById('cardUniName').innerText = config.title;
             document.getElementById('cardEditionBadge').innerText = config.name;
-            document.getElementById('cardUniBadge').innerText = currentUni;
 
             if (currentUni === 'AOF') {
                 const borderClass = "text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
@@ -540,7 +570,6 @@
             const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
             const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
 
-            // Cập nhật mượt mà cho cả ID gốc lẫn ID Card Ảnh thẻ
             document.getElementById('gpa10').innerText = finalGpa10.toFixed(2);
             document.getElementById('gpa4').innerText = finalGpa4.toFixed(2);
             document.getElementById('cardGpa10').innerText = finalGpa10.toFixed(2);
@@ -564,10 +593,11 @@
                 cardCaKhiaText.innerText = emptyMsg;
             } else {
                 const rankInfo = config.rank(finalGpa4);
+                
                 xepLoaiDiv.innerText = rankInfo.label;
                 cardXepLoaiDiv.innerText = rankInfo.label.toUpperCase();
-                xepLoaiDiv.className = `text-xl font-bold ${rankInfo.class}`;
-                cardXepLoaiDiv.className = `text-xl font-extrabold tracking-wide ${rankInfo.class} drop-shadow-md`;
+                xepLoaiDiv.className = `text-sm font-bold ${rankInfo.class}`;
+                cardXepLoaiDiv.className = `text-sm font-extrabold tracking-wide text-center w-full ${rankInfo.class} drop-shadow-md`;
                 
                 caKhiaBox.innerText = rankInfo.msg;
                 cardCaKhiaText.innerText = rankInfo.msg;
@@ -704,10 +734,68 @@
             }
         }
 
-        function shareDashboardImage() {
-            const targetCard = document.getElementById('shareCard');
-            const toast = document.getElementById('toastNotification');
+        function openShareModal() {
+            updateDashboard();
 
+            // Tính toán lại GPA hệ 4 hiện tại để gán class decor động
+            let totalCredits = 0;
+            let sumScore4 = 0;
+            const config = uniConfigs[currentUni];
+
+            subjects.forEach(sub => {
+                const score10 = calculateTotal10(sub);
+                const letter = config.convert(score10);
+                const score4 = config.mapping[letter];
+                totalCredits += sub.credits;
+                sumScore4 += score4 * sub.credits;
+            });
+
+            const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
+            const shareCard = document.getElementById('shareCard');
+            const shareCardIcon = document.getElementById('shareCardIcon');
+
+            // Reset và Apply class CSS động chuẩn vibe vũ trụ
+            if (totalCredits === 0) {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-indigo-950 via-slate-950 to-purple-950 border-slate-800";
+                shareCardIcon.innerText = "🔮";
+            } else if (finalGpa4 >= 3.6) {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-purple-950 to-amber-950/40 border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.35)]";
+                shareCardIcon.innerText = "✨";
+            } else if (finalGpa4 >= 3.2) {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.35)]";
+                shareCardIcon.innerText = "🌌";
+            } else if (finalGpa4 >= 2.5) {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/30 border-emerald-500/40 shadow-[0_0_25px_rgba(16,185,129,0.25)]";
+                shareCardIcon.innerText = "🪐";
+            } else if (finalGpa4 >= 2.0) {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-slate-950 via-slate-900 to-orange-950/40 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.25)]";
+                shareCardIcon.innerText = "☄️";
+            } else {
+                shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-black via-zinc-950 to-red-950/50 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse";
+                shareCardIcon.innerText = "🕳️";
+            }
+
+            const modal = document.getElementById('shareModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeShareModal() {
+            const modal = document.getElementById('shareModal');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 150);
+        }
+
+        function downloadShareCard() {
+            const targetCard = document.getElementById('shareCard');
             html2canvas(targetCard, {
                 backgroundColor: '#0f172a',
                 scale: 2, 
@@ -715,22 +803,37 @@
                 useCORS: true
             }).then(canvas => {
                 const base64Image = canvas.toDataURL('image/png');
-
                 const downloadLink = document.createElement('a');
                 downloadLink.href = base64Image;
-                downloadLink.download = 'UniCalc_TuViHocTap.png';
-                
+                downloadLink.download = 'UniCalc_TuVi.png';
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
-
-                toast.classList.remove('hidden');
-                setTimeout(() => {
-                    toast.classList.add('hidden');
-                }, 4500);
             }).catch(err => {
-                console.error("Lỗi trích xuất ảnh thẻ Tử vi:", err);
-                alert("Rất tiếc, trình duyệt chưa hỗ trợ xuất ảnh nhanh. Hãy chụp ảnh màn hình thủ công nhé!");
+                console.error("Lỗi Canvas:", err);
+            });
+        }
+
+        function copyShareCardToClipboard() {
+            const targetCard = document.getElementById('shareCard');
+            const toast = document.getElementById('toastNotification');
+
+            html2canvas(targetCard, {
+                backgroundColor: '#0f172a',
+                scale: 2,
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                canvas.toBlob(blob => {
+                    if (!blob) return;
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]).then(() => {
+                        toast.classList.remove('hidden');
+                        setTimeout(() => toast.classList.add('hidden'), 4000);
+                    }).catch(err => {
+                        console.error("Clipboard API bị chặn chặn hoặc lỗi sao chép blob:", err);
+                    });
+                }, "image/png");
             });
         }
     </script>
