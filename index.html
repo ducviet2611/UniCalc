@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniCalc - Giả lập & Tính điểm GPA NEU</title>
+    <title>UniCalc - Nền tảng Giả lập & Tính điểm GPA Đa Trường</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -24,13 +24,20 @@
 
     <div>
         <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-2">
                     <span class="text-2xl">🎓</span>
                     <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">UniCalc</h1>
-                    <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-bold">NEU Edition</span>
+                    <span id="editionBadge" class="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300">NEU Edition</span>
                 </div>
-                <div class="text-sm text-slate-400 font-medium hidden sm:block">⚡ Hệ thống tính điểm & giả lập chuẩn Đại học Kinh tế Quốc dân</div>
+                
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <label for="universitySelector" class="text-xs text-slate-400 uppercase font-bold tracking-wider whitespace-nowrap">Chọn Trường:</label>
+                    <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full sm:w-64 bg-slate-800 border-2 border-indigo-500/50 text-white font-bold py-2 px-3 rounded-xl focus:outline-none focus:border-indigo-400 cursor-pointer shadow-lg transition-all">
+                        <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
+                        <option value="AOF">Học viện Tài chính (AOF)</option>
+                    </select>
+                </div>
             </div>
         </header>
 
@@ -38,26 +45,28 @@
             
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
-                            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400">📝 Danh Sách Môn Học</h2>
-                            <p class="text-xs text-slate-400 mt-1">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
+                            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400">
+                                📝 Danh Sách Môn Học - <span id="tableUniTitle">NEU</span>
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-1" id="tableUniDesc">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
                         </div>
-                        <button onclick="addSubjectRow()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-2 text-sm cursor-pointer shadow-lg shadow-cyan-500/20">
+                        <button onclick="addSubjectRow()" class="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-lg shadow-cyan-500/20">
                             ➕ Thêm Môn
                         </button>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[600px]">
+                        <table class="w-full text-left border-collapse min-w-[620px]">
                             <thead>
                                 <tr class="border-b border-slate-700 text-xs text-slate-400 uppercase tracking-wider">
-                                    <th class="pb-3 w-1/3">Tên Môn Học</th>
+                                    <th class="pb-3 w-5/12">Tên Môn Học</th>
                                     <th class="pb-3 w-16 text-center">Tín Chỉ</th>
-                                    <th class="pb-3 text-center">Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span></th>
-                                    <th class="pb-3 text-center">Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span></th>
-                                    <th class="pb-3 text-center">Thi CK</th>
-                                    <th class="pb-3 text-center">Tổng Kết</th>
+                                    <th class="pb-3 text-center w-28" id="thRatio">Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span></th>
+                                    <th class="pb-3 text-center w-36" id="thComponent">Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span></th>
+                                    <th class="pb-3 text-center w-16">Thi CK</th>
+                                    <th class="pb-3 text-center w-20">Tổng Kết</th>
                                     <th class="pb-3 w-10 text-center">Xóa</th>
                                 </tr>
                             </thead>
@@ -69,16 +78,16 @@
 
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
                     <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2 mb-2">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
-                    <p class="text-xs text-slate-400 mb-4">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm mới.</p>
+                    <p class="text-xs text-slate-400 mb-4">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm của trường.</p>
                     <div id="ganhDiemContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="text-sm text-slate-500 italic col-span-2">Hãy nhập đầy đủ điểm Chuyên cần và Giữa kỳ để rada bắt đầu quét...</div>
+                        <div class="text-sm text-slate-500 italic col-span-2">Hãy nhập đầy đủ điểm thành phần để rada bắt đầu quét...</div>
                     </div>
                 </div>
             </div>
 
             <div class="space-y-6">
                 <div id="cardGpa" class="bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden">
-                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (NEU)</h2>
+                    <h2 class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-4">GPA Học Kỳ Hiện Tại (<span id="cardUniBadge">NEU</span>)</h2>
                     <div class="grid grid-cols-2 gap-4 my-4 border-b border-slate-700/50 pb-4">
                         <div>
                             <div class="text-xs text-slate-400 mb-1">Thang 10 trung bình</div>
@@ -100,7 +109,7 @@
                 </div>
 
                 <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">📊 Tỷ Lệ Điểm Chữ (Có A+)</h3>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">📊 Tỷ Lệ Điểm Chữ Phân Bố</h3>
                     <div class="w-full flex justify-center">
                         <div class="w-[200px] h-[200px] relative">
                             <canvas id="gradeChart"></canvas>
@@ -158,65 +167,228 @@
     </footer>
 
     <script>
+        // YÊU CẦU 2: Bổ sung thuộc tính `name` chứa chính xác chữ hiển thị phiên bản cho từng trường học
+        const uniConfigs = {
+            NEU: {
+                name: "NEU Edition",
+                title: "Đại học Kinh tế Quốc dân (NEU)",
+                desc: "Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU",
+                defaultWeights: { wCc: 10, wGk: 40, wCk: 50 },
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span>',
+                componentHeader: 'Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span>',
+                grades: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
+                colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
+                mapping: { 'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
+                convert: function(score) {
+                    if (score >= 9.0) return 'A+';
+                    if (score >= 8.5) return 'A';
+                    if (score >= 8.0) return 'B+';
+                    if (score >= 7.0) return 'B';
+                    if (score >= 6.5) return 'C+';
+                    if (score >= 5.5) return 'C';
+                    if (score >= 5.0) return 'D+';
+                    if (score >= 4.5) return 'D';
+                    return 'F';
+                },
+                rank: function(gpa4) {
+                    if (gpa4 >= 3.6) return { label: "Xuất Sắc 🏆", class: "text-emerald-400", msg: "🔥 Đỉnh cao NEU! Học bổng Xuất sắc nắm chắc trong tay, chuẩn bị tinh thần đi khao cả hội bạn thân thôi!" };
+                    if (gpa4 >= 3.2) return { label: "Giỏi 🌟", class: "text-cyan-400", msg: "😎 Học lực siêu chiến, bằng Giỏi NEU vẫy gọi. Giữ vững phong độ này ra trường làm BA xịn xò nhé!" };
+                    if (gpa4 >= 2.5) return { label: "Khá 👍", class: "text-indigo-400", msg: "☕ Phong độ rất an toàn và ổn định. Cố gắng cày cuốc đẩy nhẹ vài môn lên A/A+ để bứt phá lên bằng Giỏi nào." };
+                    if (gpa4 >= 2.0) return { label: "Trung Bình 😐", class: "text-amber-400", msg: "⚠️ Tín hiệu vũ trụ nhắc nhở: Tập trung gánh điểm thi cuối kỳ ngay lập tức kẻo tụt xuống vùng nguy hiểm." };
+                    return { label: "Yếu / Kém 🚨", class: "text-rose-500 animate-pulse", msg: "💀 Tối sầm màn hình! Nguy cơ học lại, nộp tiền cải thiện đang hiển thị rõ mồn một. Gác lại mọi cuộc chơi để cứu lấy học bạ ngay!" };
+                },
+                ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    let scoreForTop = (9.0 - currentAccumulated) / ckWeightRatio;
+                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
+                    let scoreForPass = (4.5 - currentAccumulated) / ckWeightRatio;
+                    return [
+                        { label: 'A+', val: scoreForTop < 0 ? 0 : (scoreForTop > 10 ? "Bất khả thi" : scoreForTop.toFixed(1)) },
+                        { label: 'A', val: scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1)) },
+                        { label: 'Qua môn (D)', val: scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1)), isPass: true }
+                    ];
+                }
+            },
+            AOF: {
+                name: "AOF Edition",
+                title: "Học viện Tài chính (AOF)",
+                desc: "Áp dụng công thức và dải quy đổi điểm 10 - Chữ - 4 chuẩn Học viện Tài chính",
+                defaultWeights: { wCc: 30, wGk: 0, wCk: 70 },
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(KT - CK)</span>',
+                componentHeader: 'Điểm Kiểm Tra<br><span class="text-[10px] text-slate-500">(Hệ số 30%)</span>',
+                grades: ['A', 'B', 'C', 'D', 'F'],
+                colors: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'],
+                mapping: { 'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0 },
+                convert: function(score) {
+                    if (score >= 8.5) return 'A';
+                    if (score >= 7.0) return 'B';
+                    if (score >= 5.5) return 'C';
+                    if (score >= 4.0) return 'D';
+                    return 'F';
+                },
+                rank: function(gpa4) {
+                    if (gpa4 >= 3.6) return { label: "Xuất Sắc 🏆", class: "text-emerald-400", msg: "🎉 Đỉnh cao học thuật tại AOF! Tương lai rạng ngời ngành Tài chính - Kế toán đang đón chờ bạn!" };
+                    if (gpa4 >= 3.2) return { label: "Giỏi 🌟", class: "text-cyan-400", msg: "👏 Học lực xuất sắc, chuẩn đầu ra bằng Giỏi AOF cực kỳ uy tín và danh giá!" };
+                    if (gpa4 >= 2.5) return { label: "Khá 👍", class: "text-indigo-400", msg: "📈 Phong độ khá tốt. Hãy tối ưu điểm thi cuối kỳ các môn tiếp theo để bứt phá." };
+                    return { label: "Trung Bình 😐", class: "text-amber-400", msg: "⚠️ Cảnh báo an toàn! Cần tập trung cải thiện điểm số để bảo vệ tấm bằng ra trường." };
+                },
+                ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
+                    let scoreForB = (7.0 - currentAccumulated) / ckWeightRatio;
+                    let scoreForPass = (4.0 - currentAccumulated) / ckWeightRatio;
+                    return [
+                        { label: 'A', val: scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1)) },
+                        { label: 'B', val: scoreForB < 0 ? 0 : (scoreForB > 10 ? "Bất khả thi" : scoreForB.toFixed(1)) },
+                        { label: 'Qua môn (D)', val: scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1)), isPass: true }
+                    ];
+                }
+            }
+        };
+
+        let currentUni = 'NEU';
         let subjects = [];
         let myChart = null;
 
-        const gradeMapping = {
-            'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0
-        };
-
         window.addEventListener('DOMContentLoaded', () => {
-            const stored = localStorage.getItem('unicalc_subjects_neu');
-            if (stored) {
-                subjects = JSON.parse(stored);
+            const storedUni = localStorage.getItem('unicalc_current_uni');
+            if (storedUni && uniConfigs[storedUni]) {
+                currentUni = storedUni;
+            }
+            document.getElementById('universitySelector').value = currentUni;
+
+            const storedSubjects = localStorage.getItem(`unicalc_subjects_${currentUni}`);
+            if (storedSubjects) {
+                subjects = JSON.parse(storedSubjects);
             } else {
+                initDefaultSubjects();
+            }
+
+            initChart();
+            applyUniversityConfig();
+        });
+
+        function initDefaultSubjects() {
+            if (currentUni === 'NEU') {
                 subjects = [
                     { id: 1, name: 'Kinh tế vĩ mô', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 9, pGk: 8.5, pCk: 9.2 },
                     { id: 2, name: 'Xác suất thống kê', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 10, pGk: 7.5, pCk: 8.2 }
                 ];
+            } else {
+                subjects = [
+                    { id: 1, name: 'Tài chính quốc tế', credits: 3, wCc: 30, wGk: 0, wCk: 70, pCc: 8.0, pGk: 0, pCk: 8.5 },
+                    { id: 2, name: 'Kế toán quản trị', credits: 3, wCc: 30, wGk: 0, wCk: 70, pCc: 7.5, pGk: 0, pCk: 6.8 }
+                ];
             }
-            renderTable();
-            initChart();
-            updateDashboard();
-        });
-
-        function saveData() {
-            localStorage.setItem('unicalc_subjects_neu', JSON.stringify(subjects));
         }
 
-        // Thay đổi quan trọng: Hàm tính điểm tổng kết môn học giờ đây sẽ làm tròn đến 1 chữ số thập phân (phần mười) theo chuẩn NEU
+        function switchUniversity(uniCode) {
+            currentUni = uniCode;
+            localStorage.setItem('unicalc_current_uni', currentUni);
+
+            const storedSubjects = localStorage.getItem(`unicalc_subjects_${currentUni}`);
+            if (storedSubjects) {
+                subjects = JSON.parse(storedSubjects);
+            } else {
+                initDefaultSubjects();
+                localStorage.setItem(`unicalc_subjects_${currentUni}`, JSON.stringify(subjects));
+            }
+
+            applyUniversityConfig();
+        }
+
+        // YÊU CẦU 3: Hàm cập nhật giao diện động - Thay đổi Badge và tĩnh học phần theo Realtime
+        function applyUniversityConfig() {
+            const config = uniConfigs[currentUni];
+            
+            // Cập nhật nhãn động ở Header bằng thời gian thực không cần reload (F5)
+            document.getElementById('editionBadge').innerText = config.name;
+
+            // Thay đổi màu sắc Badge cho đẹp mắt theo từng phiên bản trường học
+            if (currentUni === 'AOF') {
+                document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
+            } else {
+                document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
+            }
+            
+            // Cập nhật văn bản giao diện hiển thị theo thiết lập cấu hình trường
+            document.getElementById('tableUniTitle').innerText = currentUni;
+            document.getElementById('tableUniDesc').innerText = config.desc;
+            document.getElementById('cardUniBadge').innerText = currentUni;
+            document.getElementById('thRatio').innerHTML = config.ratioHeader;
+            document.getElementById('thComponent').innerHTML = config.componentHeader;
+
+            // Xây dựng cấu trúc lại biểu đồ thích ứng với số lượng đầu điểm chữ của trường
+            if (myChart) {
+                myChart.data.labels = config.grades;
+                myChart.data.datasets[0].backgroundColor = config.colors;
+                myChart.data.datasets[0].data = new Array(config.grades.length).fill(0);
+                myChart.update();
+            }
+
+            renderTable();
+            updateDashboard();
+        }
+
+        function saveData() {
+            localStorage.setItem(`unicalc_subjects_${currentUni}`, JSON.stringify(subjects));
+        }
+
         function calculateTotal10(sub) {
             const cc = sub.pCc || 0;
             const gk = sub.pGk || 0;
             const ck = sub.pCk || 0;
-            const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
-            if(sumWeight === 0) return 0;
-            const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
-            return Math.round(rawScore * 10) / 10; 
-        }
-
-        function convertToLetterNEU(score) {
-            if (score >= 9.0) return 'A+';
-            if (score >= 8.5) return 'A';
-            if (score >= 8.0) return 'B+';
-            if (score >= 7.0) return 'B';
-            if (score >= 6.5) return 'C+';
-            if (score >= 5.5) return 'C';
-            if (score >= 5.0) return 'D+';
-            if (score >= 4.5) return 'D';
-            return 'F';
+            
+            if (currentUni === 'NEU') {
+                const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
+                if (sumWeight === 0) return 0;
+                const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
+                return Math.round(rawScore * 10) / 10;
+            } else {
+                const weightCc = sub.wCc !== undefined ? sub.wCc : 30; 
+                const weightCk = sub.wCk !== undefined ? sub.wCk : 70;
+                const rawScore = ((cc * weightCc) + (ck * weightCk)) / 100;
+                return Math.round(rawScore * 10) / 10;
+            }
         }
 
         function renderTable() {
             const tbody = document.getElementById('subjectTableBody');
             tbody.innerHTML = '';
+            const config = uniConfigs[currentUni];
 
             subjects.forEach((sub) => {
                 const total10 = calculateTotal10(sub);
-                const gradeLetter = convertToLetterNEU(total10);
+                const gradeLetter = config.convert(total10);
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-800/30 transition-all text-sm";
+                
+                let dynamicComponentTd = '';
+                let dynamicRatioTd = '';
+
+                if (currentUni === 'NEU') {
+                    dynamicRatioTd = `
+                        <div class="flex items-center justify-center gap-1 text-xs">
+                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                        </div>`;
+                    dynamicComponentTd = `
+                        <div class="flex items-center justify-center gap-1 text-xs">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                        </div>`;
+                } else {
+                    dynamicRatioTd = `
+                        <div class="flex items-center justify-center gap-2 text-xs">
+                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
+                        </div>`;
+                    dynamicComponentTd = `
+                        <div class="flex items-center justify-center text-xs">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
+                        </div>`;
+                }
+
                 tr.innerHTML = `
                     <td class="py-4 pr-2">
                         <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-600 focus:border-cyan-500 focus:outline-none text-white font-medium py-1">
@@ -227,17 +399,10 @@
                         </select>
                     </td>
                     <td class="py-4 text-center">
-                        <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
-                        </div>
+                        ${dynamicRatioTd}
                     </td>
                     <td class="py-4 text-center">
-                        <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
-                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 bg-slate-900 text-center rounded border border-slate-700 p-1 text-white">
-                        </div>
+                        ${dynamicComponentTd}
                     </td>
                     <td class="py-4 text-center">
                         <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 bg-slate-900 text-center rounded border border-cyan-600/50 p-1 font-bold text-white focus:outline-none focus:border-cyan-400">
@@ -256,8 +421,17 @@
 
         function addSubjectRow() {
             const newId = subjects.length > 0 ? Math.max(...subjects.map(s => s.id)) + 1 : 1;
+            const config = uniConfigs[currentUni];
             subjects.push({
-                id: newId, name: 'Môn học mới ' + newId, credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 10, pGk: 0, pCk: 0
+                id: newId, 
+                name: 'Môn học mới ' + newId, 
+                credits: 3, 
+                wCc: config.defaultWeights.wCc, 
+                wGk: config.defaultWeights.wGk, 
+                wCk: config.defaultWeights.wCk, 
+                pCc: 10, 
+                pGk: currentUni === 'NEU' ? 0 : null, 
+                pCk: 0
             });
             saveData();
             renderTable();
@@ -296,24 +470,28 @@
         }
 
         function updateDashboard() {
+            const config = uniConfigs[currentUni];
             let totalCredits = 0;
             let sumScore10 = 0;
             let sumScore4 = 0;
-            let gradeCounts = { 'A+': 0, 'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'D+': 0, 'D': 0, 'F': 0 };
+
+            let gradeCounts = {};
+            config.grades.forEach(g => gradeCounts[g] = 0);
 
             subjects.forEach(sub => {
                 const score10 = calculateTotal10(sub);
-                const letter = convertToLetterNEU(score10);
-                const score4 = gradeMapping[letter];
+                const letter = config.convert(score10);
+                const score4 = config.mapping[letter];
 
                 totalCredits += sub.credits;
                 sumScore10 += score10 * sub.credits;
                 sumScore4 += score4 * sub.credits;
 
-                gradeCounts[letter]++;
+                if (gradeCounts[letter] !== undefined) {
+                    gradeCounts[letter]++;
+                }
             });
 
-            // Thay đổi quan trọng: Điểm trung bình học kỳ hệ 10 làm tròn đến hàng phần trăm (.toFixed(2))
             const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
             const finalGpa4 = totalCredits > 0 ? (sumScore4 / totalCredits) : 0;
 
@@ -328,27 +506,15 @@
                 xepLoaiDiv.innerText = "Chưa có dữ liệu";
                 xepLoaiDiv.className = "text-xl font-bold text-slate-400";
                 caKhiaBox.innerText = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
-            } else if (finalGpa4 >= 3.6) {
-                xepLoaiDiv.innerText = "Xuất Sắc 🏆";
-                xepLoaiDiv.className = "text-xl font-bold text-emerald-400";
-                caKhiaBox.innerText = "🔥 Đỉnh cao NEU! Học bổng Xuất sắc nắm chắc trong tay, chuẩn bị tinh thần đi khao cả hội bạn thân thôi!";
-            } else if (finalGpa4 >= 3.2) {
-                xepLoaiDiv.innerText = "Giỏi 🌟";
-                xepLoaiDiv.className = "text-xl font-bold text-cyan-400";
-                caKhiaBox.innerText = "😎 Học lực siêu chiến, bằng Giỏi NEU vẫy gọi. Giữ vững phong độ này ra trường làm BA xịn xò nhé!";
-            } else if (finalGpa4 >= 2.5) {
-                xepLoaiDiv.innerText = "Khá 👍";
-                xepLoaiDiv.className = "text-xl font-bold text-indigo-400";
-                caKhiaBox.innerText = "☕ Phong độ rất an toàn và ổn định. Cố gắng cày cuốc đẩy nhẹ vài môn lên A/A+ để bứt phá lên bằng Giỏi nào.";
-            } else if (finalGpa4 >= 2.0) {
-                xepLoaiDiv.innerText = "Trung Bình 😐";
-                xepLoaiDiv.className = "text-xl font-bold text-amber-400";
-                caKhiaBox.innerText = "⚠️ Tín hiệu vũ trụ nhắc nhở: Tập trung gánh điểm thi cuối kỳ ngay lập tức kẻo tụt xuống vùng nguy hiểm.";
             } else {
-                xepLoaiDiv.innerText = "Yếu / Kém 🚨";
-                xepLoaiDiv.className = "text-xl font-bold text-rose-500 animate-pulse";
-                caKhiaBox.innerText = "💀 Tối sầm màn hình! Nguy cơ học lại, nộp tiền cải thiện đang hiển thị rõ mồn một. Gác lại mọi cuộc chơi để cứu lấy học bạ ngay!";
-                document.body.style.backgroundColor = "#020617";
+                const rankInfo = config.rank(finalGpa4);
+                xepLoaiDiv.innerText = rankInfo.label;
+                xepLoaiDiv.className = `text-xl font-bold ${rankInfo.class}`;
+                caKhiaBox.innerText = rankInfo.msg;
+
+                if (finalGpa4 < 2.0 && currentUni === 'NEU') {
+                    document.body.style.backgroundColor = "#020617";
+                }
             }
 
             updateChartData(gradeCounts);
@@ -358,13 +524,14 @@
 
         function initChart() {
             const ctx = document.getElementById('gradeChart').getContext('2d');
+            const config = uniConfigs[currentUni];
             myChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
+                    labels: config.grades,
                     datasets: [{
-                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        backgroundColor: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
+                        data: new Array(config.grades.length).fill(0),
+                        backgroundColor: config.colors,
                         borderWidth: 0
                     }]
                 },
@@ -379,9 +546,9 @@
 
         function updateChartData(counts) {
             if (!myChart) return;
-            myChart.data.datasets[0].data = [
-                counts['A+'], counts['A'], counts['B+'], counts['B'], counts['C+'], counts['C'], counts['D+'], counts['D'], counts['F']
-            ];
+            const config = uniConfigs[currentUni];
+            const dataArr = config.grades.map(g => counts[g] || 0);
+            myChart.data.datasets[0].data = dataArr;
             myChart.update();
         }
 
@@ -389,41 +556,43 @@
             const container = document.getElementById('ganhDiemContainer');
             container.innerHTML = '';
             let hasData = false;
+            const config = uniConfigs[currentUni];
 
             subjects.forEach(sub => {
                 const cc = sub.pCc || 0;
                 const gk = sub.pGk || 0;
-                const currentAccumulated = ((cc * sub.wCc) + (gk * sub.wGk)) / 100;
-                const ckWeightRatio = sub.wCk / 100;
+                
+                let currentAccumulated = 0;
+                let ckWeightRatio = 0;
+
+                if (currentUni === 'NEU') {
+                    currentAccumulated = ((cc * sub.wCc) + (gk * sub.wGk)) / 100;
+                    ckWeightRatio = sub.wCk / 100;
+                } else {
+                    const wCc = sub.wCc !== undefined ? sub.wCc : 30;
+                    const wCk = sub.wCk !== undefined ? sub.wCk : 70;
+                    currentAccumulated = (cc * wCc) / 100;
+                    ckWeightRatio = wCk / 100;
+                }
 
                 if (ckWeightRatio > 0) {
                     hasData = true;
-
-                    let scoreForAPlus = (9.0 - currentAccumulated) / ckWeightRatio;
-                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
-                    let scoreForPass = (4.5 - currentAccumulated) / ckWeightRatio;
-
-                    scoreForAPlus = scoreForAPlus < 0 ? 0 : (scoreForAPlus > 10 ? "Bất khả thi" : scoreForAPlus.toFixed(1));
-                    scoreForA = scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1));
-                    scoreForPass = scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1));
+                    const targetScores = config.ganhDiem(currentAccumulated, ckWeightRatio);
 
                     const div = document.createElement('div');
                     div.className = "bg-slate-900/60 border border-slate-700 p-3 rounded-xl text-xs space-y-1.5";
-                    div.innerHTML = `
-                        <div class="font-bold text-slate-200 text-sm truncate">${sub.name}</div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Thi để đạt <span class="text-emerald-400 font-bold">A+</span>:</span>
-                            <span class="font-black text-white">${scoreForAPlus} ${typeof scoreForAPlus === 'string' ? '' : 'điểm'}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-teal-400 font-bold">Thi để đạt <span class="text-teal-400 font-bold">A</span>:</span>
-                            <span class="font-black text-white">${scoreForA} ${typeof scoreForA === 'string' ? '' : 'điểm'}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-rose-400 font-bold">Qua môn (D) cần:</span>
-                            <span class="font-black text-amber-400">${scoreForPass} ${typeof scoreForPass === 'string' ? '' : 'điểm'}</span>
-                        </div>
-                    `;
+                    
+                    let innerHtml = `<div class="font-bold text-slate-200 text-sm truncate">${sub.name}</div>`;
+                    targetScores.forEach(target => {
+                        const colorClass = target.isPass ? "text-rose-400" : "text-emerald-400";
+                        innerHtml += `
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Thi để đạt điểm chữ <span class="${colorClass} font-bold">${target.label}</span>:</span>
+                                <span class="font-black text-white">${target.val} ${typeof target.val === 'string' ? '' : 'điểm'}</span>
+                            </div>`;
+                    });
+
+                    div.innerHTML = innerHtml;
                     container.appendChild(div);
                 }
             });
@@ -432,12 +601,12 @@
             }
         }
 
-        // Đồng bộ hóa với việc tích lũy cũ / tương lai
         function calculateFuture() {
             const oldGpa = parseFloat(document.getElementById('oldGpa').value) || 0;
             const oldCredits = parseInt(document.getElementById('oldCredits').value) || 0;
             const futureGpa = parseFloat(document.getElementById('futureSlider').value);
             const futureCredits = parseInt(document.getElementById('futureCredits').value) || 0;
+            const config = uniConfigs[currentUni];
 
             document.getElementById('sliderValue').innerText = futureGpa.toFixed(2);
 
@@ -445,9 +614,9 @@
             let currentSumScore4 = 0;
             subjects.forEach(sub => {
                 const score10 = calculateTotal10(sub);
-                const letter = convertToLetterNEU(score10);
+                const letter = config.convert(score10);
                 currentCredits += sub.credits;
-                currentSumScore4 += gradeMapping[letter] * sub.credits;
+                currentSumScore4 += config.mapping[letter] * sub.credits;
             });
 
             const totalAllCredits = oldCredits + currentCredits + futureCredits;
