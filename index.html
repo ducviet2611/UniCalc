@@ -6,7 +6,6 @@
     <title>UniCalc - Nền tảng Giả lập & Tính điểm GPA Đa Trường</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         .dark-theme {
@@ -37,6 +36,7 @@
                     <label for="universitySelector" class="text-xs text-slate-400 uppercase font-bold tracking-wider whitespace-nowrap">Chọn Trường:</label>
                     <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full sm:w-64 bg-slate-800 border-2 border-indigo-500/50 text-white font-bold py-2 px-3 rounded-xl focus:outline-none focus:border-indigo-400 cursor-pointer shadow-lg transition-all">
                         <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
+                        <option value="TMU">Đại học Thương mại (TMU)</option>
                         <option value="AOF">Học viện Tài chính (AOF)</option>
                     </select>
                 </div>
@@ -119,11 +119,46 @@
                     ✨ Bản sao ảnh đã nằm trong bộ nhớ tạm! Hãy Ctrl+V gieo quẻ trên mạng xã hội nào!
                 </div>
 
-                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">📊 Tỷ Lệ Điểm Chữ Phân Bố</h3>
-                    <div class="w-full flex justify-center">
-                        <div class="w-[200px] h-[200px] relative">
-                            <canvas id="gradeChart"></canvas>
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl space-y-5">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">📊 Tiến Trình GPA & Tối Ưu Điểm</h3>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs text-slate-400">
+                            <span>Mức GPA Hiện Tại:</span>
+                            <span id="progressBarValue" class="font-bold text-cyan-400 font-mono">0.00 / 4.00</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-3.5 border border-slate-700/60 overflow-hidden p-[2px]">
+                            <div id="progressBarFill" class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="relative w-full h-6 mt-1 text-xs text-slate-400 select-none">
+                            <div class="absolute flex flex-col items-center" style="left: 50%; transform: translateX(-50%);">
+                                <span class="font-semibold text-[10px]">2.50</span><span class="text-[9px] text-slate-500">Khá</span>
+                            </div>
+                            <div class="absolute flex flex-col items-center" style="left: 62.5%; transform: translateX(-50%);">
+                                <span class="font-semibold text-[10px]">3.20</span><span class="text-[9px] text-slate-500">Giỏi</span>
+                            </div>
+                            <div class="absolute flex flex-col items-center" style="left: 80%; transform: translateX(-50%);">
+                                <span class="font-semibold text-[10px]">3.60</span><span class="text-[9px] text-slate-500">X.Sắc</span>
+                            </div>
+                            <div class="absolute flex flex-col items-end" style="left: 100%; transform: translateX(-100%);">
+                                <span class="font-semibold text-[10px]">4.00</span><span class="text-[9px] text-slate-500">Tuyệt đối</span>
+                            </div>
+                        </div>
+                        
+                        <div id="godRemainingMsg" class="text-xs text-slate-300 font-medium text-center pt-2 border-t border-slate-800/50 mt-1">
+                            Vui lòng nhập điểm để thiết lập tiến trình mục tiêu học lực.
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-800">
+
+                    <div class="space-y-2">
+                        <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                            <span>🧠 RADA PHÂN TÍCH ĐIỂM</span>
+                        </div>
+                        <div id="smartTipsBox" class="bg-slate-900/40 backdrop-blur-md border border-slate-700/40 rounded-xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2">
+                            <div class="text-slate-500 italic text-center">Vũ trụ đang quét dữ liệu môn học...</div>
                         </div>
                     </div>
                 </div>
@@ -246,6 +281,16 @@
                 grades: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
                 colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#f97316', '#ef4444'],
                 mapping: { 'A+': 4.0, 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
+                thresholds: [
+                    { grade: 'A+', min: 9.0 },
+                    { grade: 'A', min: 8.5 },
+                    { grade: 'B+', min: 8.0 },
+                    { grade: 'B', min: 7.0 },
+                    { grade: 'C+', min: 6.5 },
+                    { grade: 'C', min: 5.5 },
+                    { grade: 'D+', min: 5.0 },
+                    { grade: 'D', min: 4.5 }
+                ],
                 roundSubjectScore: function(rawScore) {
                     return Math.round(rawScore * 10) / 10;
                 },
@@ -278,6 +323,56 @@
                     ];
                 }
             },
+            TMU: {
+                name: "TMU Edition",
+                title: "Đại học Thương mại (TMU)",
+                desc: "Áp dụng hệ số 10 - 30 - 60 và dải quy đổi điểm 10 - Chữ - 4 chuẩn TMU",
+                defaultWeights: { wCc: 10, wGk: 30, wCk: 60 },
+                ratioHeader: 'Tỷ Lệ (%)<br><span class="text-[10px] text-slate-500">(CC - GK - CK)</span>',
+                componentHeader: 'Điểm TP<br><span class="text-[10px] text-slate-500">(CC - GK)</span>',
+                grades: ['A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F'],
+                colors: ['#10b981', '#34d399', '#22d3ee', '#3b82f6', '#6366f1', '#a855f7', '#f59e0b', '#ef4444'],
+                mapping: { 'A': 4.0, 'B+': 3.5, 'B': 3.0, 'C+': 2.5, 'C': 2.0, 'D+': 1.5, 'D': 1.0, 'F': 0.0 },
+                thresholds: [
+                    { grade: 'A', min: 8.5 },
+                    { grade: 'B+', min: 8.0 },
+                    { grade: 'B', min: 7.0 },
+                    { grade: 'C+', min: 6.5 },
+                    { grade: 'C', min: 5.5 },
+                    { grade: 'D+', min: 5.0 },
+                    { grade: 'D', min: 4.0 }
+                ],
+                roundSubjectScore: function(rawScore) {
+                    return Math.round(rawScore * 10) / 10;
+                },
+                convert: function(score) {
+                    if (score >= 8.5) return 'A';
+                    if (score >= 8.0) return 'B+';
+                    if (score >= 7.0) return 'B';
+                    if (score >= 6.5) return 'C+';
+                    if (score >= 5.5) return 'C';
+                    if (score >= 5.0) return 'D+';
+                    if (score >= 4.0) return 'D';
+                    return 'F';
+                },
+                rank: function(gpa4) {
+                    if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
+                    if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
+                    if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG TĨNH (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
+                    return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
+                },
+                ganhDiem: function(currentAccumulated, ckWeightRatio) {
+                    let scoreForA = (8.5 - currentAccumulated) / ckWeightRatio;
+                    let scoreForBPlus = (8.0 - currentAccumulated) / ckWeightRatio;
+                    let scoreForPass = (4.0 - currentAccumulated) / ckWeightRatio;
+                    return [
+                        { label: 'A', val: scoreForA < 0 ? 0 : (scoreForA > 10 ? "Bất khả thi" : scoreForA.toFixed(1)) },
+                        { label: 'B+', val: scoreForBPlus < 0 ? 0 : (scoreForBPlus > 10 ? "Bất khả thi" : scoreForBPlus.toFixed(1)) },
+                        { label: 'Qua môn (D)', val: scoreForPass < 0 ? 0 : (scoreForPass > 10 ? "Nguy kịch 🚨" : scoreForPass.toFixed(1)), isPass: true }
+                    ];
+                }
+            },
             AOF: {
                 name: "AOF Edition",
                 title: "Học viện Tài chính (AOF)",
@@ -288,6 +383,12 @@
                 grades: ['A', 'B', 'C', 'D', 'F'],
                 colors: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'],
                 mapping: { 'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0 },
+                thresholds: [
+                    { grade: 'A', min: 8.5 },
+                    { grade: 'B', min: 7.0 },
+                    { grade: 'C', min: 5.5 },
+                    { grade: 'D', min: 4.0 }
+                ],
                 roundSubjectScore: function(rawScore) {
                     return Math.round(rawScore * 10) / 10;
                 },
@@ -302,7 +403,7 @@
                     if (gpa4 >= 3.6) return { label: "QUẺ: THIÊN ĐỈNH TOÀN NĂNG (ZENITH POINT) 🌟", class: "text-amber-400 font-bold", glow: "border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.5)]", msg: "Chòm sao Tri Thức chiếu mệnh, hào quang thủ khoa sáng rực cả một vùng trời. Ví tiền sắp dày lên vì tiền ting ting từ nhà trường. Thừa tư cách gánh còng lưng tạ hữu trong mọi bài tập lớn." };
                     if (gpa4 >= 3.2) return { label: "QUẺ: QUỸ ĐẠO HOÀN HẢO (PERFECT ORBIT) 🚀", class: "text-cyan-400 font-bold", glow: "border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.5)]", msg: "Vận trình học tập hanh thông, các vì sao đang xếp thành một đường thẳng nâng bước bạn đến tấm bằng Giỏi danh giá. Con đường tương lai rộng mở, đi làm chỉ có gánh team chứ không ai gánh nổi bạn." };
                     if (gpa4 >= 2.5) return { label: "QUẺ: ĐIỂM CÂN BẰNG (EQUILIBRIUM) ☕", class: "text-emerald-400 font-bold", glow: "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]", msg: "Vũ trụ cho thấy chủ nhân chiếc thẻ này chọn lối sống bình yên, không màng tranh đấu với đời. Điểm số vừa vặn, an toàn tuyệt đối, không quá vất vả nhưng vẫn đủ khiến vạn người thèm muốn." };
-                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên ngang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
+                    if (gpa4 >= 2.0) return { label: "QUẺ: GIA TỐC VƯỢT THỜI GIAN (HYPERSPEED) ⚔️", class: "text-orange-400 font-bold", glow: "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]", msg: "Trải qua bao kiếp nạn thi cử khó nhằn và những đề thi mang tính hủy diệt của giảng đường, bạn vẫn hiên quang bước qua môn. Chỉ số sinh tồn và lực gánh sát nút đạt mức thượng thừa." };
                     return { label: "QUẺ: HỐ ĐEN BIẾN ĐỘNG (SINGULARITY) 🚨", class: "text-rose-500 font-bold animate-pulse", glow: "border-rose-500 shadow-[0_0_20px_rgba(239,68,68,0.6)]", msg: "Điểm số đang rơi vào vùng không gian báo động của hố đen vũ trụ. Tín hiệu khẩn cấp gửi từ tương lai: Gác lại mọi cuộc vui, tập trung toàn lực cứu viện học bạ ngay trước khi quá muộn!" };
                 },
                 ganhDiem: function(currentAccumulated, ckWeightRatio) {
@@ -320,7 +421,6 @@
 
         let currentUni = 'NEU';
         let subjects = [];
-        let myChart = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const storedUni = localStorage.getItem('unicalc_current_uni');
@@ -336,7 +436,6 @@
                 initDefaultSubjects();
             }
 
-            initChart();
             applyUniversityConfig();
         });
 
@@ -345,6 +444,11 @@
                 subjects = [
                     { id: 1, name: 'Kinh tế vĩ mô', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 9, pGk: 8.5, pCk: 9.2 },
                     { id: 2, name: 'Xác suất thống kê', credits: 3, wCc: 10, wGk: 40, wCk: 50, pCc: 10, pGk: 7.5, pCk: 8.2 }
+                ];
+            } else if (currentUni === 'TMU') {
+                subjects = [
+                    { id: 1, name: 'Quản trị học', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9.0, pGk: 8.0, pCk: 8.8 },
+                    { id: 2, name: 'Kinh tế vi mô', credits: 3, wCc: 10, wGk: 30, wCk: 60, pCc: 9.5, pGk: 8.5, pCk: 7.8 }
                 ];
             } else {
                 subjects = [
@@ -361,6 +465,12 @@
             const storedSubjects = localStorage.getItem(`unicalc_subjects_${currentUni}`);
             if (storedSubjects) {
                 subjects = JSON.parse(storedSubjects);
+                const config = uniConfigs[currentUni];
+                subjects.forEach(sub => {
+                    sub.wCc = config.defaultWeights.wCc;
+                    sub.wGk = config.defaultWeights.wGk;
+                    sub.wCk = config.defaultWeights.wCk;
+                });
             } else {
                 initDefaultSubjects();
                 localStorage.setItem(`unicalc_subjects_${currentUni}`, JSON.stringify(subjects));
@@ -381,6 +491,10 @@
                 const borderClass = "text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
                 document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
                 document.getElementById('cardEditionBadge').className = borderClass;
+            } else if (currentUni === 'TMU') {
+                const borderClass = "text-[10px] bg-purple-500/15 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
+                document.getElementById('editionBadge').className = "text-xs bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
+                document.getElementById('cardEditionBadge').className = borderClass;
             } else {
                 const borderClass = "text-[10px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider";
                 document.getElementById('editionBadge').className = "text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-bold transition-all duration-300";
@@ -391,13 +505,6 @@
             document.getElementById('tableUniDesc').innerText = config.desc;
             document.getElementById('thRatio').innerHTML = config.ratioHeader;
             document.getElementById('thComponent').innerHTML = config.componentHeader;
-
-            if (myChart) {
-                myChart.data.labels = config.grades;
-                myChart.data.datasets[0].backgroundColor = config.colors;
-                myChart.data.datasets[0].data = new Array(config.grades.length).fill(0);
-                myChart.update();
-            }
 
             renderTable();
             updateDashboard();
@@ -413,7 +520,7 @@
             const ck = sub.pCk || 0;
             const config = uniConfigs[currentUni];
             
-            if (currentUni === 'NEU') {
+            if (currentUni === 'NEU' || currentUni === 'TMU') {
                 const sumWeight = (sub.wCc + sub.wGk + sub.wCk);
                 if (sumWeight === 0) return 0;
                 const rawScore = ((cc * sub.wCc) + (gk * sub.wGk) + (ck * sub.wCk)) / 100;
@@ -441,7 +548,7 @@
                 let dynamicComponentTd = '';
                 let dynamicRatioTd = '';
 
-                if (currentUni === 'NEU') {
+                if (currentUni === 'NEU' || currentUni === 'TMU') {
                     dynamicRatioTd = `
                         <div class="flex items-center justify-center gap-1 text-xs">
                             <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 bg-slate-900 text-center rounded border border-slate-700 p-0.5 text-slate-300">
@@ -506,7 +613,7 @@
                 wGk: config.defaultWeights.wGk, 
                 wCk: config.defaultWeights.wCk, 
                 pCc: 10, 
-                pGk: currentUni === 'NEU' ? 0 : null, 
+                pGk: (currentUni === 'NEU' || currentUni === 'TMU') ? 0 : null, 
                 pCk: 0
             });
             saveData();
@@ -551,9 +658,6 @@
             let sumScore10 = 0;
             let sumScore4 = 0;
 
-            let gradeCounts = {};
-            config.grades.forEach(g => gradeCounts[g] = 0);
-
             subjects.forEach(sub => {
                 const score10 = calculateTotal10(sub);
                 const letter = config.convert(score10);
@@ -562,10 +666,6 @@
                 totalCredits += sub.credits;
                 sumScore10 += score10 * sub.credits;
                 sumScore4 += score4 * sub.credits;
-
-                if (gradeCounts[letter] !== undefined) {
-                    gradeCounts[letter]++;
-                }
             });
 
             const finalGpa10 = totalCredits > 0 ? (sumScore10 / totalCredits) : 0;
@@ -584,6 +684,29 @@
             
             document.body.style.backgroundColor = "#0f172a";
 
+            // THUẬT TOÁN ĐỘ RỘNG (WIDTH) PHI TUYẾN TÍNH MỚI CHO PROGRESS BAR
+            const progressBarFill = document.getElementById('progressBarFill');
+            const progressBarValue = document.getElementById('progressBarValue');
+            const godRemainingMsg = document.getElementById('godRemainingMsg');
+            
+            let customWidth = 0;
+            const gpa = finalGpa4;
+
+            if (gpa <= 0) {
+                customWidth = 0;
+            } else if (gpa < 2.50) {
+                customWidth = (gpa / 2.5) * 50;
+            } else if (gpa < 3.20) {
+                customWidth = 50 + ((gpa - 2.5) / (3.2 - 2.5)) * (62.5 - 50);
+            } else if (gpa < 3.60) {
+                customWidth = 62.5 + ((gpa - 3.2) / (3.6 - 3.2)) * (80 - 62.5);
+            } else {
+                customWidth = 80 + ((gpa - 3.6) / (4.0 - 3.6)) * (100 - 80);
+            }
+
+            progressBarFill.style.width = `${customWidth}%`;
+            progressBarValue.innerText = `${finalGpa4.toFixed(2)} / 4.00`;
+
             if (totalCredits === 0) {
                 const emptyText = "Chưa có dữ liệu";
                 const emptyMsg = "🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...";
@@ -594,63 +717,104 @@
                 caKhiaBox.innerText = emptyMsg;
                 cardCaKhiaText.innerText = emptyMsg;
                 mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
-            } else if (finalGpa4 === 4.0) {
-                xepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
-                xepLoaiDiv.className = "text-sm font-black tracking-wide text-purple-400 drop-shadow-md";
-                mainResultCard.className = "rounded-2xl p-6 text-center relative overflow-hidden bg-gradient-to-br from-black via-slate-900 to-purple-950 border-2 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse shadow-xl";
                 
-                caKhiaBox.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
+                godRemainingMsg.innerText = "Vui lòng nhập điểm để thiết lập tiến trình mục tiêu học lực.";
             } else {
-                const rankInfo = config.rank(finalGpa4);
-                
-                xepLoaiDiv.innerText = rankInfo.label;
-                cardXepLoaiDiv.innerText = rankInfo.label.toUpperCase();
-                xepLoaiDiv.className = `text-sm font-bold ${rankInfo.class}`;
-                cardXepLoaiDiv.className = `text-sm font-extrabold tracking-wide text-center w-full ${rankInfo.class} drop-shadow-md`;
-                
-                caKhiaBox.innerText = rankInfo.msg;
-                cardCaKhiaText.innerText = rankInfo.msg;
-                mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
+                if (finalGpa4 === 4.00) {
+                    xepLoaiDiv.innerText = "QUẺ: ĐẤNG TOÀN TRI VŨ TRỤ (THE CREATOR) 🛐";
+                    xepLoaiDiv.className = "text-sm font-black tracking-wide text-purple-400 drop-shadow-md";
+                    mainResultCard.className = "rounded-2xl p-6 text-center relative overflow-hidden bg-gradient-to-br from-black via-slate-900 to-purple-950 border-2 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse shadow-xl";
+                    
+                    caKhiaBox.innerText = "Bạn không còn bị ràng buộc bởi các quy luật chiêm tinh học đường nữa, vì chính bạn là Đấng kiến tạo! Điểm số chạm đỉnh tuyệt đối, các giáo sư nhìn bảng điểm cũng phải ngả mũ thán phục. Hãy chuẩn bị tinh thần gánh cả thế giới!";
+                    
+                    godRemainingMsg.innerHTML = `<span class="text-purple-400 font-bold">👑 Hoàn hảo:</span> Bạn đã đạt mức điểm tối đa của giảng đường (4.00)!`;
+                } else {
+                    const rankInfo = config.rank(finalGpa4);
+                    xepLoaiDiv.innerText = rankInfo.label;
+                    cardXepLoaiDiv.innerText = rankInfo.label.toUpperCase();
+                    xepLoaiDiv.className = `text-sm font-bold ${rankInfo.class}`;
+                    cardXepLoaiDiv.className = `text-sm font-extrabold tracking-wide text-center w-full ${rankInfo.class} drop-shadow-md`;
+                    
+                    caKhiaBox.innerText = rankInfo.msg;
+                    cardCaKhiaText.innerText = rankInfo.msg;
+                    mainResultCard.className = "bg-gradient-to-br from-indigo-900/60 to-slate-800/80 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-center relative overflow-hidden";
 
-                if (finalGpa4 < 2.0 && currentUni === 'NEU') {
-                    document.body.style.backgroundColor = "#020617";
+                    if (finalGpa4 < 2.0 && currentUni === 'NEU') {
+                        document.body.style.backgroundColor = "#020617";
+                    }
+
+                    // Tính khoảng cách mục tiêu UX chuẩn
+                    if (finalGpa4 < 2.50) {
+                        const gap = (2.50 - finalGpa4).toFixed(2);
+                        godRemainingMsg.innerHTML = `<span class="text-cyan-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để đạt học lực Khá (2.50).`;
+                    } else if (finalGpa4 >= 2.50 && finalGpa4 < 3.20) {
+                        const gap = (3.20 - finalGpa4).toFixed(2);
+                        godRemainingMsg.innerHTML = `<span class="text-indigo-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để chạm mốc học lực Giỏi (3.20).`;
+                    } else if (finalGpa4 >= 3.20 && finalGpa4 < 3.60) {
+                        const gap = (3.60 - finalGpa4).toFixed(2);
+                        godRemainingMsg.innerHTML = `<span class="text-amber-400 font-bold">🎯 Mục tiêu:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để chạm mốc học lực Xuất sắc (3.60).`;
+                    } else if (finalGpa4 >= 3.60 && finalGpa4 < 4.00) {
+                        const gap = (4.00 - finalGpa4).toFixed(2);
+                        godRemainingMsg.innerHTML = `<span class="text-emerald-400 font-bold">✨ Đỉnh cao:</span> Còn thiếu <span class="font-bold text-white font-mono">${gap}</span> điểm nữa để đạt mốc GPA tuyệt đối (4.00).`;
+                    }
                 }
             }
 
-            updateChartData(gradeCounts);
+            // Gọi quét thuật toán phân tích điểm chặn Smart Tips
+            runSmartTipsScan(totalCredits);
+            calculateGiemDiem();
             calculateGanhDiem();
             calculateFuture();
         }
 
-        function initChart() {
-            const ctx = document.getElementById('gradeChart').getContext('2d');
+        // THUẬT TOÁN QUÉT ĐIỂM CHẶN THÔNG MINH (SMART TIPS)
+        function runSmartTipsScan(totalCredits) {
+            const tipsBox = document.getElementById('smartTipsBox');
+            if (totalCredits === 0 || subjects.length === 0) {
+                tipsBox.innerHTML = `<div class="text-slate-500 italic text-center">Vũ trụ đang đợi bảng điểm của bạn để thiết lập rada quét...</div>`;
+                return;
+            }
+
             const config = uniConfigs[currentUni];
-            myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: config.grades,
-                    datasets: [{
-                        data: new Array(config.grades.length).fill(0),
-                        backgroundColor: config.colors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    cutout: '70%'
+            let tipsHtml = '';
+
+            subjects.forEach(sub => {
+                const total10 = calculateTotal10(sub);
+                const currentLetter = config.convert(total10);
+                
+                let targetThreshold = null;
+                
+                for (let i = config.thresholds.length - 1; i >= 0; i--) {
+                    if (total10 < config.thresholds[i].min) {
+                        targetThreshold = config.thresholds[i];
+                        break;
+                    }
+                }
+
+                if (targetThreshold) {
+                    const distance = (targetThreshold.min - total10);
+                    if (distance >= 0.05 && distance <= 0.35) {
+                        tipsHtml += `
+                            <div class="bg-indigo-950/40 border-l-2 border-cyan-400 p-2 rounded-r-lg">
+                                💡 <span class="font-bold text-slate-200">Mẹo bứt phá:</span> Môn <span class="text-cyan-400 font-semibold">${sub.name}</span> hiện có tổng kết là <span class="text-white font-bold font-mono">${total10.toFixed(1)}</span> (${currentLetter}). Bạn chỉ thiếu đúng <span class="text-amber-400 font-bold font-mono">${distance.toFixed(1)}</span> điểm nữa là lên được điểm <span class="text-emerald-400 font-bold">${targetThreshold.grade}</span>! Hãy cố gắng kéo thêm một chút điểm thành phần nhé!
+                            </div>
+                        `;
+                    }
                 }
             });
+
+            if (tipsHtml === '') {
+                tipsBox.innerHTML = `
+                    <div class="text-slate-300 italic text-center py-2 flex flex-col items-center gap-1">
+                        <span>Vũ trụ nhận thấy điểm số của bạn đang ở trạng thái rất tối ưu, hãy tiếp tục duy trì phong độ này nhé! ✨</span>
+                    </div>
+                `;
+            } else {
+                tipsBox.innerHTML = tipsHtml;
+            }
         }
 
-        function updateChartData(counts) {
-            if (!myChart) return;
-            const config = uniConfigs[currentUni];
-            const dataArr = config.grades.map(g => counts[g] || 0);
-            myChart.data.datasets[0].data = dataArr;
-            myChart.update();
-        }
+        function calculateGiemDiem() {} // Placeholder maintainer
 
         function calculateGanhDiem() {
             const container = document.getElementById('ganhDiemContainer');
@@ -665,7 +829,7 @@
                 let currentAccumulated = 0;
                 let ckWeightRatio = 0;
 
-                if (currentUni === 'NEU') {
+                if (currentUni === 'NEU' || currentUni === 'TMU') {
                     currentAccumulated = ((cc * sub.wCc) + (gk * sub.wGk)) / 100;
                     ckWeightRatio = sub.wCk / 100;
                 } else {
@@ -747,7 +911,6 @@
         function openShareModal() {
             updateDashboard();
 
-            // Tính toán lại GPA hệ 4 hiện tại để gán class decor động
             let totalCredits = 0;
             let sumScore4 = 0;
             const config = uniConfigs[currentUni];
@@ -766,7 +929,6 @@
             const cardXepLoaiDiv = document.getElementById('cardXepLoai');
             const cardCaKhiaText = document.getElementById('cardCaKhiaText');
 
-            // Reset và Apply class CSS động chuẩn vibe vũ trụ
             if (totalCredits === 0) {
                 shareCard.className = "border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[365px] transition-all duration-500 bg-gradient-to-br from-indigo-950 via-slate-950 to-purple-950 border-slate-800";
                 shareCardIcon.innerText = "🔮";
