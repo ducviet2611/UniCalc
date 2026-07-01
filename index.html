@@ -10,69 +10,142 @@
     <style>
         /* Kiến trúc CSS Variables quản lý Theme */
         [data-theme="dark"] {
-            --bg-app: #0f172a;
-            --bg-pattern: none;
-            --bg-card: rgba(30, 41, 59, 0.5);
-            --bg-card-solid: #1e293b;
-            --bg-input: #0f172a;
-            --border-color: rgba(51, 65, 85, 0.5);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-accent: #22d3ee;
-            --btn-primary-bg: #06b6d4;
+            --bg-app: #0d1117;
+            --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='20' cy='20' r='1' fill='%23ffffff' opacity='0.5'/%3E%3Ccircle cx='80' cy='40' r='1.2' fill='%23ffffff' opacity='0.3'/%3E%3Ccircle cx='40' cy='90' r='1' fill='%2300f5ff' opacity='0.4'/%3E%3Ccircle cx='100' cy='100' r='1.5' fill='%23ffffff' opacity='0.6'/%3E%3C/svg%3E");
+            --bg-card: rgba(13, 17, 23, 0.85); 
+            --bg-card-solid: #0d1117;
+            --bg-input: #161b22;
+            --border-color: rgba(0, 245, 255, 0.15); 
+            --text-main: #f1f5f9;
+            --text-muted: #8b949e;
+            --text-accent: #00f5ff; 
+            --btn-primary-bg: linear-gradient(135deg, #00f5ff, #00b4d8); 
             --btn-primary-text: #020617;
-            --btn-primary-hover: #0891b2;
-            --header-bg: rgba(15, 23, 42, 0.5);
-            --header-border: #1e293b;
-            --progress-bar-bg: linear-gradient(to right, #22d3ee, #6366f1, #a855f7);
-            --shadow-style: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --focus-glow: 0 0 0 3px rgba(34, 211, 238, 0.3);
+            --btn-primary-hover: linear-gradient(135deg, #00d2de, #0096b3);
+            --header-bg: rgba(13, 17, 23, 0.9);
+            --header-border: rgba(0, 245, 255, 0.2);
+            --progress-bar-bg: linear-gradient(to right, #7b2cbf, #e0aaff, #00f5ff); 
+            --shadow-style: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 245, 255, 0.05); 
+            --focus-glow: 0 0 15px rgba(0, 245, 255, 0.4);
+            /* Nút khoe tử vi dải màu Vũ trụ Ngân hà sâu thẳm phát sáng */
+            --tuvi-btn-bg: linear-gradient(135deg, #4d1375, #2c1654, #00f5ff);
+            --tuvi-btn-text: #ffffff;
+            --tuvi-btn-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
         }
 
         [data-theme="pink"] {
             --bg-app: #fff2f5; 
-            /* Background Pattern: Mũ cử nhân chibi, Nơ và Ngôi sao */
             --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M10 15 L20 10 L30 15 L20 20 Z M20 18 L20 25 M28 16 L28 22' stroke='%23ffdae3' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='45' cy='45' r='3' fill='%23ffdae3'/%3E%3Cpath d='M42 45 Q45 40 48 45 Q45 50 42 45 Z' fill='%23ffdae3'/%3E%3Cpath d='M15 45 Q12 42 15 39 Q18 42 15 45 Z' fill='%23ffdae3'/%3E%3Cpath d='M48 15 L52 15 M50 13 L50 17' stroke='%23ffdae3' stroke-width='1.5'/%3E%3C/svg%3E");
-            --bg-card: #fffbfb; /* Màu kem sữa siêu mịn */
-            --bg-card-solid: #fff9fa;
-            --bg-input: #fff6f7;
-            --border-color: #f5d4da; /* Màu hồng đất nhạt */
-            --text-main: #5c4338; /* Warm Brown cổ điển */
+            --bg-card: #fff6f7; 
+            --bg-card-solid: #fffbfc;
+            --bg-input: #fffcfd;
+            --border-color: #fcd5ce; 
+            --text-main: #5c4338; 
             --text-muted: #917568;
-            --text-accent: #ff6584; /* Đóa hồng ngọt ngào */
-            --btn-primary-bg: linear-gradient(135deg, #ff758f, #ffaaab); /* Rose Gold Gradient */
+            --text-accent: #ff6584; 
+            --btn-primary-bg: linear-gradient(135deg, #ff758f, #ffaaab); 
             --btn-primary-text: #ffffff;
             --btn-primary-hover: linear-gradient(135deg, #e65c78, #ff8fa3);
-            --header-bg: rgba(255, 242, 245, 0.85);
-            --header-border: #fbcad4;
-            --progress-bar-bg: linear-gradient(to right, #ff8fa3, #e5989b); 
-            --shadow-style: 0 20px 40px -15px rgba(163, 102, 113, 0.25); /* Đổ bóng 3D tone hồng đất */
-            --focus-glow: 0 0 10px rgba(255, 101, 132, 0.25);
+            --header-bg: rgba(255, 242, 245, 0.95);
+            --header-border: #fcd5ce;
+            --progress-bar-bg: linear-gradient(to right, #ffb5a7, #e5989b); 
+            --shadow-style: 0 15px 35px rgba(229, 152, 155, 0.2), 0 0 20px rgba(255, 181, 167, 0.15); 
+            --focus-glow: 0 0 12px rgba(255, 101, 132, 0.35);
+            --tuvi-btn-bg: linear-gradient(135deg, #e5989b, #ffb5a7, #fcd5ce);
+            --tuvi-btn-text: #5c4338;
+            --tuvi-btn-shadow: 0 8px 25px rgba(255, 181, 167, 0.4);
+        }
+
+        /* ĐOẠN CSS ĐẶC TRỊ SỬA DỨT ĐIỂM LỖI DÍNH MÀU NỀN TRẮNG THEO YÊU CẦU */
+        input, select, option, .form-control, .form-select {
+            background-color: var(--bg-input) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 8px !important;
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus {
+            border-color: var(--text-accent) !important;
+            box-shadow: var(--focus-glow) !important;
+            outline: none !important;
+        }
+
+        [data-theme="dark"] input, 
+        [data-theme="dark"] select, 
+        [data-theme="dark"] option, 
+        [data-theme="dark"] .form-control, 
+        [data-theme="dark"] .form-select { 
+            background-color: #161b22 !important; 
+            color: #00f5ff !important; 
+            border: 1px solid rgba(0, 245, 255, 0.2) !important; 
+            border-radius: 8px !important; 
+        } 
+        [data-theme="dark"] input:focus, 
+        [data-theme="dark"] select:focus { 
+            background-color: #1f242c !important; 
+            border-color: #00f5ff !important; 
+            box-shadow: 0 0 8px rgba(0, 245, 255, 0.5) !important; 
+            outline: none !important; 
+        } 
+        [data-theme="dark"] body, 
+        [data-theme="dark"] #app, 
+        [data-theme="dark"] .main-container { 
+            background: #0d1117 !important; 
+            background-image: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%) !important; 
+            min-height: 100vh !important; 
+        }
+
+        /* VIẾT ĐÈ ĐẶC TRỊ NÚT THÊM MÔN DÀNH RIÊNG CHO THEME PINK CHIBI KẸO NGỌT */
+        [data-theme="pink"] .rocket-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%) !important;
+            color: #5c4338 !important;
+            border-radius: 25px !important;
+            box-shadow: 0 4px 10px rgba(255, 154, 158, 0.3) !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease !important;
+        }
+        [data-theme="pink"] .rocket-btn:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 15px rgba(255, 154, 158, 0.45) !important;
+            background: linear-gradient(135deg, #fecfef 0%, #ff9a9e 100%) !important;
+        }
+        [data-theme="pink"] .rocket-btn::before {
+            content: "💖 ";
+            font-size: 14px;
+            margin-right: 4px;
+            display: inline-block;
         }
 
         body {
             background-color: var(--bg-app);
-            background-image: var(--bg-pattern);
+            background-attachment: fixed;
             color: var(--text-main);
             transition: all 0.3s ease;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes rocketHop {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) translateX(2px) rotate(5deg); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: var(--bg-pattern);
+            animation: twinkle 5s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1;
         }
         
         .theme-card {
             background-color: var(--bg-card);
-            border: 2px solid var(--border-color);
-            box-shadow: var(--shadow-style);
-        }
-        
-        .theme-input {
-            background-color: var(--bg-input);
             border: 1px solid var(--border-color);
-            color: var(--text-main);
-            transition: all 0.2s ease;
-        }
-        .theme-input:focus {
-            outline: none;
-            border-color: var(--text-accent);
-            box-shadow: var(--focus-glow);
+            box-shadow: var(--shadow-style);
+            backdrop-filter: blur(12px);
         }
 
         .theme-btn {
@@ -80,22 +153,60 @@
             color: var(--btn-primary-text);
         }
 
-        /* Họa tiết Sticker Chibi bay bổng */
-        .cute-sticker {
-            display: none;
+        .rocket-btn:hover .rocket-svg {
+            animation: rocketHop 0.4s infinite ease-in-out;
+        }
+
+        [data-theme="pink"] .pink-custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fffafb !important;
+            border-radius: 24px !important;
+            padding-right: 2.5rem !important;
+            font-weight: 800;
+        }
+
+        @keyframes shimmerTrack {
+            0% { transform: translateX(-150%); }
+            100% { transform: translateX(150%); }
+        }
+
+        .shimmer-effect-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-effect-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+            transform: translateX(-150%);
+            pointer-events: none;
+        }
+        .shimmer-effect-container::after {
+            animation: shimmerTrack 3.5s infinite ease-in-out;
+        }
+
+        .theme-sticker {
             position: absolute;
             pointer-events: none;
             user-select: none;
-            z-index: 20;
+            z-index: 15;
         }
-        [data-theme="pink"] .cute-sticker {
-            display: block;
+        [data-theme="dark"] .pink-only, 
+        [data-theme="pink"] .dark-only {
+            display: none !important;
         }
-        [data-theme="pink"] .kitty-only {
-            display: inline-block !important;
+        [data-theme="dark"] .dark-only {
+            display: block !important;
         }
-        [data-theme="pink"] .angel-wings {
-            display: flex !important;
+        [data-theme="pink"] .pink-only {
+            display: block !important;
+        }
+
+        .star-twinkle-btn {
+            animation: twinkle 1.5s infinite ease-in-out;
         }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -103,13 +214,21 @@
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
     </style>
 </head>
-<body class="font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+<body class="font-sans flex flex-col justify-between relative overflow-x-hidden">
 
-    <div>
+    <div id="app" class="main-container flex-1">
         <header class="border-b backdrop-blur sticky top-0 z-50 transition-all" style="background-color: var(--header-bg); border-color: var(--header-border);">
             <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex items-center gap-2 relative">
-                    <div class="kitty-only hidden w-10 h-10 mr-1">
+                <div class="flex items-center gap-2 relative z-20">
+                    <div class="dark-only hidden w-10 h-10 mr-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_8px_rgba(0,245,255,0.6)]">
+                            <path d="M70,30 Q85,15 90,5 Q75,10 60,25 Q40,30 30,45 L15,50 L5,70 L20,75 L30,65 Q45,55 50,40 Z" fill="#e2e8f0" stroke="#00f5ff" stroke-width="3"/>
+                            <circle cx="50" cy="50" r="14" fill="#38bdf8" stroke="#00f5ff" stroke-width="2"/>
+                            <path d="M42,44 Q50,38 58,44" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10,80 Q5,95 0,100 Q15,90 20,80 Z" fill="#f97316"/>
+                        </svg>
+                    </div>
+                    <div class="pink-only hidden w-10 h-10 mr-1">
                         <svg viewBox="0 0 100 100" class="w-full h-full">
                             <ellipse cx="50" cy="55" rx="40" ry="32" fill="#fff" stroke="#5c4338" stroke-width="4"/>
                             <ellipse cx="32" cy="52" rx="4" ry="6" fill="#5c4338"/>
@@ -121,27 +240,36 @@
                             <path d="M5,52 L20,54 M3,60 L18,59 M6,68 L20,64 M95,52 L80,54 M97,60 L82,59 M94,68 L80,64" stroke="#5c4338" stroke-width="3" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <span class="text-2xl [data-theme='pink']:hidden">🎓</span>
-                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-500 [data-theme='pink']:from-[#ff6584] [data-theme='pink']:to-[#ff8fa3] bg-clip-text text-transparent">UniCalc</h1>
+                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-indigo-400 [data-theme='pink']:from-[#ff6584] [data-theme='pink']:to-[#ff8fa3] bg-clip-text text-transparent">UniCalc</h1>
                     <span id="editionBadge" class="text-xs px-2 py-0.5 rounded-full font-bold transition-all duration-300 bg-cyan-500/20 text-cyan-400 [data-theme='pink']:bg-[#ff6584]/20 [data-theme='pink']:text-[#ff6584]">NEU Edition</span>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto relative z-20">
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end relative">
                         <label for="select-theme" class="text-xs uppercase font-bold tracking-wider whitespace-nowrap" style="color: var(--text-muted)">Giao diện:</label>
-                        <select id="select-theme" onchange="switchTheme(this.value)" class="w-full sm:w-40 theme-input font-bold py-2 px-3 rounded-2xl focus:outline-none cursor-pointer shadow-md text-sm">
-                            <option value="dark">Dark Pallete 🌌</option>
-                            <option value="pink">Pink Palette 💖</option>
-                        </select>
+                        <div class="relative w-full sm:w-auto flex items-center">
+                            <select id="select-theme" onchange="switchTheme(this.value)" class="w-full sm:w-44 font-bold py-2 px-3 focus:outline-none cursor-pointer shadow-md text-sm [data-theme='pink']:pink-custom-select rounded-xl">
+                                <option value="dark">🌌 Giao diện Vũ trụ</option>
+                                <option value="pink">💖 Pink Palette</option>
+                            </select>
+                            <div class="pink-only hidden absolute right-3 pointer-events-none w-5 h-5">
+                                <svg viewBox="0 0 100 100" class="w-full h-full"><ellipse cx="50" cy="55" rx="35" ry="27" fill="#fff" stroke="#5c4338" stroke-width="6"/><ellipse cx="35" cy="52" rx="4" ry="5" fill="#5c4338"/><ellipse cx="65" cy="52" rx="4" ry="5" fill="#5c4338"/><polygon points="50,57 47,61 53,61" fill="#ffbaa8" stroke="#5c4338" stroke-width="2"/><path d="M18,37 Q14,18 32,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M82,37 Q86,18 68,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M24,26 Q28,15 38,22 Q32,32 24,26" fill="#ff6584" stroke="#5c4338" stroke-width="3"/></svg>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end relative">
                         <label for="universitySelector" class="text-xs uppercase font-bold tracking-wider whitespace-nowrap" style="color: var(--text-muted)">Chọn Trường:</label>
-                        <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full sm:w-64 theme-input font-bold py-2 px-3 rounded-2xl focus:outline-none cursor-pointer shadow-md text-sm" style="border-width: 2px; border-color: var(--text-accent);">
-                            <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
-                            <option value="TMU">Đại học Thương mại (TMU)</option>
-                            <option value="AOF">Học viện Tài chính (AOF)</option>
-                        </select>
+                        <div class="relative w-full sm:w-64 flex items-center">
+                            <select id="universitySelector" onchange="switchUniversity(this.value)" class="w-full font-bold py-2 px-3 focus:outline-none cursor-pointer shadow-md text-sm [data-theme='pink']:pink-custom-select rounded-xl">
+                                <option value="NEU">Đại học Kinh tế Quốc dân (NEU)</option>
+                                <option value="TMU">Đại học Thương mại (TMU)</option>
+                                <option value="AOF">Học viện Tài chính (AOF)</option>
+                            </select>
+                            <div class="pink-only hidden absolute right-3 pointer-events-none w-5 h-5">
+                                <svg viewBox="0 0 100 100" class="w-full h-full"><ellipse cx="50" cy="55" rx="35" ry="27" fill="#fff" stroke="#5c4338" stroke-width="6"/><ellipse cx="35" cy="52" rx="4" ry="5" fill="#5c4338"/><ellipse cx="65" cy="52" rx="4" ry="5" fill="#5c4338"/><polygon points="50,57 47,61 53,61" fill="#ffbaa8" stroke="#5c4338" stroke-width="2"/><path d="M18,37 Q14,18 32,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M82,37 Q86,18 68,27" fill="#fff" stroke="#5c4338" stroke-width="6"/><path d="M24,26 Q28,15 38,22 Q32,32 24,26" fill="#ff6584" stroke="#5c4338" stroke-width="3"/></svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,25 +279,27 @@
             
             <div class="lg:col-span-2 space-y-6">
                 <div class="theme-card rounded-3xl p-6 transition-all relative">
-                    <div class="cute-sticker -left-3 top-10 w-8 h-8">
+                    <div class="theme-sticker dark-only right-4 bottom-2 w-12 h-12 opacity-[0.12]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><path d="M9 18h6"/></svg>
+                    </div>
+                    <div class="theme-sticker pink-only -left-3 top-10 w-8 h-8">
                         <svg viewBox="0 0 24 24" fill="#ff6584" stroke="#5c4338" stroke-width="2"><path d="M12 5c3 0 5 2 5 5 0 5-4 9-5 9s-5-4-5-9c0-3 2-5 5-5z"/><path d="M12 5Q11 2 14 2" fill="none" stroke-width="2"/></svg>
                     </div>
 
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
                             <h2 class="text-xl font-bold flex items-center gap-2" style="color: var(--text-main)">
-                                <span class="hidden [data-theme='pink']:inline">📚</span><span class="[data-theme='pink']:hidden">📝</span> Danh Sách Môn Học - <span id="tableUniTitle">NEU</span>
+                                <span class="dark-only text-cyan-400">☄️</span><span class="pink-only">📚</span> Danh Sách Môn Học - <span id="tableUniTitle">NEU</span>
                             </h2>
                             <p class="text-xs mt-1" id="tableUniDesc" style="color: var(--text-muted)">Áp dụng thang điểm quy đổi 10 - Chữ - 4 chuẩn NEU</p>
                         </div>
                         
                         <div class="relative w-full sm:w-auto">
-                            <div class="angel-wings hidden absolute -inset-x-6 top-1.5 justify-between pointer-events-none">
-                                <svg class="w-5 h-5 text-[#ffbaa8]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6 2 2 6 2 12c0 3 3 7 7 8l-1-3c-2-1-3-3-3-5 0-4 3-7 7-7s7 3 7 7c0 2-1 4-3 5l-1 3c4-1 7-5 7-8 0-6-4-10-10-10z"/></svg>
-                                <svg class="w-5 h-5 text-[#ffbaa8] scale-x-100" style="transform: scaleX(-1)" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6 2 2 6 2 12c0 3 3 7 7 8l-1-3c-2-1-3-3-3-5 0-4 3-7 7-7s7 3 7 7c0 2-1 4-3 5l-1 3c4-1 7-5 7-8 0-6-4-10-10-10z"/></svg>
-                            </div>
-                            <button onclick="addSubjectRow()" class="w-full sm:w-auto theme-btn font-black px-6 py-2.5 rounded-full transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-md active:scale-95">
-                                ➕ Thêm Môn
+                            <button onclick="addSubjectRow()" class="rocket-btn w-full sm:w-auto theme-btn font-black px-7 py-3 rounded-full transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-md active:scale-95" style="background: linear-gradient(135deg, #00f5ff, #00b4d8); color: #020617; box-shadow: 0 0 12px rgba(0, 245, 255, 0.35);">
+                                <span class="dark-only hidden rocket-svg w-4 h-4">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 2C6 2 2 6 2 12c0 1.5.5 3 1.5 4.5L8 11l5 5-5.5 4.5c1.5 1 3 1.5 4.5 1.5 6 0 10-4 10-10S18 2 12 2z"/></svg>
+                                </span>
+                                <span>Thêm Môn</span>
                             </button>
                         </div>
                     </div>
@@ -193,15 +323,21 @@
                     </div>
                 </div>
 
-                <div class="relative h-4 w-full">
-                    <div class="cute-sticker left-1/2 -translate-x-1/2 -top-4 flex items-center gap-1 opacity-90">
+                <div class="relative h-4 w-full overflow-visible">
+                    <div class="theme-sticker dark-only left-1/4 -top-2 w-24 h-6 opacity-60">
+                        <svg viewBox="0 0 100 30" fill="none" class="w-full h-full"><path d="M0,30 L70,5" stroke="url(#starGlow)" stroke-width="2" stroke-linecap="round"/><circle cx="70" cy="5" r="2" fill="#fff"/><defs><linearGradient id="starGlow" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="transparent"/><stop offset="100%" stop-color="#00f5ff"/></linearGradient></defs></svg>
+                    </div>
+                    <div class="theme-sticker pink-only left-1/2 -translate-x-1/2 -top-4 flex items-center gap-1 opacity-90">
                         <svg class="w-7 h-7 text-[#ff8fa3]" viewBox="0 0 24 24" fill="currentColor" stroke="#5c4338" stroke-width="1.5"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="#fff" stroke-width="2"/><path d="M12 12s-1-2-3-2 0 3 3 4c3-1 4-4 3-4s-2 2-3 2z" fill="#ff6584"/></svg>
                         <svg class="w-5 h-5 text-[#fbcad4] rotate-45" viewBox="0 0 24 24" fill="currentColor" stroke="#5c4338"><path d="M3 21l3-1 14-14-2-2-14 14-1 3z"/></svg>
                     </div>
                 </div>
 
-                <div class="theme-card rounded-3xl p-6 transition-all">
-                    <h2 class="text-xl font-bold flex items-center gap-2 mb-2" style="color: var(--text-main)">🎯 Mục Tiêu Gánh Điểm Cuối Kỳ</h2>
+                <div class="theme-card rounded-3xl p-6 transition-all relative">
+                    <div class="theme-sticker dark-only left-4 bottom-2 w-10 h-10 opacity-[0.1]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#7b2cbf" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                    </div>
+                    <h2 class="text-xl font-bold flex items-center gap-2 mb-2" style="color: var(--text-main)">🎯 Target Gánh Điểm Cuối Kỳ</h2>
                     <p class="text-xs mb-4" style="color: var(--text-muted)">Dự toán số điểm thi cuối kỳ tối thiểu để đạt mức mong muốn theo chuẩn chặn điểm của trường.</p>
                     <div id="ganhDiemContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="text-sm italic" style="color: var(--text-muted)">Hãy nhập đầy đủ điểm thành phần để rada bắt đầu quét...</div>
@@ -211,10 +347,15 @@
 
             <div class="space-y-6">
                 <div id="cardGpa" class="theme-card rounded-3xl p-6 text-center relative overflow-hidden transition-all">
-                    <div class="cute-sticker -right-2 -top-1 w-12 h-12 rotate-12">
+                    <div class="theme-sticker dark-only -right-2 -top-2 w-16 h-16 opacity-45">
+                        <svg viewBox="0 0 100 100" class="w-full h-full" stroke="#00f5ff" stroke-width="2" fill="none">
+                            <circle cx="50" cy="50" r="20" fill="rgba(0,245,255,0.08)"/>
+                            <ellipse cx="50" cy="50" rx="42" ry="9" transform="rotate(-15 50 50)"/>
+                        </svg>
+                    </div>
+                    <div class="theme-sticker pink-only -right-2 -top-1 w-12 h-12 rotate-12">
                         <svg viewBox="0 0 100 100" class="w-full h-full" fill="#ff6584" stroke="#5c4338" stroke-width="5">
-                            <circle cx="50" cy="50" r="15" fill="#fff9fa"/>
-                            <path d="M50,50 C20,30 10,70 50,50 Z M50,50 C80,30 90,70 50,50 Z"/>
+                            <circle cx="50" cy="50" r="15" fill="#fff9fa"/><path d="M50,50 C20,30 10,70 50,50 Z M50,50 C80,30 90,70 50,50 Z"/>
                         </svg>
                     </div>
 
@@ -239,8 +380,14 @@
                     🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...
                 </div>
 
-                <button onclick="openShareModal()" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 [data-theme='pink']:from-[#917568] [data-theme='pink']:via-[#ff8fa3] [data-theme='pink']:to-[#ffe3a8] font-black py-4 px-4 rounded-2xl transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2 transform active:scale-[0.99] text-base tracking-wide relative overflow-hidden" style="color: #fff">
-                    <span>✨ KHOE TỬ VI HỌC TẬP CỦA BẠN ✨</span>
+                <button onclick="openShareModal()" class="w-full font-black py-4 px-4 rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1 transform active:scale-[0.99] text-base tracking-wide relative overflow-hidden shimmer-effect-container shadow-xl" style="background: var(--tuvi-btn-bg); color: var(--tuvi-btn-text); box-shadow: var(--tuvi-btn-shadow)">
+                    <span class="star-twinkle-btn mr-1.5 text-[#fff] w-4 h-4">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2 7.2 2.4-7.2 2.4-2.4 7.2-2.4-7.2-7.2-2.4 7.2-2.4z"/></svg>
+                    </span>
+                    <span>KHOE TỬ VI HỌC TẬP CỦA BẠN</span>
+                    <span class="star-twinkle-btn ml-1.5 text-[#fff] w-4 h-4" style="animation-delay: 0.6s;">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2 7.2 2.4-7.2 2.4-2.4 7.2-2.4-7.2-7.2-2.4 7.2-2.4z"/></svg>
+                    </span>
                 </button>
 
                 <div id="toastNotification" class="hidden bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 rounded-xl p-3 text-center text-xs font-semibold shadow-lg transition-all">
@@ -248,13 +395,11 @@
                 </div>
 
                 <div class="theme-card rounded-3xl p-6 transition-all space-y-5 relative">
-                    <div class="cute-sticker -right-1 -top-8 w-14 h-14">
-                        <svg viewBox="0 0 100 100" class="w-full h-full">
-                            <path d="M20,60 Q10,30 35,42 Q50,40 65,42 Q90,30 80,60" fill="#fff" stroke="#5c4338" stroke-width="4"/>
-                            <ellipse cx="40" cy="54" rx="3" ry="5" fill="#5c4338"/>
-                            <ellipse cx="60" cy="54" rx="3" ry="5" fill="#5c4338"/>
-                            <path d="M22,40 Q28,25 40,35" fill="#ff6584" stroke="#5c4338" stroke-width="2"/>
-                        </svg>
+                    <div class="theme-sticker dark-only right-4 bottom-2 w-14 h-8 opacity-[0.15]">
+                        <svg viewBox="0 0 50 30" fill="none" stroke="#00f5ff" stroke-width="1.5"><circle cx="5" cy="5" r="2" fill="#fff"/><circle cx="20" cy="25" r="2" fill="#fff"/><circle cx="45" cy="15" r="2" fill="#fff"/><line x1="5" y1="5" x2="20" y2="25"/><line x1="20" y1="25" x2="45" y2="15"/></svg>
+                    </div>
+                    <div class="theme-sticker pink-only -right-1 -top-8 w-14 h-14">
+                        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M20,60 Q10,30 35,42 Q50,40 65,42 Q90,30 80,60" fill="#fff" stroke="#5c4338" stroke-width="4"/><ellipse cx="40" cy="54" rx="3" ry="5" fill="#5c4338"/><ellipse cx="60" cy="54" rx="3" ry="5" fill="#5c4338"/><path d="M22,40 Q28,25 40,35" fill="#ff6584" stroke="#5c4338" stroke-width="2"/></svg>
                     </div>
 
                     <h3 class="text-sm font-bold uppercase tracking-wider" style="color: var(--text-muted)">📊 Tiến Trình GPA & Tối Ưu Điểm</h3>
@@ -264,8 +409,11 @@
                             <span>Mức GPA Hiện Tại:</span>
                             <span id="progressBarValue" class="font-bold font-mono" style="color: var(--text-accent)">0.00 / 4.00</span>
                         </div>
-                        <div class="w-full rounded-full h-4 border overflow-hidden p-[2px] shadow-inner" style="background-color: var(--bg-input); border-color: var(--border-color)">
-                            <div id="progressBarFill" class="h-full rounded-full transition-all duration-500 shadow-md" style="width: 0%; background: var(--progress-bar-bg);"></div>
+                        <div class="w-full rounded-full h-4 border overflow-hidden p-[2px] shadow-inner relative" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                            <div class="dark-only hidden absolute right-1 top-0.5 text-amber-300 w-3 h-3 star-twinkle-btn z-30">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2 7.2 2.4-7.2 2.4-2.4 7.2-2.4-7.2-7.2-2.4 7.2-2.4z"/></svg>
+                            </div>
+                            <div id="progressBarFill" class="h-full rounded-full transition-all duration-500 shadow-md shimmer-effect-container" style="width: 0%; background: var(--progress-bar-bg);"></div>
                         </div>
                         
                         <div class="relative w-full h-6 mt-1 text-xs select-none" style="color: var(--text-muted)">
@@ -294,7 +442,7 @@
                         <div class="text-xs font-bold flex items-center gap-1.5" style="color: var(--text-main)">
                             <span>🧠 RADA PHÂN TÍCH ĐIỂM</span>
                         </div>
-                        <div id="smartTipsBox" class="backdrop-blur-md border rounded-2xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2" style="background-color: rgba(0,0,0,0.03); border-color: var(--border-color)">
+                        <div id="smartTipsBox" class="backdrop-blur-md border rounded-2xl p-3 text-xs leading-relaxed max-h-[180px] overflow-y-auto space-y-2" style="background-color: rgba(0,0,0,0.02); border-color: var(--border-color)">
                             <div class="italic text-center" style="color: var(--text-muted)">Vũ trụ đang quét dữ liệu môn học...</div>
                         </div>
                     </div>
@@ -306,26 +454,26 @@
                     
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">GPA tích lũy cũ (Hệ 4)</label>
-                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
+                            <label class="text-[11px] block mb-1 font-semibold" style="color: var(--text-muted)">GPA tích lũy cũ (Hệ 4)</label>
+                            <input type="number" id="oldGpa" value="0" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full rounded-xl p-2.5 text-sm text-center font-bold focus:outline-none border shadow-inner">
                         </div>
                         <div>
-                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">Số tín chỉ tích lũy cũ</label>
-                            <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
+                            <label class="text-[11px] block mb-1 font-semibold" style="color: var(--text-muted)">Số tín chỉ tích lũy cũ</label>
+                            <input type="number" id="oldCredits" value="0" min="0" oninput="calculateFuture()" class="w-full rounded-xl p-2.5 text-sm text-center font-bold focus:outline-none border shadow-inner">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">Số tín chỉ còn lại</label>
-                            <input type="number" id="futureCredits" value="60" min="1" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
+                            <label class="text-[11px] block mb-1 font-semibold" style="color: var(--text-muted)">Số tín chỉ còn lại</label>
+                            <input type="number" id="futureCredits" value="60" min="1" oninput="calculateFuture()" class="w-full rounded-xl p-2.5 text-sm text-center font-bold focus:outline-none border shadow-inner">
                         </div>
                         <div>
-                            <label class="text-[11px] block mb-1" style="color: var(--text-muted)">GPA mục tiêu ra trường</label>
-                            <input type="number" id="targetGpa" value="3.20" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full theme-input rounded-xl p-2.5 text-sm text-center focus:outline-none">
+                            <label class="text-[11px] block mb-1 font-semibold" style="color: var(--text-muted)">GPA mục tiêu ra trường</label>
+                            <input type="number" id="targetGpa" value="3.20" min="0" max="4" step="0.01" oninput="calculateFuture()" class="w-full rounded-xl p-2.5 text-sm text-center font-bold focus:outline-none border shadow-inner">
                         </div>
                     </div>
 
-                    <div id="futureResultContainer" class="border rounded-2xl p-4 text-center transition-all duration-300" style="background-color: rgba(255, 101, 132, 0.05); border-color: var(--border-color)">
+                    <div id="futureResultContainer" class="border rounded-2xl p-4 text-center transition-all duration-300" style="background-color: rgba(0, 245, 255, 0.03); border-color: var(--border-color)">
                         <div class="text-[10px] uppercase font-bold tracking-wider mb-1" style="color: var(--text-accent)">GPA Trung Bình Cần Đạt Trong Các Kỳ Tới</div>
                         <div id="futureResultGpa" class="text-3xl font-black my-1">0.00</div>
                         <div id="futureResultRank" class="text-xs font-medium mt-2 leading-relaxed">Đang tính toán lộ trình khả thi...</div>
@@ -354,11 +502,11 @@
                 </div>
 
                 <div class="my-5 grid grid-cols-2 gap-4 text-center z-10">
-                    <div class="border rounded-xl p-3" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                    <div class="border rounded-xl p-3" style="border-color: var(--border-color)">
                         <div class="text-[10px] uppercase tracking-widest font-semibold mb-1" style="color: var(--text-muted)">Hệ 10 Trung Bình</div>
                         <div id="cardGpa10" class="text-3xl font-black font-mono">0.00</div>
                     </div>
-                    <div class="border rounded-xl p-3" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                    <div class="border rounded-xl p-3" style="border-color: var(--border-color)">
                         <div class="text-[10px] uppercase tracking-widest font-semibold mb-1" style="color: var(--text-muted)">Hệ 4 Tích Lũy</div>
                         <div id="cardGpa4" class="text-3xl font-black font-mono" style="color: var(--text-accent);">0.00</div>
                     </div>
@@ -367,7 +515,7 @@
                     </div>
                 </div>
 
-                <div class="border rounded-xl p-3 text-center text-xs font-medium italic min-h-[72px] flex items-center justify-center z-10 leading-relaxed" style="background-color: var(--bg-input); border-color: var(--border-color)">
+                <div class="border rounded-xl p-3 text-center text-xs font-medium italic min-h-[72px] flex items-center justify-center z-10 leading-relaxed" style="border-color: var(--border-color)">
                     <span id="cardCaKhiaText">🔮 Đang đợi bảng điểm để bốc quẻ tử vi học tập...</span>
                 </div>
 
@@ -396,10 +544,10 @@
                 Developed by <span style="color: var(--text-accent)">Duc Viet</span>
             </div>
             <div class="flex items-center gap-6 text-xs font-medium">
-                <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border theme-input">
+                <a href="mailto:vietdang293.vn@gmail.com" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border">
                     ✉️ <span class="underline">vietdang293.vn@gmail.com</span>
                 </a>
-                <a href="tel:0965193026" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border theme-input">
+                <a href="tel:0965193026" class="flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-xl border">
                     📞 <span class="font-mono">0965193026</span>
                 </a>
             </div>
@@ -697,24 +845,24 @@
                 if (currentUni === 'NEU' || currentUni === 'TMU') {
                     dynamicRatioTd = `
                         <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
-                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
-                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-8 theme-input text-center rounded-lg p-0.5">
+                            <input type="number" value="${sub.wCc}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
+                            <input type="number" value="${sub.wGk}" onchange="updateWeights(${sub.id}, 'wGk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
+                            <input type="number" value="${sub.wCk}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
                         </div>`;
                     dynamicComponentTd = `
                         <div class="flex items-center justify-center gap-1 text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-10 theme-input text-center rounded-lg p-1 font-semibold">
-                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-10 theme-input text-center rounded-lg p-1 font-semibold">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="CC" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner">
+                            <input type="number" value="${sub.pGk !== null ? sub.pGk : ''}" placeholder="GK" onchange="updateSubField(${sub.id}, 'pGk', this.value)" min="0" max="10" step="0.1" class="w-11 text-center rounded-lg p-1 font-semibold border shadow-inner">
                         </div>`;
                 } else {
                     dynamicRatioTd = `
                         <div class="flex items-center justify-center gap-2 text-xs">
-                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-10 theme-input text-center rounded-lg p-0.5">
-                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-10 theme-input text-center rounded-lg p-0.5">
+                            <input type="number" value="${sub.wCc !== undefined ? sub.wCc : 30}" onchange="updateWeights(${sub.id}, 'wCc', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
+                            <input type="number" value="${sub.wCk !== undefined ? sub.wCk : 70}" onchange="updateWeights(${sub.id}, 'wCk', this.value)" class="w-11 text-center rounded-lg p-1 font-bold shadow-inner">
                         </div>`;
                     dynamicComponentTd = `
                         <div class="flex items-center justify-center text-xs">
-                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 theme-input text-center rounded-lg p-1 font-semibold">
+                            <input type="number" value="${sub.pCc !== null ? sub.pCc : ''}" placeholder="Điểm KT" onchange="updateSubField(${sub.id}, 'pCc', this.value)" min="0" max="10" step="0.1" class="w-24 text-center rounded-lg p-1 font-semibold border shadow-inner">
                         </div>`;
                 }
 
@@ -723,7 +871,7 @@
                         <input type="text" value="${sub.name}" onchange="updateSubField(${sub.id}, 'name', this.value)" class="w-full bg-transparent border-b border-transparent focus:border-cyan-500 [data-theme='pink']:focus:border-[#ff6584] focus:outline-none font-bold py-1" style="color: var(--text-main)">
                     </td>
                     <td class="py-4 text-center">
-                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="theme-input border rounded-xl p-1 text-center focus:outline-none font-semibold cursor-pointer">
+                        <select onchange="updateSubField(${sub.id}, 'credits', parseInt(this.value))" class="border rounded-xl p-1 text-center focus:outline-none font-semibold cursor-pointer shadow-inner">
                             ${[1,2,3,4,5].map(c => `<option value="${c}" ${sub.credits === c ? 'selected' : ''}>${c}</option>`).join('')}
                         </select>
                     </td>
@@ -734,7 +882,7 @@
                         ${dynamicComponentTd}
                     </td>
                     <td class="py-4 text-center">
-                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 theme-input text-center rounded-xl p-1 font-black focus:outline-none" style="border-width: 2px; border-color: var(--text-accent);">
+                        <input type="number" value="${sub.pCk !== null ? sub.pCk : ''}" placeholder="CK" onchange="updateSubField(${sub.id}, 'pCk', this.value)" min="0" max="10" step="0.1" class="w-12 text-center rounded-xl p-1 font-black focus:outline-none shadow-inner" style="border-width: 2px; border-color: var(--text-accent);">
                     </td>
                     <td class="py-4 text-center font-bold">
                         <div style="color: var(--text-main)">${total10.toFixed(1)}</div>
@@ -875,22 +1023,18 @@
                     caKhiaBox.innerText = rankInfo.msg;
                     cardCaKhiaText.innerText = rankInfo.msg;
 
-                    if (finalGpa4 < 2.0 && currentUni === 'NEU' && currentTheme === 'dark') {
-                        document.body.style.backgroundColor = "#020617";
-                    }
-
                     if (finalGpa4 < 2.50) {
                         const gap = (2.50 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt học lực Khá (2.50).`;
+                        godRemainingMsg.innerHTML = `Mục tiêu: Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt học lực Khá (2.50).`;
                     } else if (finalGpa4 >= 2.50 && finalGpa4 < 3.20) {
                         const gap = (3.20 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Giỏi (3.20).`;
+                        godRemainingMsg.innerHTML = `Mục tiêu: Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Giỏi (3.20).`;
                     } else if (finalGpa4 >= 3.20 && finalGpa4 < 3.60) {
                         const gap = (3.60 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `🎯 Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Xuất sắc (3.60).`;
+                        godRemainingMsg.innerHTML = `Mục tiêu: Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để chạm mốc học lực Xuất sắc (3.60).`;
                     } else if (finalGpa4 >= 3.60 && finalGpa4 < 4.00) {
                         const gap = (4.00 - finalGpa4).toFixed(2);
-                        godRemainingMsg.innerHTML = `✨ Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt mốc GPA tuyệt đối (4.00).`;
+                        godRemainingMsg.innerHTML = `Đỉnh cao: Còn thiếu <span class="font-bold font-mono">${gap}</span> điểm nữa để đạt mốc GPA tuyệt đối (4.00).`;
                     }
                 }
             }
@@ -927,7 +1071,7 @@
                     const distance = (targetThreshold.min - total10);
                     if (distance >= 0.05 && distance <= 0.35) {
                         tipsHtml += `
-                            <div class="border-l-4 p-2 rounded-r-xl" style="background-color: rgba(0,0,0,0.04); border-color: var(--text-accent)">
+                            <div class="border-l-4 p-2 rounded-r-xl" style="background-color: rgba(0,0,0,0.02); border-color: var(--text-accent)">
                                 💡 <span class="font-bold">Mẹo bứt phá:</span> Môn <span class="font-semibold" style="color: var(--text-accent)">${sub.name}</span> tổng kết là <span class="font-bold font-mono">${total10.toFixed(1)}</span> (${currentLetter}). Thiếu đúng <span class="font-bold font-mono" style="color: var(--text-accent)">${distance.toFixed(1)}</span> điểm nữa để lên mức <span class="font-bold">${targetThreshold.grade}</span>!
                             </div>
                         `;
@@ -1095,7 +1239,7 @@
 
         function downloadShareCard() {
             const targetCard = document.getElementById('shareCard');
-            const bgConvertColor = currentTheme === 'dark' ? '#0f172a' : '#fff2f5';
+            const bgConvertColor = currentTheme === 'dark' ? '#0d1117' : '#fff2f5';
             html2canvas(targetCard, {
                 backgroundColor: bgConvertColor,
                 scale: 2, 
@@ -1117,7 +1261,7 @@
         function copyShareCardToClipboard() {
             const targetCard = document.getElementById('shareCard');
             const toast = document.getElementById('toastNotification');
-            const bgConvertColor = currentTheme === 'dark' ? '#0f172a' : '#fff2f5';
+            const bgConvertColor = currentTheme === 'dark' ? '#0d1117' : '#fff2f5';
 
             html2canvas(targetCard, {
                 backgroundColor: bgConvertColor,
